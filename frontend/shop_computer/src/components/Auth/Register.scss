@@ -1,0 +1,92 @@
+.login-wrap {
+  width: 100%;
+  margin: auto;
+  max-width: 525px;
+  min-height: 670px;
+  position: relative;
+  background: url(https://raw.githubusercontent.com/khadkamhn/day-01-login-form/master/img/bg.jpg)
+    no-repeat center;
+  box-shadow: 0 12px 15px 0 rgba(0, 0, 0, 0.24),
+    0 17px 50px 0 rgba(0, 0, 0, 0.19);
+
+  .login-html {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    padding: 40px 70px 50px 70px;
+    background: rgba(40, 57, 101, 0.9);
+
+    .tab {
+      color: #fff;
+      font-size: xx-large !important;
+      margin-bottom: 15px;
+    }
+
+    .login-form {
+      min-height: 345px;
+      position: relative;
+      perspective: 1000px;
+      transform-style: preserve-3d;
+
+      .group {
+        margin-bottom: 15px;
+
+        .label {
+          color: #fff;
+          font-size: 13px;
+          margin-bottom: 5px;
+        }
+
+        .input {
+          width: 100%;
+          color: #fff;
+          display: block;
+          border: none;
+          padding: 15px 20px;
+          border-radius: 25px;
+          background: rgba(255, 255, 255, 0.1);
+        }
+
+        .button {
+          width: 100%;
+          background: #1161ee;
+          border: none;
+          padding: 15px 20px;
+          border-radius: 25px;
+          color: #fff;
+          display: block;
+          cursor: pointer;
+          text-transform: uppercase;
+          margin-top: 20px;
+        }
+
+        .hr {
+          height: 2px;
+          margin: 60px 0 50px 0;
+          background: rgba(255, 255, 255, 0.2);
+        }
+
+        .foot-lnk {
+          text-align: center;
+          margin-top: 20px;
+
+          a {
+            color: #fff;
+            text-decoration: none;
+            transition: color 0.3s ease;
+
+            &:hover {
+              text-decoration: underline;
+              cursor: pointer;
+              color: #ccc; // Màu khi hover
+            }
+
+            &:active {
+              color: #fff; // Màu khi ấn
+            }
+          }
+        }
+      }
+    }
+  }
+}
