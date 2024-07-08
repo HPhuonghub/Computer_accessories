@@ -3,15 +3,10 @@ package com.dev.computer_accessories.service;
 import com.dev.computer_accessories.dto.request.UserDTO;
 import com.dev.computer_accessories.dto.response.PageResponse;
 import com.dev.computer_accessories.dto.response.UserDetailResponse;
-import org.springframework.security.core.userdetails.UserDetailsService;
-
-import java.util.List;
 
 public interface UserService {
 
-//    UserDetailsService userDetailsService();
-
-    long saveUser(UserDTO userDTO);
+    void saveUser(UserDTO userDTO);
 
     void updateUser(long userId, UserDTO userDTO);
 

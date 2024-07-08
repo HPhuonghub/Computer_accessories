@@ -6,10 +6,8 @@ import com.dev.computer_accessories.dto.response.UserDetailResponse;
 import com.dev.computer_accessories.exception.ResourceNotFoundException;
 import com.dev.computer_accessories.model.Role;
 import com.dev.computer_accessories.model.User;
-import com.dev.computer_accessories.repository.RoleRepository;
 import com.dev.computer_accessories.repository.SearchRepository;
 import com.dev.computer_accessories.repository.UserRepository;
-import com.dev.computer_accessories.service.RoleService;
 import com.dev.computer_accessories.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -42,7 +40,7 @@ public class UserServiceImpl implements UserService {
 
 
     @Override
-    public long saveUser(UserDTO userDTO) {
+    public void saveUser(UserDTO userDTO) {
         if(existEmail(userDTO.getEmail())) {
             throw new ResourceNotFoundException("Email already exists");
         }
@@ -62,7 +60,6 @@ public class UserServiceImpl implements UserService {
 
         log.info("Create user successfully!");
 
-        return user.getId();
     }
 
     @Override

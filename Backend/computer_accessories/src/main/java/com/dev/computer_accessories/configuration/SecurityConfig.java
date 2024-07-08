@@ -20,7 +20,7 @@ public class SecurityConfig {
 
     private final AuthenticationProvider provider;
     private final PreFilter preFilter;
-    private final String[] WHITE_LIST = {"/auth/**"};
+    private final String[] WHITE_LIST = {"/auth/**", "/product/**"};
 
 
     @Bean
