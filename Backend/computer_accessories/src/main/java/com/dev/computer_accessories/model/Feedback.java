@@ -12,17 +12,17 @@ import lombok.*;
 @Entity
 public class Feedback extends AbstractEntity<Integer>{
 
-    @Column(name = "reating")
-    private int reating;
+    @Column(name = "rating")
+    private int rating;
 
     @Column(name = "comment")
     private String comment;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.MERGE)
     @JoinColumn(name = "user_id")
     private User user;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.MERGE)
     @JoinColumn(name = "product_id")
     private Product product;
 }

@@ -51,6 +51,10 @@ public class User extends AbstractEntity<Long> implements UserDetails {
     @JsonIgnore
     private List<Token> tokens;
 
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnore
+    private List<Feedback> feedbacks = new ArrayList<>();
+
 
     @Override
     public String getUsername() {

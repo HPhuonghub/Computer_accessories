@@ -11,7 +11,7 @@ public interface SupplierService {
 
     void deleteSupplier(long id);
 
-    PageResponse<?> getAllCategorysWithSortBy(int pageNo, int pageSize, String sortBy);
+    PageResponse<?> getAllSuppliersWithSortBy(int pageNo, int pageSize, String sortBy);
 
     SupplierDetailResponse getSupplier(long id);
 

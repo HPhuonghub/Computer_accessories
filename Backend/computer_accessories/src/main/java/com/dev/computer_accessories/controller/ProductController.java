@@ -71,4 +71,16 @@ public class ProductController {
             return new ResponseError(HttpStatus.BAD_REQUEST.value(), e.getMessage());
         }
     }
+
+    @Operation(summary = "Get product by id", description = "Api get a product by id")
+    @PutMapping("/{productId}")
+    public ResponseData<?> getProductById(@Min(value = 1, message = "productId must be greater than 0") @PathVariable long productId) {
+        try {
+            productService.getProductDetail(productId);
+            return new ResponseData<>(HttpStatus.OK.value(), "Get product by id successfully");
+        } catch (Exception e) {
+            log.error("Error Message={}", e.getMessage());
+            return new ResponseError(HttpStatus.BAD_REQUEST.value(), e.getMessage());
+        }
+    }
 }

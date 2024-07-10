@@ -78,6 +78,6 @@ public class SupplierController {
             @Min(1) @RequestParam(defaultValue = "20", required = false) int pageSize,
             @RequestParam(required = false) String sortBy
     ) {
-        return new ResponseData<>(HttpStatus.OK.value(), "Get all supplier successful", supplierService.getAllCategorysWithSortBy(pageNo, pageSize, sortBy));
+        return new ResponseData<>(HttpStatus.OK.value(), "Get all supplier successful", supplierService.getAllSuppliersWithSortBy(pageNo, pageSize, sortBy));
     }
 }

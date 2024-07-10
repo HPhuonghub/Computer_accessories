@@ -58,7 +58,7 @@ public class SupplierServiceImpl implements SupplierService {
     }
 
     @Override
-    public PageResponse<?> getAllCategorysWithSortBy(int pageNo, int pageSize, String sortBy) {
+    public PageResponse<?> getAllSuppliersWithSortBy(int pageNo, int pageSize, String sortBy) {
         int p = 0;
         if(pageNo > 0) {
             p = pageNo - 1;
