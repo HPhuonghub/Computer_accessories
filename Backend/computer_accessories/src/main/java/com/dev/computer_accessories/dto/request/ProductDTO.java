@@ -2,15 +2,12 @@ package com.dev.computer_accessories.dto.request;
 
 import com.dev.computer_accessories.model.Category;
 import com.dev.computer_accessories.model.Supplier;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
 @Getter
-@Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder

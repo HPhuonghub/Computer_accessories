@@ -20,7 +20,7 @@ public class SecurityConfig {
 
     private final AuthenticationProvider provider;
     private final PreFilter preFilter;
-    private final String[] WHITE_LIST = {"/auth/**", "/product/**"};
+    private final String[] WHITE_LIST = {"api/v1/auth/**", "api/v1/product/**", "api/v1/supplier/**", "api/v1/category/**"};
 
 
     @Bean
@@ -28,11 +28,11 @@ public class SecurityConfig {
         http.csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(request -> request
                         .requestMatchers(WHITE_LIST).permitAll()
-                        .requestMatchers(HttpMethod.GET,  "/user/list/**").hasRole("ADMIN")
-                        .requestMatchers(HttpMethod.DELETE,  "/user/**").hasAnyRole("ADMIN", "USER")
-                        .requestMatchers(HttpMethod.GET,  "/user/**").hasAnyRole("ADMIN", "USER")
-                        .requestMatchers(HttpMethod.POST,  "/user/**").hasAnyRole("ADMIN", "USER")
-                        .requestMatchers(HttpMethod.PUT,  "/user/**").hasAnyRole("ADMIN", "USER")
+                        .requestMatchers(HttpMethod.GET,  "api/v1/user/list/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.DELETE,  "api/v1/user/**").hasAnyRole("ADMIN", "USER")
+                        .requestMatchers(HttpMethod.GET,  "api/v1/user/**").hasAnyRole("ADMIN", "USER")
+                        .requestMatchers(HttpMethod.POST,  "api/v1/user/**").hasAnyRole("ADMIN", "USER")
+                        .requestMatchers(HttpMethod.PUT,  "api/v1/user/**").hasAnyRole("ADMIN", "USER")
                         .anyRequest().authenticated()
                 )
                 .sessionManagement(manager -> manager.sessionCreationPolicy(SessionCreationPolicy.STATELESS))

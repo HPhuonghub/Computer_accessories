@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/product")
+@RequestMapping("/api/v1/product")
 @Tag(name="Product Controller")
 @Slf4j
 public class ProductController {

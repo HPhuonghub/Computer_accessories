@@ -30,11 +30,11 @@ public class Product extends AbstractEntity<Long>{
     @Column(name = "stock")
     private int stock;
 
-    @ManyToOne
-    @JoinColumn(name = "category_id")
+    @ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.MERGE })
+    @JoinColumn(name = "category_id", referencedColumnName = "id")
     private Category category;
 
-    @ManyToOne
-    @JoinColumn(name = "supplier_id")
+    @ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.MERGE })
+    @JoinColumn(name = "supplier_id", referencedColumnName = "id")
     private Supplier supplier;
 }
