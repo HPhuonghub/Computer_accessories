@@ -73,7 +73,7 @@ public class ProductController {
     }
 
     @Operation(summary = "Get product by id", description = "Api get a product by id")
-    @PutMapping("/{productId}")
+    @GetMapping("/{productId}")
     public ResponseData<?> getProductById(@Min(value = 1, message = "productId must be greater than 0") @PathVariable long productId) {
         try {
             productService.getProductDetail(productId);

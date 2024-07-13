@@ -73,7 +73,7 @@ public class FeedbackController {
     }
 
     @Operation(summary = "Get feedback by id", description = "Api get a feedback by id")
-    @PutMapping("/{feedbackId}")
+    @GetMapping("/{feedbackId}")
     public ResponseData<?> getFeedbackById(@Min(value = 1, message = "feedbackId must be greater than 0") @PathVariable int feedbackId) {
         try {
             feedbackService.getFeedback(feedbackId);

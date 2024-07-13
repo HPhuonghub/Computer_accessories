@@ -215,4 +215,8 @@ public class UserServiceImpl implements UserService {
     public boolean existEmail(String email) {
         return userRepository.findByEmail(email).isPresent();
     }
+
+    public User getUserByEmail(String email) {
+        return userRepository.findByEmail(email).orElseThrow(() -> new ResourceNotFoundException("Email user not found"));
+    }
 }

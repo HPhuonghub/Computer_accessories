@@ -157,4 +157,8 @@ public class ProductServiceImpl implements ProductService {
     private Supplier getSupplierByName(String name) {
         return supplierRepository.findByName(name).orElseThrow(() -> new ResourceNotFoundException("Supplier name not found"));
     }
+
+    public Product getProductByName(String name) {
+        return productRepository.findByName(name).orElseThrow(() -> new ResourceNotFoundException("Product not found"));
+    }
 }
