@@ -1,4 +1,4 @@
-import ModalForm from "./ModalForm";
+import ModalForm from "../ModalForm";
 import { FcPlus } from "react-icons/fc";
 import "./ManageUser.scss";
 import TableUser from "./TableUser";
@@ -7,8 +7,8 @@ import {
   getAllUsers,
   deleteUser,
   getAllUsersWithPaginate,
-} from "../../../services/UserService";
-import ModalConfirm from "./ModalConfirm";
+} from "../../../../services/UserService";
+import ModalConfirm from "../ModalConfirm";
 import { toast } from "react-toastify";
 import TableUserPaginate from "./TableUserPaginate";
 

@@ -3,7 +3,8 @@ import Home from "./components/HomePage/HomePage";
 import Admin from "./components/Admin/Admin";
 import User from "./components/User/User";
 import Dashboard from "./components/Admin/Content/Dashboard";
-import ManageUser from "./components/Admin/Content/ManageUser";
+import ManageUser from "./components/Admin/Content/User/ManageUser";
+import ManageProduct from "./components/Admin/Content/Product/ManageProduct";
 import Login from "./components/Auth/Login";
 import App from "./views/App";
 import { ToastContainer, toast } from "react-toastify";
@@ -23,6 +24,7 @@ const Layout = () => {
         <Route path="/admin" element={<Admin />}>
           <Route index element={<Dashboard />} />
           <Route path="manage-users" element={<ManageUser />} />
+          <Route path="manage-products" element={<ManageProduct />} />
         </Route>
 
         <Route path="/login" element={<Login />} />
