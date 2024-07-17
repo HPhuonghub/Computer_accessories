@@ -4,6 +4,8 @@ import com.dev.computer_accessories.dto.request.SupplierDTO;
 import com.dev.computer_accessories.dto.response.PageResponse;
 import com.dev.computer_accessories.dto.response.SupplierDetailResponse;
 
+import java.util.List;
+
 public interface SupplierService {
     void saveSupplier(SupplierDTO supplierDTO);
 
@@ -15,5 +17,5 @@ public interface SupplierService {
 
     SupplierDetailResponse getSupplier(long id);
 
-
+    List<SupplierDetailResponse> getSuppliers();
 }

@@ -76,8 +76,7 @@ public class ProductController {
     @GetMapping("/{productId}")
     public ResponseData<?> getProductById(@Min(value = 1, message = "productId must be greater than 0") @PathVariable long productId) {
         try {
-            productService.getProductDetail(productId);
-            return new ResponseData<>(HttpStatus.OK.value(), "Get product by id successfully");
+            return new ResponseData<>(HttpStatus.OK.value(), "Get product by id successfully",productService.getProductDetail(productId));
         } catch (Exception e) {
             log.error("Error Message={}", e.getMessage());
             return new ResponseError(HttpStatus.BAD_REQUEST.value(), e.getMessage());

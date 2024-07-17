@@ -5,6 +5,8 @@ import { useNavigate, Link } from "react-router-dom";
 import { toast } from "react-toastify";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
+import { useDispatch, useSelector } from "react-redux";
+import { loginUser, selectIsLoggedIn } from "../../redux/slices/authSlice";
 
 const Login = () => {
   const navigate = useNavigate();
@@ -12,17 +14,14 @@ const Login = () => {
   const [passwordLogin, setPasswordLogin] = useState("");
   const [keepSignedIn, setKeepSignedIn] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
+  const dispatch = useDispatch();
+  const isLoggedIn = useSelector(selectIsLoggedIn);
 
-  const handleLogin = async () => {
-    let res = await postLogin(emailLogin, passwordLogin);
-    if (res && res.data.status !== 400) {
-      toast.success(res.data.message);
+  const handleLogin = () => {
+    dispatch(loginUser(emailLogin, passwordLogin));
+    setTimeout(() => {
       navigate("/");
-    }
-
-    if (res && res.data.status === 400) {
-      toast.error(res.data.message);
-    }
+    }, 1500);
   };
 
   const handleKeepSignedInChange = () => {

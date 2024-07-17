@@ -21,15 +21,15 @@ const postCreateNewUser = async (
     state: state.toLowerCase(),
   };
 
-  return await axios.post("user/", data);
+  return await axios.post("api/v1/user/", data);
 };
 
 const getAllUsers = async () => {
-  return await axios.get("user/list");
+  return await axios.get("api/v1/user/list");
 };
 
 const getUserId = async (userId) => {
-  return await axios.get(`user/${userId}`);
+  return await axios.get(`api/v1/user/${userId}`);
 };
 
 const putUpdateUsers = async (
@@ -51,23 +51,23 @@ const putUpdateUsers = async (
     },
     state: state.toLowerCase(),
   };
-  return axios.put(`user/${id}`, data);
+  return axios.put(`api/v1/user/${id}`, data);
 };
 
 const deleteUser = async (userId) => {
-  return axios.delete(`user/${userId}`);
+  return axios.delete(`api/v1/user/${userId}`);
 };
 
 const getAllUsersWithPaginate = async (pageNo, pageSize) => {
-  return axios.get(`user/list?pageNo=${pageNo}&pageSize=${pageSize}`);
+  return axios.get(`api/v1/user/list?pageNo=${pageNo}&pageSize=${pageSize}`);
 };
 
 const postLogin = async (username, password) => {
-  return axios.post(`auth/login`, { username, password });
+  return axios.post(`api/v1/auth/login`, { username, password });
 };
 
 const postRegister = async (fullname, username, password) => {
-  return axios.post(`auth/register`, {
+  return axios.post(`api/v1/auth/register`, {
     fullname,
     username,
     password,

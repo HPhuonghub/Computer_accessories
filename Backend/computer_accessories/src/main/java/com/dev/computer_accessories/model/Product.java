@@ -23,7 +23,7 @@ public class Product extends AbstractEntity<Long>{
     private String description;
 
     @Column(name = "price")
-    private double price;
+    private long price;
 
     @Column(name = "discount")
     private int discount;
@@ -49,4 +49,8 @@ public class Product extends AbstractEntity<Long>{
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonIgnore
     private List<OrderDetails> orderDetails = new ArrayList<>();
+
+    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnore
+    private List<ProductSpecification> productSpecifications = new ArrayList<>();
 }

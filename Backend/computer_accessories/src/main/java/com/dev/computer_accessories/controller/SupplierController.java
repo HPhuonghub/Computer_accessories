@@ -72,12 +72,18 @@ public class SupplierController {
     }
 
     @Operation(summary = "Get list of suppliers per page", description = "Send a request via this API to get supplier list by pageNo and pageSize")
-    @GetMapping("/list")
+    @GetMapping("/lists")
     public ResponseData<?> getAllSupplierWithSortBy(
             @RequestParam(defaultValue = "0", required = false) int pageNo,
             @Min(1) @RequestParam(defaultValue = "20", required = false) int pageSize,
             @RequestParam(required = false) String sortBy
     ) {
         return new ResponseData<>(HttpStatus.OK.value(), "Get all supplier successful", supplierService.getAllSuppliersWithSortBy(pageNo, pageSize, sortBy));
+    }
+
+    @Operation(summary = "Get list of suppliers", description = "Send a request via this API to get supplier list")
+    @GetMapping("/list")
+    public ResponseData<?> getSuppliers() {
+        return new ResponseData<>(HttpStatus.OK.value(), "Get all supplier successful", supplierService.getSuppliers());
     }
 }

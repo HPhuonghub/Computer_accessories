@@ -58,6 +58,8 @@ public class AuthenticationService {
                 .status(200)
                 .message("Login user successful")
                 .email(signInRequest.getUsername())
+                .fullname(user.getFullName())
+                .role(user.getRole())
                 .userId(user.getId())
                 .build();
     }

@@ -72,12 +72,18 @@ public class CategoryController {
     }
 
     @Operation(summary = "Get list of categorys per page", description = "Send a request via this API to get category list by pageNo and pageSize")
-    @GetMapping("/list")
+    @GetMapping("/lists")
     public ResponseData<?> getAllCategoryWithSortBy(
             @RequestParam(defaultValue = "0", required = false) int pageNo,
             @Min(1) @RequestParam(defaultValue = "20", required = false) int pageSize,
             @RequestParam(required = false) String sortBy
     ) {
         return new ResponseData<>(HttpStatus.OK.value(), "Get all category successful", categoryService.getAllCategorysWithSortBy(pageNo, pageSize, sortBy));
+    }
+
+    @Operation(summary = "Get list of categories", description = "Send a request via this API to get category list")
+    @GetMapping("/list")
+    public ResponseData<?> getAllCategories() {
+        return new ResponseData<>(HttpStatus.OK.value(), "Get all category successful", categoryService.getCategories());
     }
 }

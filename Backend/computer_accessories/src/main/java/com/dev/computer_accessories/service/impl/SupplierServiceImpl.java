@@ -111,6 +111,21 @@ public class SupplierServiceImpl implements SupplierService {
                 .build();
     }
 
+    @Override
+    public List<SupplierDetailResponse> getSuppliers() {
+        List<Supplier> suppliers = supplierRepository.findAll();
+
+        List<SupplierDetailResponse> responses = suppliers.stream().map(supplier -> SupplierDetailResponse.builder()
+                        .id(supplier.getId())
+                        .name(supplier.getName())
+                        .address(supplier.getAddress())
+                        .phone(supplier.getPhone())
+                        .description(supplier.getDescription())
+                        .build())
+                .toList();
+        return responses;
+    }
+
     private Supplier getSupplierById(long id) {
         return supplierRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Supplier not found"));
     }
