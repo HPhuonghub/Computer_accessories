@@ -75,8 +75,7 @@ public class OrdersController {
     @GetMapping("/{ordersId}")
     public ResponseData<?> getOrdersById(@Min(value = 1, message = "ordersId must be greater than 0") @PathVariable int ordersId) {
         try {
-            ordersService.getOrdersDetail(ordersId);
-            return new ResponseData<>(HttpStatus.OK.value(), "Get orders by id successfully");
+            return new ResponseData<>(HttpStatus.OK.value(), "Get orders by id successfully", ordersService.getOrdersDetail(ordersId));
         } catch (Exception e) {
             log.error("Error Message={}", e.getMessage());
             return new ResponseError(HttpStatus.BAD_REQUEST.value(), e.getMessage());

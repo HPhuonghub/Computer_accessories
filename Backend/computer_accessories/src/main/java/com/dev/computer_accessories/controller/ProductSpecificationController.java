@@ -1,9 +1,9 @@
 package com.dev.computer_accessories.controller;
 
-import com.dev.computer_accessories.dto.request.ProductDTO;
+import com.dev.computer_accessories.dto.request.ProductSpecificationDTO;
 import com.dev.computer_accessories.dto.response.ResponseData;
 import com.dev.computer_accessories.dto.response.ResponseError;
-import com.dev.computer_accessories.service.ProductService;
+import com.dev.computer_accessories.service.ProductSpecificationService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.constraints.Min;
@@ -14,19 +14,19 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/v1/product")
-@Tag(name="Product Controller")
+@RequestMapping("/api/v1/product-specification")
+@Tag(name="ProductSpecification Controller")
 @Slf4j
-public class ProductController {
+public class ProductSpecificationController {
 
-    private final ProductService productService;
+    private final ProductSpecificationService productSpecificationService;
 
-    @Operation(summary = "Add product", description = "Api create new product")
+    @Operation(summary = "Add productSpecification", description = "Api create new productSpecification")
     @PostMapping("/")
-    public ResponseData<?> saveProduct(@RequestBody ProductDTO productDTO) {
+    public ResponseData<?> saveProductSpecification(@RequestBody ProductSpecificationDTO productSpecificationDTO) {
         try {
-            productService.saveProduct(productDTO);
-            return new ResponseData<>(HttpStatus.OK.value(), "Product added successfully");
+            productSpecificationService.saveProductSpecification(productSpecificationDTO);
+            return new ResponseData<>(HttpStatus.OK.value(), "ProductSpecification added successfully");
         } catch (Exception e) {
             log.error("Error Message={}", e.getMessage());
             return new ResponseError(HttpStatus.BAD_REQUEST.value(), e.getMessage());
@@ -34,50 +34,50 @@ public class ProductController {
     }
 
 
-    @Operation(summary = "Delete product", description = "Api delete a product")
-    @DeleteMapping("/{productId}")
-    public ResponseData<?> deleteProduct(@PathVariable long productId) {
+    @Operation(summary = "Delete productSpecificationSpecification", description = "Api delete a productSpecification")
+    @DeleteMapping("/{productSpecificationId}")
+    public ResponseData<?> deleteProductSpecification(@PathVariable long productSpecificationId) {
         try {
-            productService.deleteProduct(productId);
-            return new ResponseData<>(HttpStatus.OK.value(), "Product deleted successfully");
+            productSpecificationService.deleteProductSpecification(productSpecificationId);
+            return new ResponseData<>(HttpStatus.OK.value(), "ProductSpecification deleted successfully");
         } catch (Exception e) {
             log.error("Error Message={}, Cause={}", e.getMessage(), e.getCause());
             return new ResponseError(HttpStatus.BAD_REQUEST.value(), e.getMessage());
         }
     }
 
-    @Operation(summary = "Update product", description = "Api update a product")
-    @PutMapping("/{productId}")
-    public ResponseData<?> updateProduct(@Min(value = 1, message = "productId must be greater than 0") @PathVariable long productId, @RequestBody ProductDTO productDTO) {
+    @Operation(summary = "Update productSpecificationSpecification", description = "Api update a productSpecification")
+    @PutMapping("/{productSpecificationId}")
+    public ResponseData<?> updateProductSpecification(@Min(value = 1, message = "productSpecificationId must be greater than 0") @PathVariable long productSpecificationId, @RequestBody ProductSpecificationDTO productSpecificationDTO) {
         try {
-            productService.updateProduct(productId, productDTO);
-            return new ResponseData<>(HttpStatus.OK.value(), "Product updated successfully");
+            productSpecificationService.updateProductSpecification(productSpecificationId, productSpecificationDTO);
+            return new ResponseData<>(HttpStatus.OK.value(), "ProductSpecification updated successfully");
         } catch (Exception e) {
             log.error("Error Message={}", e.getMessage());
             return new ResponseError(HttpStatus.BAD_REQUEST.value(), e.getMessage());
         }
     }
 
-    @Operation(summary = "Get list of products per page", description = "Send a request via this API to get product list by pageNo and pageSize")
+    @Operation(summary = "Get list of productSpecifications per page", description = "Send a request via this API to get productSpecification list by pageNo and pageSize")
     @GetMapping("/list")
-    public ResponseData<?> getAllProduct(@RequestParam(defaultValue = "0", required = false) int pageNo,
+    public ResponseData<?> getAllProductSpecification(@RequestParam(defaultValue = "0", required = false) int pageNo,
                                          @Min(1) @RequestParam(defaultValue = "20", required = false) int pageSize,
                                          @RequestParam(required = false) String sortBy
     ) {
         try {
-            return new ResponseData<>(HttpStatus.OK.value(), "Get all product successful", productService.getAllProductsWithSortBy(pageNo, pageSize, sortBy));
+            return new ResponseData<>(HttpStatus.OK.value(), "Get all productSpecification successful", productSpecificationService.getAllProductSpecificationsWithSortBy(pageNo, pageSize, sortBy));
         } catch (Exception e) {
             log.error("Error Message={}", e.getMessage());
             return new ResponseError(HttpStatus.BAD_REQUEST.value(), e.getMessage());
         }
     }
 
-    @Operation(summary = "Get product by id", description = "Api get a product by id")
-    @GetMapping("/{productId}")
-    public ResponseData<?> getProductById(@Min(value = 1, message = "productId must be greater than 0") @PathVariable long productId) {
+    @Operation(summary = "Get productSpecification by id", description = "Api get a productSpecification by id")
+    @GetMapping("/{productSpecificationId}")
+    public ResponseData<?> getProductSpecificationById(@Min(value = 1, message = "productSpecificationId must be greater than 0") @PathVariable long productSpecificationId) {
         try {
-            productService.getProductDetail(productId);
-            return new ResponseData<>(HttpStatus.OK.value(), "Get product by id successfully");
+
+            return new ResponseData<>(HttpStatus.OK.value(), "Get productSpecification by id successfully",productSpecificationService.getProductSpecification(productSpecificationId));
         } catch (Exception e) {
             log.error("Error Message={}", e.getMessage());
             return new ResponseError(HttpStatus.BAD_REQUEST.value(), e.getMessage());

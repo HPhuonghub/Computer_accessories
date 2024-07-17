@@ -7,10 +7,9 @@ import lombok.Getter;
 
 @Getter
 @Builder
-public class FeedbackDTO {
-    private int id;
-    private int rating;
-    private String comment;
-    private User user;
+public class ProductSpecificationDTO {
+    private long id;
+    private String specName;
+    private String specValue;
     private Product product;
 }

@@ -94,8 +94,11 @@ public class ProductServiceImpl implements ProductService {
                 .name(product.getName())
                 .description(product.getDescription())
                 .discount(product.getDiscount())
+                .price(product.getPrice())
                 .stock(product.getStock())
                 .thumbnail(product.getThumbnail())
+                .supplier(product.getSupplier())
+                .category(product.getCategory())
                 .build();
     }
 
@@ -134,6 +137,7 @@ public class ProductServiceImpl implements ProductService {
                         .discount(product.getDiscount())
                         .category(product.getCategory())
                         .supplier(product.getSupplier())
+                        .productSpecifications(product.getProductSpecifications())
                         .build())
                 .toList();
 

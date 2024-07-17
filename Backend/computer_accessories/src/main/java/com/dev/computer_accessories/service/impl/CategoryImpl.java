@@ -105,6 +105,19 @@ public class CategoryImpl implements CategoryService {
                 .build();
     }
 
+    @Override
+    public List<CategoryDetailResponse> getCategories() {
+        List<Category> categories = categoryRepository.findAll();
+
+        List<CategoryDetailResponse> responses = categories.stream().map(category -> CategoryDetailResponse.builder()
+                        .id(category.getId())
+                        .name(category.getName())
+                        .description(category.getDescription())
+                        .build())
+                .toList();
+        return responses;
+    }
+
     private Category getCategoryById(int id) {
         return categoryRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Category not found"));
     }

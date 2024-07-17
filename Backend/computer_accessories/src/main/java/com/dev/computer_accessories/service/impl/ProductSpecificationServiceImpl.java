@@ -1,16 +1,17 @@
 package com.dev.computer_accessories.service.impl;
 
-import com.dev.computer_accessories.dto.request.FeedbackDTO;
-import com.dev.computer_accessories.dto.response.PageResponse;
+import com.dev.computer_accessories.dto.request.ProductSpecificationDTO;
 import com.dev.computer_accessories.dto.response.FeedBackDetailResponse;
+import com.dev.computer_accessories.dto.response.PageResponse;
+import com.dev.computer_accessories.dto.response.ProductSpecificationDetailResponse;
 import com.dev.computer_accessories.exception.ResourceNotFoundException;
-import com.dev.computer_accessories.model.Feedback;
+import com.dev.computer_accessories.model.ProductSpecification;
 import com.dev.computer_accessories.model.Product;
 import com.dev.computer_accessories.model.User;
-import com.dev.computer_accessories.repository.FeedbackRepository;
+import com.dev.computer_accessories.repository.ProductSpecificationRepository;
 import com.dev.computer_accessories.repository.ProductRepository;
 import com.dev.computer_accessories.repository.UserRepository;
-import com.dev.computer_accessories.service.FeedbackService;
+import com.dev.computer_accessories.service.ProductSpecificationService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -28,42 +29,39 @@ import java.util.regex.Pattern;
 @Service
 @RequiredArgsConstructor
 @Slf4j
-public class FeedbackServiceImpl implements FeedbackService {
-   private final FeedbackRepository feedbackRepository;
-   private final UserRepository userRepository;
+public class ProductSpecificationServiceImpl implements ProductSpecificationService {
+   private final ProductSpecificationRepository productSpecificationRepository;
    private final ProductRepository productRepository;
 
     @Override
-    public void saveFeedback(FeedbackDTO feedbackDTO) {
-        User user = getUserByEmail(feedbackDTO.getUser().getEmail());
-        Product product = getProductByName(feedbackDTO.getProduct().getName());
+    public void saveProductSpecification(ProductSpecificationDTO productSpecificationDTO) {
+        Product product = getProductByName(productSpecificationDTO.getProduct().getName());
 
-        Feedback feedback = Feedback.builder()
-                .rating(feedbackDTO.getRating())
-                .comment(feedbackDTO.getComment())
-                .user(user)
+        ProductSpecification productSpecification = ProductSpecification.builder()
+                .specName(productSpecificationDTO.getSpecName())
+                .specValue(productSpecificationDTO.getSpecValue())
                 .product(product)
                 .build();
 
-        feedbackRepository.save(feedback);
+        productSpecificationRepository.save(productSpecification);
     }
 
     @Override
-    public void updateFeedback(int id, FeedbackDTO feedbackDTO) {
-        Feedback feedback = getFeedBackById(id);
-        feedback.setRating(feedbackDTO.getRating());
-        feedback.setComment(feedbackDTO.getComment());
+    public void updateProductSpecification(long id, ProductSpecificationDTO productSpecificationDTO) {
+        ProductSpecification productSpecification = getProductSpecificationById(id);
+        productSpecification.setSpecName(productSpecificationDTO.getSpecName());
+        productSpecification.setSpecValue(productSpecificationDTO.getSpecValue());
 
-        feedbackRepository.save(feedback);
+        productSpecificationRepository.save(productSpecification);
     }
 
     @Override
-    public void deleteFeedback(int id) {
-        feedbackRepository.deleteById(id);
+    public void deleteProductSpecification(long id) {
+        productSpecificationRepository.deleteById(id);
     }
 
     @Override
-    public PageResponse<?> getAllFeedbacksWithSortBy(int pageNo, int pageSize, String sortBy) {
+    public PageResponse<?> getAllProductSpecificationsWithSortBy(int pageNo, int pageSize, String sortBy) {
         int p = 0;
         if(pageNo > 0) {
             p = pageNo - 1;
@@ -84,42 +82,36 @@ public class FeedbackServiceImpl implements FeedbackService {
 
         Pageable pageable = PageRequest.of(p, pageSize,Sort.by(sorts));
 
-        Page<Feedback> feedbacks = feedbackRepository.findAll(pageable);
+        Page<ProductSpecification> productSpecifications = productSpecificationRepository.findAll(pageable);
 
-        List<FeedBackDetailResponse> responses = feedbacks.stream().map(feedback -> FeedBackDetailResponse.builder()
-                .id(feedback.getId())
-                .rating(feedback.getRating())
-                .comment(feedback.getComment())
-                .user(feedback.getUser())
-                .product(feedback.getProduct())
+        List<ProductSpecificationDetailResponse> responses = productSpecifications.stream().map(productSpecification -> ProductSpecificationDetailResponse.builder()
+                .id(productSpecification.getId())
+                .specName(productSpecification.getSpecName())
+                .specValue(productSpecification.getSpecValue())
+                .product(productSpecification.getProduct())
                 .build()
         ).toList();
 
         return PageResponse.builder()
                 .pageNo(p)
                 .pageSize(pageSize)
-                .totalPage(feedbacks.getTotalPages())
+                .totalPage(productSpecifications.getTotalPages())
                 .items(responses)
                 .build();
     }
 
     @Override
-    public FeedBackDetailResponse getFeedback(int id) {
-        Feedback feedback = getFeedBackById(id);
-        return FeedBackDetailResponse.builder()
-                .rating(feedback.getRating())
-                .comment(feedback.getComment())
-                .user(feedback.getUser())
-                .product(feedback.getProduct())
+    public ProductSpecificationDetailResponse getProductSpecification(long id) {
+        ProductSpecification productSpecification = getProductSpecificationById(id);
+        return ProductSpecificationDetailResponse.builder()
+                .specName(productSpecification.getSpecName())
+                .specValue(productSpecification.getSpecValue())
+                .product(productSpecification.getProduct())
                 .build();
     }
 
-    private Feedback getFeedBackById(int id) {
-        return feedbackRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("FeedBack not found"));
-    }
-
-    private User getUserByEmail(String email) {
-        return userRepository.findByEmail(email).orElseThrow(() -> new ResourceNotFoundException("User not found"));
+    private ProductSpecification getProductSpecificationById(long id) {
+        return productSpecificationRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("ProductSpecification not found"));
     }
 
     private Product getProductByName(String name) {

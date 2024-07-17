@@ -8,10 +8,9 @@ import lombok.Getter;
 
 @Getter
 @Builder
-public class FeedBackDetailResponse {
-    private int id;
-    private int rating;
-    private String comment;
-    private User user;
+public class ProductSpecificationDetailResponse {
+    private long id;
+    private String specName;
+    private String specValue;
     private Product product;
 }

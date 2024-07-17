@@ -1,17 +1,18 @@
 package com.dev.computer_accessories.service;
 
-import com.dev.computer_accessories.dto.request.FeedbackDTO;
-import com.dev.computer_accessories.dto.response.PageResponse;
+import com.dev.computer_accessories.dto.request.ProductSpecificationDTO;
 import com.dev.computer_accessories.dto.response.FeedBackDetailResponse;
+import com.dev.computer_accessories.dto.response.PageResponse;
+import com.dev.computer_accessories.dto.response.ProductSpecificationDetailResponse;
 
-public interface FeedbackService {
-    void saveFeedback(FeedbackDTO feedBackDTO);
+public interface ProductSpecificationService {
+    void saveProductSpecification(ProductSpecificationDTO productSpecificationDTO);
 
-    void updateFeedback(int id, FeedbackDTO feedBackDTO);
+    void updateProductSpecification(long id, ProductSpecificationDTO productSpecificationDTO);
 
-    void deleteFeedback(int id);
+    void deleteProductSpecification(long id);
 
-    PageResponse<?> getAllFeedbacksWithSortBy(int pageNo, int pageSize, String sortBy);
+    PageResponse<?> getAllProductSpecificationsWithSortBy(int pageNo, int pageSize, String sortBy);
 
-    FeedBackDetailResponse getFeedback(int id);
+    ProductSpecificationDetailResponse getProductSpecification(long id);
 }
