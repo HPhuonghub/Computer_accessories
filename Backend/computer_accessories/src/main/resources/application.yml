@@ -22,8 +22,8 @@ spring:
       client:
         registration:
           google:
-            client-id: 838931501142-387dr4ds5j49a18nk4qb8gg5534c9bka.apps.googleusercontent.com
-            client-secret: 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
+            client-id:
+            client-secret:
 
 
 springdoc:
@@ -43,4 +43,4 @@ openapi:
 jwt:
   expiryHour: 1
   expiryDay: 15
-  secretKey: 947ba682032c9b9d4e376b4fe2c3c053657d39af82e738a7d2916a5d0df36bb4
+  secretKey:
