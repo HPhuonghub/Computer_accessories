@@ -67,8 +67,8 @@ public class OrdersServiceImpl implements OrdersService {
     }
 
     @Override
-    public OrdersResponse getOrdersDetail(long id) {
-        Orders orders = getOrdersById(id);
+    public OrdersResponse getOrdersDetail(String email) {
+        Orders orders = getOrdersByEmail(email);
         return OrdersResponse.builder()
                 .fullname(orders.getFullname())
                 .email(orders.getEmail())
