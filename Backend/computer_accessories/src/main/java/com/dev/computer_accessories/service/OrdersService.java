@@ -12,7 +12,7 @@ public interface OrdersService {
 
     void deleteOrders(long id);
 
-    OrdersResponse getOrdersDetail(long id);
+    OrdersResponse getOrdersDetail(String email);
 
     PageResponse<?> getAllOrdersWithSortBy(int pageNo, int pageSize, String sortBy);
 }

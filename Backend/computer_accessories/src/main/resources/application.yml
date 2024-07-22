@@ -17,6 +17,13 @@ spring:
     add-properties: true
     restart:
       log-condition-evaluation-delta: false
+  security:
+    oauth2:
+      client:
+        registration:
+          google:
+            client-id:
+            client-secret:
 
 
 springdoc:
@@ -36,4 +43,4 @@ openapi:
 jwt:
   expiryHour: 1
   expiryDay: 15
-  secretKey: 947ba682032c9b9d4e376b4fe2c3c053657d39af82e738a7d2916a5d0df36bb4
+  secretKey:

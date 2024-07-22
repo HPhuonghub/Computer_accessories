@@ -71,11 +71,11 @@ public class OrdersController {
         }
     }
 
-    @Operation(summary = "Get orders by id", description = "Api get a orders by id")
-    @GetMapping("/{ordersId}")
-    public ResponseData<?> getOrdersById(@Min(value = 1, message = "ordersId must be greater than 0") @PathVariable int ordersId) {
+    @Operation(summary = "Get orders by email", description = "Api get a orders by email")
+    @GetMapping("/{email}")
+    public ResponseData<?> getOrdersByEmail(@PathVariable String email) {
         try {
-            return new ResponseData<>(HttpStatus.OK.value(), "Get orders by id successfully", ordersService.getOrdersDetail(ordersId));
+            return new ResponseData<>(HttpStatus.OK.value(), "Get orders by email successfully", ordersService.getOrdersDetail(email));
         } catch (Exception e) {
             log.error("Error Message={}", e.getMessage());
             return new ResponseError(HttpStatus.BAD_REQUEST.value(), e.getMessage());

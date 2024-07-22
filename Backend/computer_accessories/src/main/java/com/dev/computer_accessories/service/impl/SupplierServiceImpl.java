@@ -121,6 +121,7 @@ public class SupplierServiceImpl implements SupplierService {
                         .address(supplier.getAddress())
                         .phone(supplier.getPhone())
                         .description(supplier.getDescription())
+                        .email(supplier.getEmail())
                         .build())
                 .toList();
         return responses;

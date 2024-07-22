@@ -74,7 +74,6 @@ public class UserServiceImpl implements UserService {
         user.setStatus(userDTO.getStatus());
         user.setRole(role);
         user.setAddress(userDTO.getAddress());
-        user.setPassword(passwordEncoder.encode(userDTO.getPassword()));
         userRepository.save(user);
 
         log.info("Update user successfully!");
