@@ -22,9 +22,9 @@ spring:
       client:
         registration:
           google:
-            client-id: 838931501142-qmucmmbdh6d27ct61s9h4asevrre11kp.apps.googleusercontent.com
-            client-secret: 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
-            redirectUri: "http://localhost:8888/api/v1/oauth2/callback/{registrationId}"
+            client-id:
+            client-secret:
+            redirectUri:
             scope:
               - email
               - profile
