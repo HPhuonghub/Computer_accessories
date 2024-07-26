@@ -1,101 +1,110 @@
 import "./Login.scss";
-import { postLogin } from "../../services/UserService";
 import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
-import { toast } from "react-toastify";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
-import { useDispatch, useSelector } from "react-redux";
-import { loginUser, selectIsLoggedIn } from "../../redux/slices/authSlice";
+import { faGoogle, faFacebook } from "@fortawesome/free-brands-svg-icons";
+import axios from "axios";
+import { useDispatch } from "react-redux";
+import { loginUser } from "../../redux/slices/authSlice";
+import { toast } from "react-toastify";
+import { GOOGLE_AUTH_URL } from "../../constants";
+import googleLogo from "../../assets/images/google-logo.png";
 
 const Login = () => {
   const navigate = useNavigate();
   const [emailLogin, setEmailLogin] = useState("");
   const [passwordLogin, setPasswordLogin] = useState("");
-  const [keepSignedIn, setKeepSignedIn] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const dispatch = useDispatch();
-  const isLoggedIn = useSelector(selectIsLoggedIn);
 
   const handleLogin = () => {
+    if (!emailLogin) {
+      toast.error("Please fill in the email field!");
+      return;
+    }
+    if (!passwordLogin) {
+      toast.error("Please fill in the password field!");
+      return;
+    }
     dispatch(loginUser(emailLogin, passwordLogin));
+    localStorage.setItem("loggedInUser", JSON.stringify({ email: emailLogin }));
     setTimeout(() => {
       navigate("/");
     }, 1500);
-  };
-
-  const handleKeepSignedInChange = () => {
-    setKeepSignedIn(!keepSignedIn); // Đảo ngược giá trị của keepSignedIn
   };
 
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
   };
 
+  const handleLoginGoogle = () => {
+    window.location.href = GOOGLE_AUTH_URL;
+  };
+
   return (
-    <div className="login-wrap">
-      <div className="login-html">
-        <label htmlFor="tab-1" className="tab">
-          Sign In
-        </label>
-        <div className="login-form">
-          <div className="sign-in-htm">
-            <div className="group">
-              <label htmlFor="user" className="label">
-                USERNAME
-              </label>
-              <input
-                id="user"
-                type="text"
-                className="input"
-                placeholder="Enter your username"
-                onChange={(event) => setEmailLogin(event.target.value)}
-              />
-            </div>
-            <div className="group">
-              <label htmlFor="pass" className="label">
-                PASSWORD
-              </label>
-              <div className="password-input-container">
+    <div className="background">
+      <div className="login-wrap">
+        <div className="login-html">
+          <label htmlFor="tab-1" className="tab">
+            Sign In
+          </label>
+          <div className="login-form">
+            <div className="sign-in-htm">
+              <div className="group">
+                <label htmlFor="user" className="label">
+                  Username
+                </label>
                 <input
-                  id="pass"
-                  type={showPassword ? "text" : "password"}
+                  id="user"
+                  type="text"
                   className="input"
-                  placeholder="Enter your password"
-                  data-type="password"
-                  onChange={(event) => setPasswordLogin(event.target.value)}
-                />
-                <FontAwesomeIcon
-                  icon={showPassword ? faEyeSlash : faEye}
-                  className="password-toggle-icon"
-                  onClick={togglePasswordVisibility}
+                  placeholder="Enter your username"
+                  value={emailLogin}
+                  onChange={(event) => setEmailLogin(event.target.value)}
                 />
               </div>
-            </div>
-            <div className="group">
-              <input
-                id="check"
-                type="checkbox"
-                className="check"
-                checked={keepSignedIn}
-                onChange={handleKeepSignedInChange}
-              />
-              <label htmlFor="check">
-                <span className="icon"></span> Keep me Signed in
-              </label>
-            </div>
-            <div className="group">
-              <input
-                type="submit"
-                className="button"
-                value="Sign In"
-                onClick={handleLogin}
-              />
-            </div>
-            <div className="hr"></div>
-            <div className="foot-lnk d-flex justify-content-between">
-              <Link to="/forgot-password">Forgot Password?</Link>
-              <Link to="/register">Create an account</Link>
+              <div className="group">
+                <label htmlFor="pass" className="label">
+                  Password
+                </label>
+                <div className="password-input-container">
+                  <input
+                    id="pass"
+                    type={showPassword ? "text" : "password"}
+                    className="input"
+                    placeholder="Enter your password"
+                    value={passwordLogin}
+                    onChange={(event) => setPasswordLogin(event.target.value)}
+                  />
+                  <FontAwesomeIcon
+                    icon={showPassword ? faEyeSlash : faEye}
+                    className="password-toggle-icon"
+                    onClick={togglePasswordVisibility}
+                  />
+                </div>
+              </div>
+              <div className="group">
+                <input
+                  type="submit"
+                  className="button"
+                  value="Sign In"
+                  onClick={handleLogin}
+                />
+              </div>
+              <div className="login-icons">
+                <button className="google-login" onClick={handleLoginGoogle}>
+                  <FontAwesomeIcon icon={faGoogle} /> Sign In with Google
+                </button>
+                <button className="facebook-login">
+                  <FontAwesomeIcon icon={faFacebook} /> Sign In with Facebook
+                </button>
+              </div>
+              <div className="hr"></div>
+              <div className="foot-lnk d-flex justify-content-between">
+                <Link to="/forgot-password">Forgot Password?</Link>
+                <Link to="/register">Create an account</Link>
+              </div>
             </div>
           </div>
         </div>

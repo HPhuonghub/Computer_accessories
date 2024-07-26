@@ -75,6 +75,18 @@ const postRegister = async (fullname, username, password) => {
   });
 };
 
+const postForgotPassword = async (username) => {
+  return axios.post(`api/v1/password/forgot`, { email: username });
+};
+
+const postChangePassword = async (email, oldPassword, newPassword) => {
+  return axios.post(`api/v1/password/change`, {
+    email,
+    oldPassword,
+    newPassword,
+  });
+};
+
 export {
   postCreateNewUser,
   getAllUsers,
@@ -84,4 +96,6 @@ export {
   getAllUsersWithPaginate,
   postLogin,
   postRegister,
+  postForgotPassword,
+  postChangePassword,
 };

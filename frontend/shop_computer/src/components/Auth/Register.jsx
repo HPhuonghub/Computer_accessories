@@ -66,91 +66,93 @@ const Register = () => {
   };
 
   return (
-    <div className="login-wrap">
-      <div className="login-html">
-        <label htmlFor="tab-2" className="tab">
-          Sign Up
-        </label>
-        <div className="login-form">
-          <div className="sign-up-htm">
-            <div className="group">
-              <label htmlFor="user" className="label">
-                FULLNAME
-              </label>
-              <input
-                id="user"
-                type="text"
-                className="input"
-                placeholder="Enter your Fullname"
-                value={fullnameRegister}
-                onChange={(e) => setFullnameRegister(e.target.value)}
-              />
-            </div>
-            <div className="group">
-              <label htmlFor="pass" className="label">
-                Email Address
-              </label>
-              <input
-                id="pass"
-                type="text"
-                className="input"
-                placeholder="Enter your email"
-                onChange={(e) => setEmailRegister(e.target.value)}
-              />
-            </div>
-            <div className="group">
-              <label htmlFor="pass" className="label">
-                Password
-              </label>
-              <div className="password-input-container">
+    <div className="background">
+      <div className="login-wrap">
+        <div className="login-html">
+          <label htmlFor="tab-2" className="tab">
+            Sign Up
+          </label>
+          <div className="login-form">
+            <div className="sign-up-htm">
+              <div className="group">
+                <label htmlFor="user" className="label">
+                  Full Name
+                </label>
                 <input
-                  id="pass"
-                  type={showPassword ? "text" : "password"}
+                  id="user"
+                  type="text"
                   className="input"
-                  data-type="password"
-                  placeholder="Enter your password"
-                  onChange={(e) => setPasswordRegister(e.target.value)}
-                />
-                <FontAwesomeIcon
-                  icon={showPassword ? faEyeSlash : faEye}
-                  className="password-toggle-icon"
-                  onClick={togglePasswordVisibility}
+                  placeholder="Enter your Fullname"
+                  value={fullnameRegister}
+                  onChange={(e) => setFullnameRegister(e.target.value)}
                 />
               </div>
-            </div>
-            <div className="group">
-              <label htmlFor="pass" className="label">
-                Repeat Password
-              </label>
-              <div className="password-input-container">
+              <div className="group">
+                <label htmlFor="pass" className="label">
+                  Email Address
+                </label>
                 <input
                   id="pass"
-                  type={showRepeatPassword ? "text" : "password"}
+                  type="text"
                   className="input"
-                  data-type="password"
-                  placeholder="Enter your repeat password"
-                  onChange={(e) => setRepeatPasswordRegister(e.target.value)}
-                />
-                <FontAwesomeIcon
-                  icon={showRepeatPassword ? faEyeSlash : faEye}
-                  className="password-toggle-icon"
-                  onClick={toggleRepeatPasswordVisibility}
+                  placeholder="Enter your email"
+                  onChange={(e) => setEmailRegister(e.target.value)}
                 />
               </div>
-            </div>
+              <div className="group">
+                <label htmlFor="pass" className="label">
+                  Password
+                </label>
+                <div className="password-input-container">
+                  <input
+                    id="pass"
+                    type={showPassword ? "text" : "password"}
+                    className="input"
+                    data-type="password"
+                    placeholder="Enter your password"
+                    onChange={(e) => setPasswordRegister(e.target.value)}
+                  />
+                  <FontAwesomeIcon
+                    icon={showPassword ? faEyeSlash : faEye}
+                    className="password-toggle-icon"
+                    onClick={togglePasswordVisibility}
+                  />
+                </div>
+              </div>
+              <div className="group">
+                <label htmlFor="pass" className="label">
+                  Repeat Password
+                </label>
+                <div className="password-input-container">
+                  <input
+                    id="pass"
+                    type={showRepeatPassword ? "text" : "password"}
+                    className="input"
+                    data-type="password"
+                    placeholder="Enter your repeat password"
+                    onChange={(e) => setRepeatPasswordRegister(e.target.value)}
+                  />
+                  <FontAwesomeIcon
+                    icon={showRepeatPassword ? faEyeSlash : faEye}
+                    className="password-toggle-icon"
+                    onClick={toggleRepeatPasswordVisibility}
+                  />
+                </div>
+              </div>
 
-            <div className="group">
-              <input
-                type="submit"
-                className="button"
-                value="Sign Up"
-                onClick={() => handleRegister()}
-              />
-            </div>
-            <div className="hr"></div>
-            <div className="foot-lnk d-flex justify-content-center">
-              <label htmlFor="tab-1" />
-              <Link to="/login">Already Member?</Link>
+              <div className="group">
+                <input
+                  type="submit"
+                  className="button"
+                  value="Sign Up"
+                  onClick={() => handleRegister()}
+                />
+              </div>
+              <div className="hr"></div>
+              <div className="foot-lnk d-flex justify-content-center">
+                <label htmlFor="tab-1" />
+                <Link to="/login">Already Member?</Link>
+              </div>
             </div>
           </div>
         </div>
