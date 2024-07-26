@@ -1,4 +1,4 @@
-package com.dev.computer_accessories.dto.request;
+package com.dev.computer_accessories.auth.request;
 
 import lombok.Getter;
 

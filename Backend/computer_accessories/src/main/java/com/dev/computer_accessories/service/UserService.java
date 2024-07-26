@@ -12,7 +12,7 @@ public interface UserService {
 
     void deleteUser(long userId);
 
-    void changePassword(long userId, UserDTO userSTO);
+    void changePassword(String email, String password);
 
     UserDetailResponse getUser(long userId);
 
