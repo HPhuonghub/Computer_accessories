@@ -108,19 +108,6 @@ public class UserController {
 
     }
 
-    @Operation(summary = "Patch user", description = "API patch user")
-    @PatchMapping("/{userId}")
-    public ResponseData<?> changePassword(@Min(value = 1 , message = "userId must be greater than 0") @PathVariable long userId, @RequestParam UserDTO userDTO) {
-        log.info("Request update password userId = {}", (Long) userId);
-        try {
-            userService.changePassword(userId, userDTO);
-            return  new ResponseData<>(HttpStatus.ACCEPTED.value(), "Update password successfully");
-        } catch (Exception e) {
-            log.error("errorMessage = {}", e.getMessage(), e.getCause());
-            return new ResponseError(HttpStatus.BAD_REQUEST.value(), "Update password fail");
-        }
-
-    }
 
     @Operation(summary = "Delete user", description = "API delete user")
     @DeleteMapping("/{userId}")

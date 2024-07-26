@@ -88,9 +88,9 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void changePassword(long userId, UserDTO userSTO) {
-        User user = getUserById(userId);
-        user.setPassword(user.getPassword());
+    public void changePassword(String email, String password) {
+        User user = getUserByEmail(email);
+        user.setPassword(passwordEncoder.encode(password));
         userRepository.save(user);
 
     }

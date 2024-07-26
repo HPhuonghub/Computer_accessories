@@ -4,7 +4,7 @@ import reportWebVitals from "./reportWebVitals";
 import { createRoot } from "react-dom/client";
 import { BrowserRouter } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
-import Layout from "./Layout";
+import Layout from "./routes/Layout";
 import { store } from "./redux/store";
 import { Provider } from "react-redux";
 
