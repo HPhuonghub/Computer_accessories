@@ -1,28 +1,42 @@
-.login-wrap {
-  width: 100%;
-  margin: auto;
-  max-width: 525px;
-  min-height: 670px;
-  position: relative;
-  background: url(https://raw.githubusercontent.com/khadkamhn/day-01-login-form/master/img/bg.jpg)
-    no-repeat center;
-  box-shadow: 0 12px 15px 0 rgba(0, 0, 0, 0.24),
-    0 17px 50px 0 rgba(0, 0, 0, 0.19);
+.background {
+  margin: 0;
+  padding: 0;
+  background-image: url("/assets/images/background.jpg");
+  background-size: cover;
+  background-position: center;
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 
-  .login-html {
+  .login-wrap {
     width: 100%;
-    height: 100%;
-    position: absolute;
-    padding: 40px 70px 50px 70px;
-    background: rgba(40, 57, 101, 0.9);
+    max-width: 600px; /* Độ rộng tối đa của phần wrap */
+    height: auto; /* Chiều cao của phần wrap bằng với body */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 50px;
+    background: rgba(40, 57, 101, 0.9); /* Màu nền với độ trong suốt */
+    border-radius: 10px; /* Bo tròn góc */
+    box-shadow: 0 12px 15px 0 rgba(0, 0, 0, 0.24),
+      0 17px 50px 0 rgba(0, 0, 0, 0.19); /* Đổ bóng */
 
-    .tab {
-      color: #fff;
-      font-size: xx-large !important;
-      margin-bottom: 15px;
+    .login-html {
+      width: 100%;
+      max-width: 100%; /* Đảm bảo chiều rộng của login-html bằng với login-wrap */
+      padding: 40px;
+      border-radius: 10px;
+
+      .tab {
+        font-size: xx-large;
+        color: #fff;
+        margin-bottom: 10px;
+      }
     }
 
     .login-form {
+      width: 100%; /* Đảm bảo form đăng nhập lấp đầy login-html */
       min-height: 345px;
       position: relative;
       perspective: 1000px;
@@ -45,6 +59,24 @@
           padding: 15px 20px;
           border-radius: 25px;
           background: rgba(255, 255, 255, 0.1);
+          position: relative;
+
+          &.password {
+            padding-right: 40px;
+          }
+        }
+
+        .password-input-container {
+          position: relative;
+
+          .password-toggle-icon {
+            position: absolute;
+            top: 50%;
+            right: 10px;
+            transform: translateY(-50%);
+            cursor: pointer;
+            color: #aaa;
+          }
         }
 
         .button {
@@ -73,16 +105,9 @@
           a {
             color: #fff;
             text-decoration: none;
-            transition: color 0.3s ease;
-
+            margin: 0 10px;
             &:hover {
               text-decoration: underline;
-              cursor: pointer;
-              color: #ccc; // Màu khi hover
-            }
-
-            &:active {
-              color: #fff; // Màu khi ấn
             }
           }
         }

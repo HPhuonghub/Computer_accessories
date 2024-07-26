@@ -1,0 +1,94 @@
+.cart-popup {
+  position: absolute;
+  top: calc(100% + 10px); /* Vị trí dưới icon cart */
+  right: 15px;
+  width: 400px;
+  background-color: white;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  z-index: 1000;
+
+  .cart-popup-content {
+    padding: 10px;
+
+    p {
+      line-height: 1.5;
+      color: black;
+      font-size: 1.3rem;
+      border-bottom: 1px solid #eee;
+      margin-bottom: 5px;
+    }
+
+    .cart-items-list {
+      max-height: 300px; /* Đặt chiều cao tối đa cho danh sách */
+      overflow-y: auto; /* Thiết lập thanh cuộn dọc */
+
+      &.scrollable-list {
+        max-height: 200px; /* Nếu có từ 4 sản phẩm trở lên, giảm chiều cao tối đa */
+      }
+
+      ul {
+        list-style-type: none;
+        padding: 0;
+        margin: 0;
+
+        li {
+          display: flex;
+          align-items: center;
+          padding: 10px;
+          border-bottom: 1px solid #eee;
+
+          img {
+            width: 50px;
+            height: 50px;
+            object-fit: cover;
+            margin-right: 10px;
+          }
+
+          div {
+            flex-grow: 1;
+          }
+
+          p {
+            margin: 0;
+            line-height: 1.5;
+            color: black;
+            font-size: 0.8rem;
+            white-space: normal; /* Cho phép văn bản xuống dòng */
+            overflow: hidden;
+            text-overflow: ellipsis;
+            display: -webkit-box;
+            -webkit-line-clamp: 4; /* Chỉnh số dòng cần hiển thị */
+            -webkit-box-orient: vertical;
+          }
+        }
+      }
+    }
+
+    .total {
+      margin-top: 10px;
+      display: flex;
+      justify-content: space-between; // Đảm bảo chữ "Total" và số tiền cách xa nhau
+      width: 350px;
+      h3 {
+        color: black;
+        margin-left: 10px; // Cách lề trái chữ "Total" là 10px
+      }
+      p {
+        color: red;
+        margin-right: 10px; // Cách lề phải số tiền là 10px
+      }
+    }
+  }
+
+  .close-btn {
+    margin-top: 10px;
+    width: 100%;
+    color: #fff;
+    background-color: red;
+    border: none;
+    border-radius: 3px;
+    cursor: pointer;
+  }
+}
