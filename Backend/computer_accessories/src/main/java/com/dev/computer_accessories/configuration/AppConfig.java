@@ -1,6 +1,7 @@
 package com.dev.computer_accessories.configuration;
 
 import com.dev.computer_accessories.repository.UserRepository;
+import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -23,6 +24,7 @@ public class AppConfig {
 
 
     private final UserRepository userRepository;
+    private final long MAX_AGE_SECS = 3600;
 
 
     @Bean
@@ -35,16 +37,17 @@ public class AppConfig {
     public WebMvcConfigurer corsConfigurer() {
         return new WebMvcConfigurer() {
             @Override
-            public void addCorsMappings(CorsRegistry registry) {
+            public void addCorsMappings(@NonNull CorsRegistry registry) {
                 registry.addMapping("/**")
                         .allowedOrigins("http://localhost:3000")
-                        .allowedMethods("POST", "PUT", "GET", "PATCH", "DELETE")
+                        .allowedMethods("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS")
                         .allowedHeaders("*")
-                        .allowCredentials(false)
-                        .maxAge(3600);
+                        .allowCredentials(true)
+                        .maxAge(MAX_AGE_SECS);
             }
         };
     }
+
 
 
     @Bean

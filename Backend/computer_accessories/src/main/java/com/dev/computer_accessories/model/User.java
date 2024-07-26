@@ -40,6 +40,8 @@ public class User extends AbstractEntity<Long> implements UserDetails {
     @Column(name = "status")
     private UserStatus status;
 
+    @Enumerated(EnumType.STRING)
+    private AuthProvider provider;
 
     @ManyToOne
     @JoinColumn(name = "role_id")
@@ -56,6 +58,10 @@ public class User extends AbstractEntity<Long> implements UserDetails {
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonIgnore
     private List<Orders> orders = new ArrayList<>();
+
+    private String imageUrl;
+    private String providerId;
+    private boolean enabled;
 
 
     @Override

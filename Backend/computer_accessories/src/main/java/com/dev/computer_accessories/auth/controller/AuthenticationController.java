@@ -1,4 +1,4 @@
-package com.dev.computer_accessories.controller;
+package com.dev.computer_accessories.auth.controller;
 
 import com.dev.computer_accessories.dto.request.SignInRequest;
 import com.dev.computer_accessories.dto.response.ResponseError;
