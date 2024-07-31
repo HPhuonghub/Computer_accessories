@@ -4,6 +4,7 @@ import com.dev.computer_accessories.auth.utils.CookieUtils;
 import com.dev.computer_accessories.configuration.AppProperties;
 import com.dev.computer_accessories.exception.ResourceNotFoundException;
 import com.dev.computer_accessories.exception.ResourcesNotFoundException;
+import com.dev.computer_accessories.model.AuthProvider;
 import com.dev.computer_accessories.model.User;
 import com.dev.computer_accessories.oauth2.user.UserPrincipal;
 import com.dev.computer_accessories.repository.TokenRepository;
@@ -74,7 +75,7 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
         UserPrincipal userPrincipal = (UserPrincipal) authentication.getPrincipal();
 
         // Get User from UserPrincipal
-        User user = userRepository.findByEmail(userPrincipal.getEmail())
+        User user = userRepository.findByEmailAndProvider(userPrincipal.getEmail(), userPrincipal.getProvider())
                 .orElseThrow(() -> new ResourcesNotFoundException("User", "email", userPrincipal.getEmail()));
 
         /// Generate JWT token

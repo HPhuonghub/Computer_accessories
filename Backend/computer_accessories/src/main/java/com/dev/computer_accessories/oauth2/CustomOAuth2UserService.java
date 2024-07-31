@@ -54,29 +54,24 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
                 .getOAuth2UserInfo(
                         oAuth2UserRequest.getClientRegistration().getRegistrationId(), oAuth2User.getAttributes()
                 );
-        System.out.println("before 52");
+        System.out.println("before 57");
         System.out.println(oAuth2UserInfo.getEmail());
         System.out.println(oAuth2UserInfo.getId());
         System.out.println(oAuth2UserInfo.getFirstName());
         if (oAuth2UserInfo.getEmail() == null) {
             throw new OAuth2AuthenticationProcessingException("Email not found from OAuth2 provider");
         }
-        System.out.println("before 57");
-        Optional<User> userOptional = userRepository.findByEmail(oAuth2UserInfo.getEmail());
-//        System.out.println(userOptional.get());
+        System.out.println("before 64");
+        AuthProvider provider = AuthProvider.valueOf(oAuth2UserRequest.getClientRegistration().getRegistrationId().toUpperCase());
+        Optional<User> userOptional = userRepository.findByEmailAndProvider(oAuth2UserInfo.getEmail(), provider);
         System.out.println("----------------------------");
         User user;
         if (userOptional.isPresent()) {
             user = userOptional.get();
             System.out.println(user);
             System.out.println(oAuth2UserRequest.getClientRegistration());
-            System.out.println(AuthProvider.valueOf(oAuth2UserRequest.getClientRegistration().getRegistrationId()));
+            System.out.println(AuthProvider.valueOf(oAuth2UserRequest.getClientRegistration().getRegistrationId().toUpperCase()));
             System.out.println(user.getProvider().toString().toLowerCase());
-            if (!user.getProvider().toString().toLowerCase().equalsIgnoreCase(String.valueOf(AuthProvider.valueOf(oAuth2UserRequest.getClientRegistration().getRegistrationId())))) {
-                throw new ResourceNotFoundException("Looks like you're signed up with " +
-                        user.getProvider() + " account. Please use your " + user.getProvider() +
-                        " account to login.");
-            }
             user = updateExistingUser(user, oAuth2UserInfo);
         } else {
             user = registerNewUser(oAuth2UserRequest, oAuth2UserInfo);
@@ -91,7 +86,7 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
         Role role = roleService.findByName("USER");
 
         User user = User.builder()
-                .provider(AuthProvider.valueOf(oAuth2UserRequest.getClientRegistration().getRegistrationId()))
+                .provider(AuthProvider.valueOf(oAuth2UserRequest.getClientRegistration().getRegistrationId().toUpperCase()))
                 .providerId(oAuth2UserInfo.getId())
                 .fullName(oAuth2UserInfo.getName())
                 .email(oAuth2UserInfo.getEmail())
