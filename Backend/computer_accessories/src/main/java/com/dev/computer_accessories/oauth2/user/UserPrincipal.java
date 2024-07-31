@@ -1,5 +1,6 @@
 package com.dev.computer_accessories.oauth2.user;
 
+import com.dev.computer_accessories.model.AuthProvider;
 import com.dev.computer_accessories.model.User;
 import lombok.Data;
 import org.springframework.security.core.GrantedAuthority;
@@ -17,13 +18,15 @@ public class UserPrincipal implements OAuth2User, UserDetails {
     private final Long id;
     private final String email;
     private final String password;
+    private final AuthProvider provider;
     private final Collection<? extends GrantedAuthority> authorities;
     private Map<String, Object> attributes;
 
-    public UserPrincipal(Long id, String email, String password, Collection<? extends GrantedAuthority> authorities) {
+    public UserPrincipal(Long id, String email, String password, AuthProvider provider, Collection<? extends GrantedAuthority> authorities) {
         this.id = id;
         this.email = email;
         this.password = password;
+        this.provider = provider;
         this.authorities = authorities;
     }
 
@@ -35,6 +38,7 @@ public class UserPrincipal implements OAuth2User, UserDetails {
                 user.getId(),
                 user.getEmail(),
                 user.getPassword(),
+                user.getProvider(),
                 authorities
         );
     }
