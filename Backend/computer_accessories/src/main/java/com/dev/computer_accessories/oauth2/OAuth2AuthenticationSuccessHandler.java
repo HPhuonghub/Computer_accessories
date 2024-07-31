@@ -62,19 +62,18 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
         Optional<String> redirectUri = CookieUtils.getCookie(request, REDIRECT_URI_PARAM_COOKIE_NAME)
                 .map(Cookie::getValue);
 
-        log.info("check redirectUri {},{}",redirectUri.isPresent(),!isAuthorizedRedirectUri(redirectUri.get()));
-
         if (redirectUri.isPresent() && !isAuthorizedRedirectUri(redirectUri.get())) {
             throw new ResourceNotFoundException("Sorry! We've got an Unauthorized Redirect URI and can't proceed with the authentication");
         }
 
         String targetUrl = redirectUri.orElse(getDefaultTargetUrl());
 
+
         // Get UserPrincipal from Authentication
         UserPrincipal userPrincipal = (UserPrincipal) authentication.getPrincipal();
 
         // Get User from UserPrincipal
-        User user = userRepository.findByEmail(userPrincipal.getEmail())
+        User user = userRepository.findByEmailAndProvider(userPrincipal.getEmail(),userPrincipal.getProvider())
                 .orElseThrow(() -> new ResourcesNotFoundException("User", "email", userPrincipal.getEmail()));
 
         /// Generate JWT token
