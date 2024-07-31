@@ -42,7 +42,7 @@ const Login = () => {
     window.location.href = GOOGLE_AUTH_URL;
   };
 
-  const handleLoginFaceBook = () => {
+  const handleLoginFacebook = () => {
     window.location.href = FACEBOOK_AUTH_URL;
   };
 
@@ -102,7 +102,7 @@ const Login = () => {
                 </button>
                 <button
                   className="facebook-login"
-                  onClick={handleLoginFaceBook}
+                  onClick={handleLoginFacebook}
                 >
                   <FontAwesomeIcon icon={faFacebook} /> Sign In with Facebook
                 </button>
