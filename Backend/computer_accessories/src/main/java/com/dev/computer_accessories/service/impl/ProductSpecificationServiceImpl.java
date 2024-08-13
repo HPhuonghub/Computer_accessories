@@ -4,6 +4,8 @@ import com.dev.computer_accessories.dto.request.ProductSpecificationDTO;
 import com.dev.computer_accessories.dto.response.FeedBackDetailResponse;
 import com.dev.computer_accessories.dto.response.PageResponse;
 import com.dev.computer_accessories.dto.response.ProductSpecificationDetailResponse;
+import com.dev.computer_accessories.exception.AppException;
+import com.dev.computer_accessories.exception.ErrorCode;
 import com.dev.computer_accessories.exception.ResourceNotFoundException;
 import com.dev.computer_accessories.model.ProductSpecification;
 import com.dev.computer_accessories.model.Product;
@@ -111,10 +113,10 @@ public class ProductSpecificationServiceImpl implements ProductSpecificationServ
     }
 
     private ProductSpecification getProductSpecificationById(long id) {
-        return productSpecificationRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("ProductSpecification not found"));
+        return productSpecificationRepository.findById(id).orElseThrow(() -> new AppException(ErrorCode.SPECIFICATION_PRODUCT_NOT_FOUND));
     }
 
     private Product getProductByName(String name) {
-        return  productRepository.findByName(name).orElseThrow(() -> new ResourceNotFoundException("Product not found"));
+        return  productRepository.findByName(name).orElseThrow(() -> new AppException(ErrorCode.PRODUCT_NOT_FOUND));
     }
 }

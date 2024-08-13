@@ -26,49 +26,30 @@ public class SupplierController {
     @Operation(summary = "Get supplier by id", description = "Return supplier by id")
     @GetMapping("/{supplierId}")
     public ResponseData<?> getSupplierById(@Valid @PathVariable Long supplierId) {
-        try {
-            return new ResponseData<>(HttpStatus.OK.value(), "Get supplier by id successful", supplierService.getSupplier(supplierId));
-        } catch (Exception e) {
-            return new ResponseError(HttpStatus.BAD_REQUEST.value(), e.getMessage());
-        }
+        return new ResponseData<>(HttpStatus.OK.value(), "Get supplier by id successful", supplierService.getSupplier(supplierId));
     }
 
     @Operation(summary = "Add supplier", description = "API create new supplier")
     @PostMapping("/")
     public ResponseData<?> addSupplier(@Valid @RequestBody SupplierDTO supplierDTO) {
         log.info("Request add supplier = {}", supplierDTO);
-        try {
-            supplierService.saveSupplier(supplierDTO);
-            return new ResponseData<>(HttpStatus.OK.value(), "Create a supplier successful");
-        } catch (Exception e) {
-            log.error("errorMessage = {}",e.getMessage());
-            return new ResponseError(HttpStatus.BAD_REQUEST.value(), e.getMessage());
-        }
+        supplierService.saveSupplier(supplierDTO);
+        return new ResponseData<>(HttpStatus.OK.value(), "Create a supplier successful");
     }
 
 
     @Operation(summary = "Update a supplier", description = "API update a supplier")
     @PutMapping("/{supplierId}")
     public ResponseData<?> updateSupplier(@Min(value = 1, message = "SupplierId must be greater than 0") @PathVariable long supplierId, @RequestBody SupplierDTO supplierDTO) {
-        try {
-            supplierService.updateSupplier(supplierId, supplierDTO);
-            return new ResponseData<>(HttpStatus.OK.value(), "Update supplier successful");
-        } catch (Exception e) {
-            log.error("errorMessage = {}", e.getMessage());
-            return new ResponseError(HttpStatus.BAD_REQUEST.value(), e.getMessage());
-        }
+        supplierService.updateSupplier(supplierId, supplierDTO);
+        return new ResponseData<>(HttpStatus.OK.value(), "Update supplier successful");
     }
 
     @Operation(summary = "Delete a supplier", description = "API delete a supplier")
     @DeleteMapping("/{supplierId}")
     public ResponseData<?> deleteSupplier(@Min(1) @PathVariable long supplierId) {
-        try {
-            supplierService.deleteSupplier(supplierId);
-            return new ResponseData<>(HttpStatus.OK.value(), "Delete supplier successful");
-        } catch (Exception e) {
-            log.error("errorMessage = {}", e.getMessage());
-            return new ResponseError(HttpStatus.BAD_REQUEST.value(), e.getMessage());
-        }
+        supplierService.deleteSupplier(supplierId);
+        return new ResponseData<>(HttpStatus.OK.value(), "Delete supplier successful");
     }
 
     @Operation(summary = "Get list of suppliers per page", description = "Send a request via this API to get supplier list by pageNo and pageSize")

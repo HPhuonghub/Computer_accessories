@@ -3,6 +3,8 @@ package com.dev.computer_accessories.service.impl;
 import com.dev.computer_accessories.dto.request.OrdersDTO;
 import com.dev.computer_accessories.dto.response.OrdersResponse;
 import com.dev.computer_accessories.dto.response.PageResponse;
+import com.dev.computer_accessories.exception.AppException;
+import com.dev.computer_accessories.exception.ErrorCode;
 import com.dev.computer_accessories.exception.ResourceNotFoundException;
 import com.dev.computer_accessories.model.Orders;
 import com.dev.computer_accessories.model.User;
@@ -122,11 +124,11 @@ public class OrdersServiceImpl implements OrdersService {
     }
 
     private Orders getOrdersById(long id) {
-        return ordersRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Orders not found"));
+        return ordersRepository.findById(id).orElseThrow(() -> new AppException(ErrorCode.ORDERS_NOT_FOUND));
     }
 
     public Orders getOrdersByEmail(String email) {
-        return ordersRepository.findByEmail(email).orElseThrow(() -> new ResourceNotFoundException("Orders not found"));
+        return ordersRepository.findByEmail(email).orElseThrow(() -> new AppException(ErrorCode.ORDERS_NOT_FOUND));
     }
 
 }

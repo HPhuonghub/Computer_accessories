@@ -123,6 +123,7 @@ public class ProductServiceImpl implements ProductService {
             }
         }
 
+
         Pageable pageable = PageRequest.of(p, pageSize, Sort.by(sorts));
 
         Page<Product> products = productRepository.findAll(pageable);
@@ -146,6 +147,53 @@ public class ProductServiceImpl implements ProductService {
                 .pageSize(pageSize)
                 .totalPage(products.getTotalPages())
                 .items(response)
+                .build();
+    }
+
+    public PageResponse<?> searchProduct(int pageNo, int pageSize, String sortBy, String keyword) {
+        int p = 0;
+        if(pageNo > 0) {
+            p = pageNo - 1;
+        }
+
+
+        List<Sort.Order> sorts = new ArrayList<>();
+        if(StringUtils.hasLength(sortBy)) {
+            //name:asc||desc
+            Pattern pattern = Pattern.compile("(\\w+?)(:)(.*)");
+            Matcher matcher = pattern.matcher(sortBy);
+            if(matcher.find()) {
+                if (matcher.group(3).equalsIgnoreCase("asc")) {
+                    sorts.add((new Sort.Order(Sort.Direction.ASC, matcher.group(1))));
+                } else {
+                    sorts.add((new Sort.Order(Sort.Direction.DESC, matcher.group(1))));
+                }
+            }
+        }
+
+        Pageable pageable = PageRequest.of(p, pageSize, Sort.by(sorts));
+
+        Page<Product> products = productRepository.search(keyword, pageable);
+
+        List<ProductDetailResponse> res = products.stream().map(product -> ProductDetailResponse.builder()
+                        .id(product.getId())
+                        .name(product.getName())
+                        .price(product.getPrice())
+                        .description(product.getDescription())
+                        .stock(product.getStock())
+                        .thumbnail(product.getThumbnail())
+                        .discount(product.getDiscount())
+                        .category(product.getCategory())
+                        .supplier(product.getSupplier())
+                        .productSpecifications(product.getProductSpecifications())
+                        .build())
+                .toList();
+
+        return PageResponse.builder()
+                .pageNo(p)
+                .pageSize(pageSize)
+                .totalPage(products.getTotalPages())
+                .items(res)
                 .build();
     }
 

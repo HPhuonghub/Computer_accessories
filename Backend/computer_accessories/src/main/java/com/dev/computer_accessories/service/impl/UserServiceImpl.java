@@ -3,7 +3,8 @@ package com.dev.computer_accessories.service.impl;
 import com.dev.computer_accessories.dto.request.UserDTO;
 import com.dev.computer_accessories.dto.response.PageResponse;
 import com.dev.computer_accessories.dto.response.UserDetailResponse;
-import com.dev.computer_accessories.exception.ResourceNotFoundException;
+import com.dev.computer_accessories.exception.AppException;
+import com.dev.computer_accessories.exception.ErrorCode;
 import com.dev.computer_accessories.model.Role;
 import com.dev.computer_accessories.model.User;
 import com.dev.computer_accessories.repository.SearchRepository;
@@ -42,7 +43,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public void saveUser(UserDTO userDTO) {
         if(existEmail(userDTO.getEmail())) {
-            throw new ResourceNotFoundException("Email already exists");
+            throw new AppException(ErrorCode.USER_EXISTED);
         }
 
         Role role = roleService.findByName(userDTO.getRole().getName());
@@ -58,7 +59,6 @@ public class UserServiceImpl implements UserService {
                 .build();
         userRepository.save(user);
 
-        log.info("Create user successfully!");
 
     }
 
@@ -104,6 +104,7 @@ public class UserServiceImpl implements UserService {
                 .phone(user.getPhone())
                 .email(user.getEmail())
                 .address(user.getAddress())
+                .role(user.getRole())
                 .build();
     }
 
@@ -208,7 +209,7 @@ public class UserServiceImpl implements UserService {
 
 
     public User getUserById(long userId) {
-        return userRepository.findById((Long) userId).orElseThrow(() -> new ResourceNotFoundException("User not found"));
+        return userRepository.findById((Long) userId).orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));
     }
 
     public boolean existEmail(String email) {
@@ -216,6 +217,6 @@ public class UserServiceImpl implements UserService {
     }
 
     public User getUserByEmail(String email) {
-        return userRepository.findByEmail(email).orElseThrow(() -> new ResourceNotFoundException("Email user not found"));
+        return userRepository.findByEmail(email).orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTED));
     }
 }

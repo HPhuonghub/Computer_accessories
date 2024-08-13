@@ -72,54 +72,31 @@ public class UserController {
     @Operation(summary = "Get user by id", description = "Return user by id")
     @GetMapping("/{userId}")
     public ResponseData<UserDetailResponse> getUserId(@PathVariable long userId) {
-        log.info("Request get user by id, userId = {}", (Long) userId);
-        try {
-            return new ResponseData<>(HttpStatus.OK.value(), "user", userService.getUser(userId));
-        } catch (ResourceNotFoundException e) {
-            log.error("errorMessage = {}", e.getMessage(), e.getCause());
-            return new ResponseError(HttpStatus.BAD_REQUEST.value(), e.getMessage());
-        }
+        log.info("Request get user by id, userId = {}", userId);
+        return new ResponseData<>(HttpStatus.OK.value(), "Get user by id successful", userService.getUser(userId));
     }
+
 
     @Operation(summary = "Add user", description = "API create new user")
     @PostMapping("/")
     public ResponseData<Long> addUser(@Valid @RequestBody UserDTO user) {
-        log.info("Request add user: {}", user.getFullName());
-        try {userService.saveUser(user);
-            return new ResponseData<>(HttpStatus.CREATED.value(), "User added successfully");
-        } catch(Exception e) {
-            log.error("errorMessage={}", e.getMessage(), e.getCause());
-            return new ResponseError(HttpStatus.BAD_REQUEST.value(), e.getMessage());
-        }
-
+        userService.saveUser(user);
+        return new ResponseData<>(HttpStatus.CREATED.value(), "User added successfully");
     }
 
     @Operation(summary = "Put user", description = "API edit user")
     @PutMapping("/{userId}")
     public ResponseData<?> updateUser(@Min(value = 1, message = "userId must be greater than 0") @PathVariable long userId, @RequestBody UserDTO userDTO) {
-        log.info("Request update userId = {}", (Long) userId);
-        try {
-            userService.updateUser(userId, userDTO);
-            return new ResponseData<>(HttpStatus.ACCEPTED.value(), "Update a user successfully");
-        } catch (ResourceNotFoundException e){
-            log.error("errorMessage={}", e.getMessage(), e.getCause());
-            return new ResponseError(HttpStatus.BAD_REQUEST.value(), "Update user fail");
-        }
-
+        log.info("Request update userId = {}", userId);
+        userService.updateUser(userId, userDTO);
+        return new ResponseData<>(HttpStatus.ACCEPTED.value(), "Update a user successfully");
     }
 
 
     @Operation(summary = "Delete user", description = "API delete user")
     @DeleteMapping("/{userId}")
     public ResponseData<?> deleteUser(@PathVariable long userId) {
-        log.info("Request delete userId = {}", (Long) userId);
-        try {
-            userService.deleteUser(userId);
-            return new ResponseData<>(HttpStatus.NO_CONTENT.value(), "Delete a user successfully");
-        } catch (Exception e) {
-            log.error("errorMessage = {}",e.getMessage(),e.getCause());
-            return new ResponseError(HttpStatus.BAD_REQUEST.value(), "Delete user fail");
-        }
-
+         userService.deleteUser(userId);
+         return new ResponseData<>(HttpStatus.NO_CONTENT.value(), "Delete a user successfully");
     }
 }

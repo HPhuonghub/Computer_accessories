@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api/v1/auth")
 @Validated
 @Slf4j
-@Tag(name = "Authentication Controller" )
+@Tag(name = "Authentication Controller")
 @RequiredArgsConstructor
 public class AuthenticationController {
 
@@ -32,24 +32,13 @@ public class AuthenticationController {
 
     @PostMapping("/login")
     public ResponseEntity<?> login(@Valid @RequestBody SignInRequest signInRequest) {
-        try {
-            return new ResponseEntity<>(authenticationService.authenticate(signInRequest), HttpStatus.OK);
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.OK)
-                    .body(new ResponseError(HttpStatus.BAD_REQUEST.value(), e.getMessage()));
-        }
+        return new ResponseEntity<>(authenticationService.authenticate(signInRequest), HttpStatus.OK);
     }
 
 
     @PostMapping("/register")
     public ResponseEntity<?> register(@Valid @RequestBody SignInRequest signInRequest) {
-        try {
-            return new ResponseEntity<>(authenticationService.register(signInRequest), HttpStatus.OK);
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.OK)
-                    .body(new ResponseError(HttpStatus.BAD_REQUEST.value(), e.getMessage()));
-        }
-
+        return new ResponseEntity<>(authenticationService.register(signInRequest), HttpStatus.OK);
     }
 
     @PostMapping("/logout")
