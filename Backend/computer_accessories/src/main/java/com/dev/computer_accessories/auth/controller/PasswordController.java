@@ -22,22 +22,14 @@ public class PasswordController {
 
     @PostMapping("/forgot")
     public ResponseData<?> forgotPassword(@RequestBody PasswordRequest passwordRequest) {
-        try {
-            log.info("check forgot password email {}", passwordRequest.getEmail());
-            passwordService.forgotPassword(passwordRequest.getEmail());
-            return new ResponseData<>(HttpStatus.OK.value(), "Forgot password is successful");
-        } catch (Exception e) {
-            return new ResponseError(HttpStatus.BAD_REQUEST.value(), e.getMessage());
-        }
+        log.info("check forgot password email {}", passwordRequest.getEmail());
+        passwordService.forgotPassword(passwordRequest.getEmail());
+        return new ResponseData<>(HttpStatus.OK.value(), "Forgot password is successful");
     }
 
     @PostMapping("/change")
     public ResponseData<?> changePassword(@RequestBody PasswordRequest passwordRequest) {
-        try {
-            passwordService.changePassword(passwordRequest);
-            return new ResponseData<>(HttpStatus.OK.value(), "Change password is successful");
-        } catch (Exception e) {
-            return new ResponseError(HttpStatus.BAD_REQUEST.value(), e.getMessage());
-        }
+        passwordService.changePassword(passwordRequest);
+        return new ResponseData<>(HttpStatus.OK.value(), "Change password is successful");
     }
 }

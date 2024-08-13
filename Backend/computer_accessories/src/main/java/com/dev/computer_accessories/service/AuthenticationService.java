@@ -1,8 +1,9 @@
 package com.dev.computer_accessories.service;
 
 import com.dev.computer_accessories.dto.request.SignInRequest;
-import com.dev.computer_accessories.dto.request.UserDTO;
 import com.dev.computer_accessories.dto.response.TokenResponse;
+import com.dev.computer_accessories.exception.AppException;
+import com.dev.computer_accessories.exception.ErrorCode;
 import com.dev.computer_accessories.exception.ResourceNotFoundException;
 import com.dev.computer_accessories.model.Role;
 import com.dev.computer_accessories.model.User;
@@ -39,10 +40,10 @@ public class AuthenticationService {
                     new UsernamePasswordAuthenticationToken(signInRequest.getUsername(), signInRequest.getPassword())
             );
         } catch (Exception e) {
-            throw new ResourceNotFoundException("Incorrect username or password");
+            throw new AppException(ErrorCode.INCORRECT_USERNAME_OR_PASSWORD);
         }
 
-        var user = userRepository.findByEmail(signInRequest.getUsername()).orElseThrow(() -> new UsernameNotFoundException("Username not found"));
+        var user = userRepository.findByEmail(signInRequest.getUsername()).orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTED));
 
         var accessToken = jwtService.generateToken(user);
 
@@ -58,15 +59,12 @@ public class AuthenticationService {
                 .status(200)
                 .message("Login user successful")
                 .email(signInRequest.getUsername())
-                .fullname(user.getFullName())
-                .role(user.getRole())
-                .userId(user.getId())
                 .build();
     }
 
     public TokenResponse register(SignInRequest signInRequest) {
         if(existEmail(signInRequest.getUsername())) {
-            throw new ResourceNotFoundException("Email already exists");
+            throw new AppException(ErrorCode.USER_EXISTED);
         }
 
         Role role = roleService.findByName(signInRequest.getRole().getName());

@@ -3,7 +3,8 @@ package com.dev.computer_accessories.service.impl;
 import com.dev.computer_accessories.dto.request.SupplierDTO;
 import com.dev.computer_accessories.dto.response.PageResponse;
 import com.dev.computer_accessories.dto.response.SupplierDetailResponse;
-import com.dev.computer_accessories.exception.ResourceNotFoundException;
+import com.dev.computer_accessories.exception.AppException;
+import com.dev.computer_accessories.exception.ErrorCode;
 import com.dev.computer_accessories.model.Supplier;
 import com.dev.computer_accessories.repository.SupplierRepository;
 import com.dev.computer_accessories.service.SupplierService;
@@ -29,6 +30,10 @@ public class SupplierServiceImpl implements SupplierService {
 
     @Override
     public void saveSupplier(SupplierDTO supplierDTO) {
+        if(existName(supplierDTO.getName())) {
+            throw new AppException(ErrorCode.SUPPLIER_EXISTED);
+        }
+
         Supplier supplier = Supplier.builder()
                 .name(supplierDTO.getName())
                 .phone(supplierDTO.getPhone())
@@ -43,6 +48,11 @@ public class SupplierServiceImpl implements SupplierService {
     @Override
     public void updateSupplier(long id, SupplierDTO supplierDTO) {
         Supplier supplier = getSupplierById(id);
+
+        if(existName(supplierDTO.getName())) {
+            throw new AppException(ErrorCode.CATEGORY_EXISTED);
+        }
+
         supplier.setName(supplierDTO.getName());
         supplier.setPhone(supplierDTO.getPhone());
         supplier.setAddress(supplierDTO.getAddress());
@@ -128,6 +138,10 @@ public class SupplierServiceImpl implements SupplierService {
     }
 
     private Supplier getSupplierById(long id) {
-        return supplierRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Supplier not found"));
+        return supplierRepository.findById(id).orElseThrow(() -> new AppException(ErrorCode.SUPPLIER_NOT_FOUND));
+    }
+
+    private boolean existName(String name) {
+        return supplierRepository.findByName(name).isPresent();
     }
 }

@@ -26,49 +26,30 @@ public class CategoryController {
     @Operation(summary = "Get category by id", description = "Return category by id")
     @GetMapping("/{categoryId}")
     public ResponseData<?> getCategoryById(@Valid @PathVariable int categoryId) {
-        try {
-            return new ResponseData<>(HttpStatus.OK.value(), "Get category by id successful", categoryService.getCategory(categoryId));
-        } catch (Exception e) {
-            return new ResponseError(HttpStatus.BAD_REQUEST.value(), e.getMessage());
-        }
+        return new ResponseData<>(HttpStatus.OK.value(), "Get category by id successful", categoryService.getCategory(categoryId));
     }
 
     @Operation(summary = "Add category", description = "API create new category")
     @PostMapping("/")
     public ResponseData<?> addCategory(@RequestBody @Valid CategoryDTO categoryDTO) {
         log.info("Request add category = {}", categoryDTO);
-        try {
-            categoryService.saveCategory(categoryDTO);
-            return new ResponseData<>(HttpStatus.OK.value(), "Create a category successful");
-        } catch (Exception e) {
-            log.error("errorMessage = {}",e.getMessage());
-            return new ResponseError(HttpStatus.BAD_REQUEST.value(), e.getMessage());
-        }
+        categoryService.saveCategory(categoryDTO);
+        return new ResponseData<>(HttpStatus.OK.value(), "Create a category successful");
     }
 
 
     @Operation(summary = "Update a category", description = "API update a category")
     @PutMapping("/{categoryId}")
     public ResponseData<?> updateCategory(@Min(value = 1, message = "CategoryId must be greater than 0") @PathVariable int categoryId, @RequestBody CategoryDTO categoryDTO) {
-        try {
-            categoryService.updateCategory(categoryId, categoryDTO);
-            return new ResponseData<>(HttpStatus.OK.value(), "Update category successful");
-        } catch (Exception e) {
-            log.error("errorMessage = {}", e.getMessage());
-            return new ResponseError(HttpStatus.BAD_REQUEST.value(), e.getMessage());
-        }
+        categoryService.updateCategory(categoryId, categoryDTO);
+        return new ResponseData<>(HttpStatus.OK.value(), "Update category successful");
     }
 
     @Operation(summary = "Delete a category", description = "API delete a category")
     @DeleteMapping("/{categoryId}")
     public ResponseData<?> deleteCategory(@Min(1) @PathVariable int categoryId) {
-        try {
-            categoryService.deleteCategory(categoryId);
-            return new ResponseData<>(HttpStatus.OK.value(), "Delete category successful");
-        } catch (Exception e) {
-            log.error("errorMessage = {}", e.getMessage());
-            return new ResponseError(HttpStatus.BAD_REQUEST.value(), e.getMessage());
-        }
+        categoryService.deleteCategory(categoryId);
+        return new ResponseData<>(HttpStatus.OK.value(), "Delete category successful");
     }
 
     @Operation(summary = "Get list of categorys per page", description = "Send a request via this API to get category list by pageNo and pageSize")

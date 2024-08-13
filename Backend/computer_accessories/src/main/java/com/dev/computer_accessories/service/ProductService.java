@@ -16,5 +16,5 @@ public interface ProductService {
 
     PageResponse<?> getAllProductsWithSortBy(int PageNo, int PageSize, String sortBy);
 
-
+    PageResponse<?> searchProduct(int pageNo, int pageSize, String sortBy, String keyword);
 }

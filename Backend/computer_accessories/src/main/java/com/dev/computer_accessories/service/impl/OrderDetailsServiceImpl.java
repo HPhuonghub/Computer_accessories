@@ -3,6 +3,8 @@ package com.dev.computer_accessories.service.impl;
 import com.dev.computer_accessories.dto.request.OrderDetailsDTO;
 import com.dev.computer_accessories.dto.response.OrderDetailsResponse;
 import com.dev.computer_accessories.dto.response.PageResponse;
+import com.dev.computer_accessories.exception.AppException;
+import com.dev.computer_accessories.exception.ErrorCode;
 import com.dev.computer_accessories.exception.ResourceNotFoundException;
 import com.dev.computer_accessories.model.OrderDetails;
 import com.dev.computer_accessories.model.Orders;
@@ -114,7 +116,7 @@ public class OrderDetailsServiceImpl implements OrderDetailsService {
     }
 
     private OrderDetails getOrderDetailsById(long id) {
-        return orderDetailsRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("OrderDetails not found"));
+        return orderDetailsRepository.findById(id).orElseThrow(() -> new AppException(ErrorCode.ORDER_DETAILS_NOT_FOUND));
     }
 
 }
