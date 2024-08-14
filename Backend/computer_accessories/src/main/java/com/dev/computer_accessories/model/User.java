@@ -75,6 +75,7 @@ public class User extends AbstractEntity<Long> implements UserDetails {
         List<GrantedAuthority> authorities = new ArrayList<>();
         authorities.add(new SimpleGrantedAuthority(role.getName()));
 
+
         return authorities;
     }
 

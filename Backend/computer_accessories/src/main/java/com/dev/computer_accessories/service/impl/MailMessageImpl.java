@@ -1,6 +1,6 @@
-package com.dev.computer_accessories.auth.service.impl;
+package com.dev.computer_accessories.service.impl;
 
-import com.dev.computer_accessories.auth.service.MailMessage;
+import com.dev.computer_accessories.service.MailMessage;
 import lombok.RequiredArgsConstructor;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;

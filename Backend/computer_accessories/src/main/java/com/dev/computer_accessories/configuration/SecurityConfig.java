@@ -9,6 +9,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationProvider;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -35,12 +36,6 @@ public class SecurityConfig {
     private final OAuth2AuthenticationFailureHandler oAuth2AuthenticationFailureHandler;
     private final String[] WHITE_LIST = {"api/v1/auth/**",
             "api/v1/password/**",
-            "api/v1/product/**",
-            "api/v1/supplier/**",
-            "api/v1/category/**",
-            "api/v1/orders/**",
-            "api/v1/order-details/**",
-            "/api/v1/product-specification/**",
             "/api/v1/oauth2/**",
             "/login/oauth2/**"
     };
@@ -51,10 +46,10 @@ public class SecurityConfig {
         http.csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(request -> request
                         .requestMatchers(WHITE_LIST).permitAll()
-                        .requestMatchers(HttpMethod.GET,  "api/v1/user/list/**").hasRole("ADMIN")
-                        .requestMatchers(HttpMethod.DELETE,  "api/v1/user/**").hasAnyRole("ADMIN", "USER")
-                        .requestMatchers(HttpMethod.GET,  "api/v1/user/**").hasAnyRole("ADMIN", "USER")
-                        .requestMatchers(HttpMethod.PUT,  "api/v1/user/**").hasAnyRole("ADMIN", "USER")
+//                        .requestMatchers(HttpMethod.GET,  "api/v1/category/list/**").hasRole("ADMIN")
+//                        .requestMatchers(HttpMethod.DELETE,  "api/v1/user/**").hasAnyRole("ADMIN", "USER")
+//                        .requestMatchers(HttpMethod.GET,  "api/v1/user/**").hasAnyRole("ADMIN", "USER")
+//                        .requestMatchers(HttpMethod.PUT,  "api/v1/user/**").hasAnyRole("ADMIN", "USER")
                         .anyRequest().authenticated()
                 )
                 .sessionManagement(manager -> manager.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
@@ -79,6 +74,7 @@ public class SecurityConfig {
 
         return http.build();
     }
+
 
 
     @Bean

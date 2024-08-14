@@ -57,19 +57,13 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
         System.out.println("before 52");
         System.out.println(oAuth2UserInfo.getEmail());
         System.out.println(oAuth2UserInfo.getId());
-        System.out.println(oAuth2UserInfo.getName());
+        System.out.println(oAuth2UserInfo.getFirstName());
         if (oAuth2UserInfo.getEmail() == null) {
             throw new OAuth2AuthenticationProcessingException("Email not found from OAuth2 provider");
         }
-        System.out.println("before 57" + oAuth2UserRequest);
+        System.out.println("before 64");
         AuthProvider provider = AuthProvider.valueOf(oAuth2UserRequest.getClientRegistration().getRegistrationId().toUpperCase());
         Optional<User> userOptional = userRepository.findByEmailAndProvider(oAuth2UserInfo.getEmail(), provider);
-        if(userOptional.isPresent()) {
-            System.out.println("check userOptional successful");
-        }
-        else {
-            System.out.println("check userOptional failed");
-        }
         System.out.println("----------------------------");
         User user;
         if (userOptional.isPresent()) {
@@ -77,23 +71,13 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
             System.out.println(user);
             System.out.println(oAuth2UserRequest.getClientRegistration());
             System.out.println(AuthProvider.valueOf(oAuth2UserRequest.getClientRegistration().getRegistrationId().toUpperCase()));
-            System.out.println("checkout");
             System.out.println(user.getProvider().toString().toLowerCase());
-            String checkProvider = String.valueOf(AuthProvider.valueOf(oAuth2UserRequest.getClientRegistration().getRegistrationId().toUpperCase()));
-            if (checkProvider.isEmpty()) {
-                throw new ResourceNotFoundException("Looks like you're signed up with " +
-                        user.getProvider() + " account. Please use your " + user.getProvider() +
-                        " account to login.");
-            }
-            if(!user.getProvider().toString().toUpperCase().equalsIgnoreCase(checkProvider)) {
-                user = registerNewUser(oAuth2UserRequest, oAuth2UserInfo);
-            }
             user = updateExistingUser(user, oAuth2UserInfo);
         } else {
             user = registerNewUser(oAuth2UserRequest, oAuth2UserInfo);
             log.info("check user: {}", user.getRole().getName());
         }
-        System.out.println("check user successful ");
+
         return UserPrincipal.create(user, oAuth2User.getAttributes());
     }
 

@@ -1,12 +1,12 @@
-package com.dev.computer_accessories.auth.service.impl;
+package com.dev.computer_accessories.service.impl;
 
 import com.dev.computer_accessories.auth.PasswordGenerator;
-import com.dev.computer_accessories.auth.request.PasswordRequest;
-import com.dev.computer_accessories.auth.service.MailMessage;
-import com.dev.computer_accessories.auth.service.PasswordService;
-import com.dev.computer_accessories.exception.ResourceNotFoundException;
+import com.dev.computer_accessories.dto.request.PasswordRequest;
+import com.dev.computer_accessories.service.MailMessage;
+import com.dev.computer_accessories.service.PasswordService;
+import com.dev.computer_accessories.exception.AppException;
+import com.dev.computer_accessories.exception.ErrorCode;
 import com.dev.computer_accessories.model.User;
-import com.dev.computer_accessories.service.impl.UserServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -23,8 +23,8 @@ public class PasswordServiceImpl implements PasswordService {
     public void forgotPassword(String email) {
 
 
-        if(!userService.existEmail(email)) {
-            throw  new ResourceNotFoundException("Email does not exist");
+        if (!userService.existEmail(email)) {
+            throw new AppException(ErrorCode.USER_NOT_FOUND);
         }
 
         String newPassword = passwordGenerator.generateRandomPassword(12);
@@ -43,10 +43,14 @@ public class PasswordServiceImpl implements PasswordService {
     @Override
     public void changePassword(PasswordRequest passwordRequest) {
 
+        if (passwordRequest.getNewPassword().length() < 6) {
+            throw new AppException(ErrorCode.INVALID_PASSWORD);
+        }
+
         User user = userService.getUserByEmail(passwordRequest.getEmail());
 
         if (!passwordEncoder.matches(passwordRequest.getOldPassword(), user.getPassword())) {
-            throw new ResourceNotFoundException("Password does not match");
+            throw new AppException(ErrorCode.PASSWORD_MISMATCH);
         }
 
 

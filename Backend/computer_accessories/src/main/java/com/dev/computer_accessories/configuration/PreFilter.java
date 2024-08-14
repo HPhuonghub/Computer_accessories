@@ -1,5 +1,7 @@
 package com.dev.computer_accessories.configuration;
 
+import com.dev.computer_accessories.exception.AppException;
+import com.dev.computer_accessories.exception.ErrorCode;
 import com.dev.computer_accessories.repository.TokenRepository;
 import com.dev.computer_accessories.service.JwtService;
 import jakarta.servlet.FilterChain;
@@ -45,6 +47,7 @@ public class PreFilter extends OncePerRequestFilter {
         log.info("Authorization: {}", authorization);
 
         if(StringUtils.isAllBlank(authorization) || !authorization.startsWith("Bearer ")) {
+            log.error("Authorization header is missing or does not start with Bearer");
             filterChain.doFilter(request, response);
             return;
         }

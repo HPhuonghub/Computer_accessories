@@ -12,6 +12,7 @@ import jakarta.validation.constraints.Min;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @RequiredArgsConstructor
@@ -24,54 +25,40 @@ public class SupplierController {
     private final SupplierService supplierService;
 
     @Operation(summary = "Get supplier by id", description = "Return supplier by id")
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'USER')")
     @GetMapping("/{supplierId}")
     public ResponseData<?> getSupplierById(@Valid @PathVariable Long supplierId) {
-        try {
-            return new ResponseData<>(HttpStatus.OK.value(), "Get supplier by id successful", supplierService.getSupplier(supplierId));
-        } catch (Exception e) {
-            return new ResponseError(HttpStatus.BAD_REQUEST.value(), e.getMessage());
-        }
+        return new ResponseData<>(HttpStatus.OK.value(), "Get supplier by id successful", supplierService.getSupplier(supplierId));
     }
 
     @Operation(summary = "Add supplier", description = "API create new supplier")
+    @PreAuthorize("hasAuthority('ADMIN')")
     @PostMapping("/")
     public ResponseData<?> addSupplier(@Valid @RequestBody SupplierDTO supplierDTO) {
         log.info("Request add supplier = {}", supplierDTO);
-        try {
-            supplierService.saveSupplier(supplierDTO);
-            return new ResponseData<>(HttpStatus.OK.value(), "Create a supplier successful");
-        } catch (Exception e) {
-            log.error("errorMessage = {}",e.getMessage());
-            return new ResponseError(HttpStatus.BAD_REQUEST.value(), e.getMessage());
-        }
+        supplierService.saveSupplier(supplierDTO);
+        return new ResponseData<>(HttpStatus.OK.value(), "Create a supplier successful");
     }
 
 
     @Operation(summary = "Update a supplier", description = "API update a supplier")
+    @PreAuthorize("hasAuthority('ADMIN')")
     @PutMapping("/{supplierId}")
     public ResponseData<?> updateSupplier(@Min(value = 1, message = "SupplierId must be greater than 0") @PathVariable long supplierId, @RequestBody SupplierDTO supplierDTO) {
-        try {
-            supplierService.updateSupplier(supplierId, supplierDTO);
-            return new ResponseData<>(HttpStatus.OK.value(), "Update supplier successful");
-        } catch (Exception e) {
-            log.error("errorMessage = {}", e.getMessage());
-            return new ResponseError(HttpStatus.BAD_REQUEST.value(), e.getMessage());
-        }
+        supplierService.updateSupplier(supplierId, supplierDTO);
+        return new ResponseData<>(HttpStatus.OK.value(), "Update supplier successful");
     }
 
     @Operation(summary = "Delete a supplier", description = "API delete a supplier")
+    @PreAuthorize("hasAuthority('ADMIN')")
     @DeleteMapping("/{supplierId}")
     public ResponseData<?> deleteSupplier(@Min(1) @PathVariable long supplierId) {
-        try {
-            supplierService.deleteSupplier(supplierId);
-            return new ResponseData<>(HttpStatus.OK.value(), "Delete supplier successful");
-        } catch (Exception e) {
-            log.error("errorMessage = {}", e.getMessage());
-            return new ResponseError(HttpStatus.BAD_REQUEST.value(), e.getMessage());
-        }
+        supplierService.deleteSupplier(supplierId);
+        return new ResponseData<>(HttpStatus.OK.value(), "Delete supplier successful");
     }
 
     @Operation(summary = "Get list of suppliers per page", description = "Send a request via this API to get supplier list by pageNo and pageSize")
+    @PreAuthorize("hasAuthority('ADMIN')")
     @GetMapping("/lists")
     public ResponseData<?> getAllSupplierWithSortBy(
             @RequestParam(defaultValue = "0", required = false) int pageNo,
@@ -82,6 +69,7 @@ public class SupplierController {
     }
 
     @Operation(summary = "Get list of suppliers", description = "Send a request via this API to get supplier list")
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'USER')")
     @GetMapping("/list")
     public ResponseData<?> getSuppliers() {
         return new ResponseData<>(HttpStatus.OK.value(), "Get all supplier successful", supplierService.getSuppliers());

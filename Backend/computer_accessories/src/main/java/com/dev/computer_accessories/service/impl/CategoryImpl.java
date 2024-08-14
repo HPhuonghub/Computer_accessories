@@ -3,6 +3,8 @@ package com.dev.computer_accessories.service.impl;
 import com.dev.computer_accessories.dto.request.CategoryDTO;
 import com.dev.computer_accessories.dto.response.CategoryDetailResponse;
 import com.dev.computer_accessories.dto.response.PageResponse;
+import com.dev.computer_accessories.exception.AppException;
+import com.dev.computer_accessories.exception.ErrorCode;
 import com.dev.computer_accessories.exception.ResourceNotFoundException;
 import com.dev.computer_accessories.model.Category;
 import com.dev.computer_accessories.repository.CategoryRepository;
@@ -13,13 +15,20 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.security.access.prepost.PostAuthorize;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -30,6 +39,10 @@ public class CategoryImpl implements CategoryService {
 
     @Override
     public void saveCategory(CategoryDTO categoryDTO) {
+        if(existCategory(categoryDTO.getName())) {
+            throw new AppException(ErrorCode.CATEGORY_EXISTED);
+        }
+
         Category category = Category.builder()
                 .name(categoryDTO.getName())
                 .description(categoryDTO.getDescription())
@@ -43,6 +56,10 @@ public class CategoryImpl implements CategoryService {
     @Override
     public void updateCategory(int id, CategoryDTO categoryDTO) {
         Category category = getCategoryById(id);
+
+        if(existCategory(categoryDTO.getName())) {
+            throw new AppException(ErrorCode.CATEGORY_EXISTED);
+        }
 
         category.setName(categoryDTO.getName());
         category.setDescription(categoryDTO.getDescription());
@@ -105,6 +122,7 @@ public class CategoryImpl implements CategoryService {
                 .build();
     }
 
+
     @Override
     public List<CategoryDetailResponse> getCategories() {
         List<Category> categories = categoryRepository.findAll();
@@ -119,6 +137,10 @@ public class CategoryImpl implements CategoryService {
     }
 
     private Category getCategoryById(int id) {
-        return categoryRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Category not found"));
+        return categoryRepository.findById(id).orElseThrow(() -> new AppException(ErrorCode.CATEGORY_NOT_FOUND));
+    }
+
+    private boolean existCategory(String name) {
+        return categoryRepository.findByName(name).isPresent();
     }
 }

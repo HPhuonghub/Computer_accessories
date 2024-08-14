@@ -8,7 +8,7 @@ import axios from "axios";
 import { useDispatch } from "react-redux";
 import { loginUser } from "../../redux/slices/authSlice";
 import { toast } from "react-toastify";
-import { GOOGLE_AUTH_URL } from "../../constants";
+import { GOOGLE_AUTH_URL, FACEBOOK_AUTH_URL } from "../../constants";
 import googleLogo from "../../assets/images/google-logo.png";
 
 const Login = () => {
@@ -40,6 +40,10 @@ const Login = () => {
 
   const handleLoginGoogle = () => {
     window.location.href = GOOGLE_AUTH_URL;
+  };
+
+  const handleLoginFacebook = () => {
+    window.location.href = FACEBOOK_AUTH_URL;
   };
 
   return (
@@ -96,7 +100,10 @@ const Login = () => {
                 <button className="google-login" onClick={handleLoginGoogle}>
                   <FontAwesomeIcon icon={faGoogle} /> Sign In with Google
                 </button>
-                <button className="facebook-login">
+                <button
+                  className="facebook-login"
+                  onClick={handleLoginFacebook}
+                >
                   <FontAwesomeIcon icon={faFacebook} /> Sign In with Facebook
                 </button>
               </div>

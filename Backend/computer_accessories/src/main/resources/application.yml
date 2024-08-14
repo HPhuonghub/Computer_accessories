@@ -24,14 +24,14 @@ spring:
           google:
             client-id: 838931501142-qmucmmbdh6d27ct61s9h4asevrre11kp.apps.googleusercontent.com
             client-secret: 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
-            redirectUri: "http://localhost:8888/api/v1/oauth2/callback/{registrationId}"
+            redirectUri: "{baseUrl}/api/v1/oauth2/callback/{registrationId}"
             scope:
               - email
               - profile
           facebook:
             client-id: 1527322331190412
             client-secret: 4d7d62a0fe00109a7ed595f3c75c7f64
-            redirect_uri: "http://localhost:8888/api/v1/oauth2/callback/{registrationId}"
+            redirectUri: "{baseUrl}/api/v1/oauth2/callback/{registrationId}"
             scope:
               - email
               - public_profile

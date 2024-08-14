@@ -3,7 +3,8 @@ package com.dev.computer_accessories.service.impl;
 import com.dev.computer_accessories.dto.request.FeedbackDTO;
 import com.dev.computer_accessories.dto.response.PageResponse;
 import com.dev.computer_accessories.dto.response.FeedBackDetailResponse;
-import com.dev.computer_accessories.exception.ResourceNotFoundException;
+import com.dev.computer_accessories.exception.AppException;
+import com.dev.computer_accessories.exception.ErrorCode;
 import com.dev.computer_accessories.model.Feedback;
 import com.dev.computer_accessories.model.Product;
 import com.dev.computer_accessories.model.User;
@@ -115,14 +116,14 @@ public class FeedbackServiceImpl implements FeedbackService {
     }
 
     private Feedback getFeedBackById(int id) {
-        return feedbackRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("FeedBack not found"));
+        return feedbackRepository.findById(id).orElseThrow(() -> new AppException(ErrorCode.FEEDBACK_NOT_FOUND));
     }
 
     private User getUserByEmail(String email) {
-        return userRepository.findByEmail(email).orElseThrow(() -> new ResourceNotFoundException("User not found"));
+        return userRepository.findByEmail(email).orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));
     }
 
     private Product getProductByName(String name) {
-        return  productRepository.findByName(name).orElseThrow(() -> new ResourceNotFoundException("Product not found"));
+        return  productRepository.findByName(name).orElseThrow(() -> new AppException(ErrorCode.PRODUCT_NOT_FOUND));
     }
 }

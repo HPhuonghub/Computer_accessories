@@ -21,10 +21,5 @@ public class TokenResponse {
 
     private String email;
 
-    private String fullname;
 
-    @JsonInclude(JsonInclude.Include.NON_NULL)
-    private Long userId;
-
-    private Role role;
 }

@@ -14,7 +14,9 @@ import jakarta.validation.constraints.Min;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PostAuthorize;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -31,8 +33,8 @@ public class UserController {
 
 
     @Operation(summary = "Get list of users per page", description = "Send a request via this API to get user list by pageNo and pageSize")
+    @PreAuthorize("hasAuthority('ADMIN')")
     @GetMapping("/list")
-    @PreAuthorize("hasRole('ADMIN')")
     public ResponseData<?> getAllUser(@RequestParam(defaultValue = "0", required = false) int pageNo,
                                       @Min(1) @RequestParam(defaultValue = "20", required = false) int pageSize,
                                       @RequestParam(required = false) String sortBy) {
@@ -41,6 +43,7 @@ public class UserController {
     }
 
     @Operation(summary = "Get list of users with sort by multiple columns", description = "Send a request via this API to get user list by pageNo, pageSize and sort by multiple columns")
+    @PostAuthorize("hasAuthority('ADMIN')")
     @GetMapping("/list-with-sort-by-multiple-columns")
     public ResponseData<?> getAllUsersWithSortByMultipleColumns(@RequestParam(defaultValue = "0", required = false) int pageNo,
                                                              @Min(10) @RequestParam(defaultValue = "20", required = false) int pageSize,
@@ -50,6 +53,7 @@ public class UserController {
     }
 
     @Operation(summary = "Get list of users with sort by columns and search", description = "Send a request via this API to get user list by pageNo, pageSize, search and sort by search")
+    @PostAuthorize("hasAuthority('ADMIN')")
     @GetMapping("/list-with-sort-by-multiple-columns-search")
     public ResponseData<?> getAllUsersWithSortByColumnAndSearch(@RequestParam(defaultValue = "0", required = false) int pageNo,
                                                                 @RequestParam(defaultValue = "20", required = false) int pageSize,
@@ -70,56 +74,40 @@ public class UserController {
 //    }
 
     @Operation(summary = "Get user by id", description = "Return user by id")
+    @PreAuthorize("hasAnyAuthority('ADMIN','USER')")
+    @PostAuthorize("returnObject.data.email == authentication.name")
     @GetMapping("/{userId}")
     public ResponseData<UserDetailResponse> getUserId(@PathVariable long userId) {
-        log.info("Request get user by id, userId = {}", (Long) userId);
-        try {
-            return new ResponseData<>(HttpStatus.OK.value(), "user", userService.getUser(userId));
-        } catch (ResourceNotFoundException e) {
-            log.error("errorMessage = {}", e.getMessage(), e.getCause());
-            return new ResponseError(HttpStatus.BAD_REQUEST.value(), e.getMessage());
-        }
+        log.info("Request get user by id, userId = {}", userId);
+        return new ResponseData<>(HttpStatus.OK.value(), "Get user by id successful", userService.getUser(userId));
     }
 
+
     @Operation(summary = "Add user", description = "API create new user")
+    @PostAuthorize("hasAuthority('ADMIN')")
     @PostMapping("/")
     public ResponseData<Long> addUser(@Valid @RequestBody UserDTO user) {
-        log.info("Request add user: {}", user.getFullName());
-        try {userService.saveUser(user);
-            return new ResponseData<>(HttpStatus.CREATED.value(), "User added successfully");
-        } catch(Exception e) {
-            log.error("errorMessage={}", e.getMessage(), e.getCause());
-            return new ResponseError(HttpStatus.BAD_REQUEST.value(), e.getMessage());
-        }
-
+        userService.saveUser(user);
+        return new ResponseData<>(HttpStatus.CREATED.value(), "User added successfully");
     }
 
     @Operation(summary = "Put user", description = "API edit user")
+    @PreAuthorize("hasAnyAuthority('ADMIN','USER')")
+    @PostAuthorize("returnObject.data.email == authentication.name")
     @PutMapping("/{userId}")
     public ResponseData<?> updateUser(@Min(value = 1, message = "userId must be greater than 0") @PathVariable long userId, @RequestBody UserDTO userDTO) {
-        log.info("Request update userId = {}", (Long) userId);
-        try {
-            userService.updateUser(userId, userDTO);
-            return new ResponseData<>(HttpStatus.ACCEPTED.value(), "Update a user successfully");
-        } catch (ResourceNotFoundException e){
-            log.error("errorMessage={}", e.getMessage(), e.getCause());
-            return new ResponseError(HttpStatus.BAD_REQUEST.value(), "Update user fail");
-        }
-
+        log.info("Request update userId = {}", userId);
+        userService.updateUser(userId, userDTO);
+        return new ResponseData<>(HttpStatus.ACCEPTED.value(), "Update a user successfully");
     }
 
 
     @Operation(summary = "Delete user", description = "API delete user")
+    @PreAuthorize("hasAnyAuthority('ADMIN','USER')")
+    @PostAuthorize("returnObject.data.email == authentication.name")
     @DeleteMapping("/{userId}")
     public ResponseData<?> deleteUser(@PathVariable long userId) {
-        log.info("Request delete userId = {}", (Long) userId);
-        try {
-            userService.deleteUser(userId);
-            return new ResponseData<>(HttpStatus.NO_CONTENT.value(), "Delete a user successfully");
-        } catch (Exception e) {
-            log.error("errorMessage = {}",e.getMessage(),e.getCause());
-            return new ResponseError(HttpStatus.BAD_REQUEST.value(), "Delete user fail");
-        }
-
+         userService.deleteUser(userId);
+         return new ResponseData<>(HttpStatus.NO_CONTENT.value(), "Delete a user successfully");
     }
 }
