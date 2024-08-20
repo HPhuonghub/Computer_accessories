@@ -1,5 +1,7 @@
 package com.dev.computer_accessories.auth;
 
+import com.dev.computer_accessories.exception.AppException;
+import com.dev.computer_accessories.exception.ErrorCode;
 import com.dev.computer_accessories.repository.TokenRepository;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -25,7 +27,7 @@ public class LogoutService implements LogoutHandler {
         final String authHeader = request.getHeader("Authorization");
         final String jwt;
         if (StringUtils.isAllBlank(authHeader) || !authHeader.startsWith("Bearer ")) {
-            return;
+            throw new AppException(ErrorCode.TOKEN_INVALID);
         }
         jwt = authHeader.substring(7);
         var storedToken = tokenRepository.findByToken(jwt)

@@ -48,7 +48,6 @@ public class ProductController {
     }
 
     @Operation(summary = "Get product by id", description = "Api get a product by id")
-    @PreAuthorize("hasAnyAuthority('ADMIN', 'USER')")
     @GetMapping("/{productId}")
     public ResponseData<?> getProductById(@Min(value = 1, message = "productId must be greater than 0") @PathVariable long productId) {
         return new ResponseData<>(HttpStatus.OK.value(), "Get product by id successfully", productService.getProductDetail(productId));
@@ -56,7 +55,6 @@ public class ProductController {
 
 
     @Operation(summary = "Get list of products per page", description = "Send a request via this API to get product list by pageNo and pageSize")
-    @PreAuthorize("hasAnyAuthority('ADMIN', 'USER')")
     @GetMapping("/list")
     public ResponseData<?> getAllProduct(@RequestParam(defaultValue = "0", required = false) int pageNo,
                                          @Min(1) @RequestParam(defaultValue = "20", required = false) int pageSize,
@@ -66,7 +64,6 @@ public class ProductController {
     }
 
     @Operation(summary = "Get list of products per page by search", description = "Send a request via this API to get product list by search with pageNo and pageSize")
-    @PreAuthorize("hasAnyAuthority('ADMIN', 'USER')")
     @GetMapping("/list-search")
     public ResponseData<?> getAllProductBySearch(@RequestParam(defaultValue = "0", required = false) int pageNo,
                                                  @Min(1) @RequestParam(defaultValue = "20", required = false) int pageSize,

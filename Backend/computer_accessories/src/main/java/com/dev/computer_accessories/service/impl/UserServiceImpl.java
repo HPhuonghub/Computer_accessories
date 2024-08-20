@@ -164,21 +164,24 @@ public class UserServiceImpl implements UserService {
         }
 
         List<Sort.Order> orders = new ArrayList<>();
-        for(String sortBy : sorts) {
-            //fullName:asc|desc
-            Pattern pattern = Pattern.compile("(\\w+?)(:)(.*)");
-            Matcher matcher = pattern.matcher(sortBy);
-            if(matcher.find()) {
-                if(matcher.group(3).equalsIgnoreCase("asc")) {
-                    orders.add(new Sort.Order(Sort.Direction.ASC, matcher.group(1)));
-                } else {
-                    orders.add(new Sort.Order(Sort.Direction.DESC, matcher.group(1)));
-                }
 
+        if (sorts != null) {
+            for (String sortBy : sorts) {
+                log.info("sortBy: {}", sortBy);
+                // fullName:asc|desc
+                Pattern pattern = Pattern.compile("(\\w+?)(:)(.*)");
+                Matcher matcher = pattern.matcher(sortBy);
+                if (matcher.find()) {
+                    if (matcher.group(3).equalsIgnoreCase("asc")) {
+                        orders.add(new Sort.Order(Sort.Direction.ASC, matcher.group(1)));
+                    } else {
+                        orders.add(new Sort.Order(Sort.Direction.DESC, matcher.group(1)));
+                    }
+                }
             }
         }
 
-        Pageable pageable = PageRequest.of(pageNo, pageSize, Sort.by(sorts));
+        Pageable pageable = PageRequest.of(pageNo, pageSize, Sort.by(orders));
 
         Page<User> users = userRepository.findAll(pageable);
         List<UserDetailResponse> response = users.stream().map(user -> UserDetailResponse.builder()

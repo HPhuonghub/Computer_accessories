@@ -69,7 +69,6 @@ public class SupplierController {
     }
 
     @Operation(summary = "Get list of suppliers", description = "Send a request via this API to get supplier list")
-    @PreAuthorize("hasAnyAuthority('ADMIN', 'USER')")
     @GetMapping("/list")
     public ResponseData<?> getSuppliers() {
         return new ResponseData<>(HttpStatus.OK.value(), "Get all supplier successful", supplierService.getSuppliers());

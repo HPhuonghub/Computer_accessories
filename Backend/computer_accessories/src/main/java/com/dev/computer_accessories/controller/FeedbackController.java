@@ -52,7 +52,6 @@ public class FeedbackController {
     }
 
     @Operation(summary = "Get list of feedbacks per page", description = "Send a request via this API to get feedback list by pageNo and pageSize")
-    @PreAuthorize("hasAnyAuthority('ADMIN','USER')")
     @GetMapping("/list")
     public ResponseData<?> getAllFeedback(@RequestParam(defaultValue = "0", required = false) int pageNo,
                                           @Min(1) @RequestParam(defaultValue = "20", required = false) int pageSize,

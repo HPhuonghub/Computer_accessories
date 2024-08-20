@@ -24,7 +24,6 @@ public class CategoryController {
     private final CategoryService categoryService;
 
     @Operation(summary = "Get category by id", description = "Return category by id")
-    @PreAuthorize("hasAnyAuthority('ADMIN', 'USER')")
     @GetMapping("/{categoryId}")
     public ResponseData<?> getCategoryById(@Valid @PathVariable int categoryId) {
         return new ResponseData<>(HttpStatus.OK.value(), "Get category by id successful", categoryService.getCategory(categoryId));
@@ -57,7 +56,6 @@ public class CategoryController {
     }
 
     @Operation(summary = "Get list of categorys per page", description = "Send a request via this API to get category list by pageNo and pageSize")
-    @PreAuthorize("hasAnyAuthority('ADMIN', 'USER')")
     @GetMapping("/lists")
     public ResponseData<?> getAllCategoryWithSortBy(
             @RequestParam(defaultValue = "0", required = false) int pageNo,
@@ -68,7 +66,6 @@ public class CategoryController {
     }
 
     @Operation(summary = "Get list of categories", description = "Send a request via this API to get category list")
-    @PreAuthorize("hasAnyAuthority('ADMIN', 'USER')")
     @GetMapping("/list")
     public ResponseData<?> getAllCategories() {
         return new ResponseData<>(HttpStatus.OK.value(), "Get all category successful", categoryService.getCategories());

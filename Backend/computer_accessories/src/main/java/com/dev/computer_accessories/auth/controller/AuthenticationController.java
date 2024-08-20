@@ -3,20 +3,18 @@ package com.dev.computer_accessories.auth.controller;
 import com.dev.computer_accessories.dto.request.PasswordRequest;
 import com.dev.computer_accessories.dto.request.SignInRequest;
 import com.dev.computer_accessories.dto.response.ResponseData;
-import com.dev.computer_accessories.dto.response.ResponseError;
+import com.dev.computer_accessories.dto.response.TokenResponse;
 import com.dev.computer_accessories.service.AuthenticationService;
 import com.dev.computer_accessories.service.PasswordService;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/v1/auth")
@@ -47,13 +45,13 @@ public class AuthenticationController {
     }
 
     @PostMapping("/logout")
-    public String logout() {
-        return "access";
+    public ResponseEntity<?> logout(HttpServletRequest request) {
+        return new ResponseEntity<>(authenticationService.logout(request), HttpStatus.OK);
     }
 
-    @PostMapping("/refresh")
-    public String refresh() {
-        return "access";
+    @PostMapping("/refresh-token")
+    public ResponseEntity<TokenResponse> refresh(HttpServletRequest jwtToken) {
+        return new ResponseEntity<>(authenticationService.refreshToken(jwtToken), HttpStatus.OK);
     }
 
     @PostMapping("/forgot")

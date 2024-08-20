@@ -48,7 +48,6 @@ public class ProductSpecificationController {
     }
 
     @Operation(summary = "Get list of productSpecifications per page", description = "Send a request via this API to get productSpecification list by pageNo and pageSize")
-    @PreAuthorize("hasAnyAuthority('ADMIN', 'USER')")
     @GetMapping("/list")
     public ResponseData<?> getAllProductSpecification(@RequestParam(defaultValue = "0", required = false) int pageNo,
                                                       @Min(1) @RequestParam(defaultValue = "20", required = false) int pageSize,

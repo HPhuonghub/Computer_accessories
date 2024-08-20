@@ -20,7 +20,8 @@ public enum ErrorCode {
     INCORRECT_USERNAME_OR_PASSWORD(1009, "Incorrect username or password", HttpStatus.UNAUTHORIZED),
     USER_NOT_FOUND(1010, "User not found", HttpStatus.NOT_FOUND),
     PASSWORD_MISMATCH(1011, "Password does not match", HttpStatus.UNAUTHORIZED),
-
+    TOKEN_NOT_BLANK(1012, "Token must be not blank", HttpStatus.UNAUTHORIZED),
+    TOKEN_INVALID(1013, "Token is invalid", HttpStatus.UNAUTHORIZED),
 
     // SUPPLIER
     SUPPLIER_NOT_FOUND(2000, "Supplier not found", HttpStatus.NOT_FOUND),
@@ -51,7 +52,7 @@ public enum ErrorCode {
     ORDER_DETAILS_EXISTED(8001, "OrderDetails already exists", HttpStatus.BAD_REQUEST),
 
     // FEEDBACK
-    FEEDBACK_NOT_FOUND(8000, "Feedback not found", HttpStatus.NOT_FOUND),
+    FEEDBACK_NOT_FOUND(9000, "Feedback not found", HttpStatus.NOT_FOUND),
 
     ;
 

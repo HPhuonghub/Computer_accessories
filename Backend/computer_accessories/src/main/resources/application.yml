@@ -4,9 +4,9 @@ spring:
   application:
     name: computer_accessories
   datasource:
-    url: jdbc:mysql://localhost:3306/computer_accessories
+    url: jdbc:mysql://172.18.0.2:3306/computer_accessories
     username: root
-    password: 123456789
+    password: root
     driver-class-name: com.mysql.cj.jdbc.Driver
   jpa:
     database-platform: org.hibernate.dialect.MySQLDialect
