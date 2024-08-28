@@ -37,7 +37,7 @@ public class PreFilter extends OncePerRequestFilter {
     protected void doFilterInternal(@NonNull HttpServletRequest request,@NonNull HttpServletResponse response,@NonNull FilterChain filterChain) throws ServletException, IOException {
         log.info("-------------------PreFilter----------------");
 
-        if(request.getServletPath().startsWith("/api/v1/auth") || request.getServletPath().startsWith("/api/v1/password")) {
+        if(request.getServletPath().startsWith("/api/v1/auth")) {
             log.info("-----------------");
             filterChain.doFilter(request, response);
             return;

@@ -86,7 +86,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(MalformedJwtException.class)
     public ResponseEntity<ErrorResponse> handleMalformedJwtException(MalformedJwtException exception) {
-        ErrorCode errorCode = ErrorCode.TOKEN_INVALID;
+        ErrorCode errorCode = ErrorCode.UNAUTHORIZED;
         String[] error = errorCode.getStatusCode().toString().split(" ");
 
         return ResponseEntity.status(errorCode.getStatusCode())
@@ -97,4 +97,15 @@ public class GlobalExceptionHandler {
                         .build());
     }
 
+    @ExceptionHandler(IllegalArgumentException.class)
+    public ResponseEntity<ErrorResponse> handleIllegalArgumentException(IllegalArgumentException exception) {
+        ErrorCode errorCode = ErrorCode.UNAUTHORIZED;
+
+        return ResponseEntity.status(errorCode.getStatusCode())
+                .body(ErrorResponse.builder()
+                        .status(errorCode.getCode())
+                        .error(errorCode.getStatusCode().toString())
+                        .message(errorCode.getMessage())
+                        .build());
+    }
 }

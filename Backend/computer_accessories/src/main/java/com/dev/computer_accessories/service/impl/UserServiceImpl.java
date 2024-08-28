@@ -16,6 +16,9 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
@@ -59,24 +62,55 @@ public class UserServiceImpl implements UserService {
                 .build();
         userRepository.save(user);
 
-
+        log.info("Create user successfully!");
     }
 
     @Override
     public void updateUser(long userId, UserDTO userDTO) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String currentUserName = authentication.getName();
+        UserDetails currentUserDetails = (UserDetails) authentication.getPrincipal();
+
+        // Lấy thông tin người dùng cần update
+        User userToUpdate = getUserById(userId);
+
         Role role = roleService.findByName(userDTO.getRole().getName());
-
-        User user = getUserById(userId);
-        user.setFullName(userDTO.getFullName());
-        if(StringUtils.hasLength(userDTO.getPhone())) {
-            user.setPhone(userDTO.getPhone());
+        userToUpdate.setFullName(userDTO.getFullName());
+        if (StringUtils.hasLength(userDTO.getPhone())) {
+            userToUpdate.setPhone(userDTO.getPhone());
         }
-        user.setStatus(userDTO.getStatus());
-        user.setRole(role);
-        user.setAddress(userDTO.getAddress());
-        userRepository.save(user);
+        userToUpdate.setStatus(userDTO.getStatus());
+        userToUpdate.setRole(role);
+        userToUpdate.setAddress(userDTO.getAddress());
 
-        log.info("Update user successfully!");
+        // Kiểm tra vai trò và điều kiện
+        if (currentUserDetails.getAuthorities().stream()
+                .anyMatch(authority -> authority.getAuthority().equals("ADMIN"))) {
+            // ADMIN có thể update bất kỳ người dùng nào
+            userRepository.save(userToUpdate);
+            log.info("Update user successfully!");
+        } else if (currentUserName.equals(userToUpdate.getEmail())) {
+            // USER chỉ có thể cập nhật thông tin của chính mình
+            userRepository.save(userToUpdate);
+            log.info("Update user successfully!");
+        } else {
+            // Người dùng không có quyền cập nhật thông tin người dùng này
+            throw new AppException(ErrorCode.UNAUTHORIZED);
+        }
+
+//        Role role = roleService.findByName(userDTO.getRole().getName());
+
+//        User user = getUserById(userId);
+//        user.setFullName(userDTO.getFullName());
+//        if(StringUtils.hasLength(userDTO.getPhone())) {
+//            user.setPhone(userDTO.getPhone());
+//        }
+//        user.setStatus(userDTO.getStatus());
+//        user.setRole(role);
+//        user.setAddress(userDTO.getAddress());
+//        userRepository.save(user);
+//
+//        log.info("Update user successfully!");
 
     }
 
@@ -84,7 +118,7 @@ public class UserServiceImpl implements UserService {
     public void deleteUser(long userId) {
         userRepository.deleteById((Long) userId);
 
-        log.info("Create user successfully!, userId = {}", userId);
+        log.info("Delete user successfully!, userId = {}", userId);
     }
 
     @Override

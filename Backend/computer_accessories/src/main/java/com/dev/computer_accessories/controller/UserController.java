@@ -75,7 +75,6 @@ public class UserController {
 
     @Operation(summary = "Get user by id", description = "Return user by id")
     @PreAuthorize("hasAnyAuthority('ADMIN','USER')")
-    @PostAuthorize("returnObject.data.email == authentication.name")
     @GetMapping("/{userId}")
     public ResponseData<UserDetailResponse> getUserId(@PathVariable long userId) {
         log.info("Request get user by id, userId = {}", userId);
@@ -93,9 +92,8 @@ public class UserController {
 
     @Operation(summary = "Put user", description = "API edit user")
     @PreAuthorize("hasAnyAuthority('ADMIN','USER')")
-    @PostAuthorize("returnObject.data.email == authentication.name")
     @PutMapping("/{userId}")
-    public ResponseData<?> updateUser(@Min(value = 1, message = "userId must be greater than 0") @PathVariable long userId, @RequestBody UserDTO userDTO) {
+    public ResponseData<UserDTO> updateUser(@Min(value = 1, message = "userId must be greater than 0") @PathVariable long userId, @RequestBody UserDTO userDTO) {
         log.info("Request update userId = {}", userId);
         userService.updateUser(userId, userDTO);
         return new ResponseData<>(HttpStatus.ACCEPTED.value(), "Update a user successfully");
@@ -103,10 +101,9 @@ public class UserController {
 
 
     @Operation(summary = "Delete user", description = "API delete user")
-    @PreAuthorize("hasAnyAuthority('ADMIN','USER')")
-    @PostAuthorize("returnObject.data.email == authentication.name")
+    @PreAuthorize("hasAuthority('ADMIN')")
     @DeleteMapping("/{userId}")
-    public ResponseData<?> deleteUser(@PathVariable long userId) {
+    public ResponseData<UserDTO> deleteUser(@PathVariable long userId) {
          userService.deleteUser(userId);
          return new ResponseData<>(HttpStatus.NO_CONTENT.value(), "Delete a user successfully");
     }

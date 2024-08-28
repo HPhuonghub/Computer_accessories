@@ -54,6 +54,9 @@ public enum ErrorCode {
     // FEEDBACK
     FEEDBACK_NOT_FOUND(9000, "Feedback not found", HttpStatus.NOT_FOUND),
 
+    // CART
+    CART_NOT_FOUND(10000, "Cart not found", HttpStatus.NOT_FOUND),
+
     ;
 
     ErrorCode(int code, String message, HttpStatusCode statusCode) {

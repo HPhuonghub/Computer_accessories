@@ -58,7 +58,6 @@ public class SupplierController {
     }
 
     @Operation(summary = "Get list of suppliers per page", description = "Send a request via this API to get supplier list by pageNo and pageSize")
-    @PreAuthorize("hasAuthority('ADMIN')")
     @GetMapping("/lists")
     public ResponseData<?> getAllSupplierWithSortBy(
             @RequestParam(defaultValue = "0", required = false) int pageNo,

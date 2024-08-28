@@ -59,6 +59,9 @@ public class User extends AbstractEntity<Long> implements UserDetails {
     @JsonIgnore
     private List<Orders> orders = new ArrayList<>();
 
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Cart cart;
+
     private String imageUrl;
     private String providerId;
     private boolean enabled;

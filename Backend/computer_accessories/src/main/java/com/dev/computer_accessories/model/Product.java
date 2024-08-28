@@ -42,6 +42,10 @@ public class Product extends AbstractEntity<Long>{
     @JoinColumn(name = "supplier_id", referencedColumnName = "id")
     private Supplier supplier;
 
+    @ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.MERGE })
+    @JoinColumn(name = "cart_id", referencedColumnName = "id")
+    private Cart cart;
+
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonIgnore
     private List<Feedback> feedbacks = new ArrayList<>();
