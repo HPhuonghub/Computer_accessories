@@ -1,0 +1,123 @@
+.view-cart {
+  display: grid;
+  grid-template-columns: 1fr 7fr 3fr 1fr; // Defines 1/12, 7/12, 3/12, 1/12
+  gap: 20px; // Optional: Add some spacing between columns
+
+  // Optional: Add a container to constrain the width of the entire view-cart
+  .container {
+    grid-column: 2 / 4; // Constrains the content to 7/12 + 3/12 of the container width
+    display: flex;
+    justify-content: space-between;
+    gap: 20px; // Optional: Spacing between cart-items and payment-info
+
+    .cart-items {
+      flex: 1;
+      overflow-y: auto;
+
+      // Styling for cart items list
+      ul {
+        padding: 0;
+        list-style: none;
+        margin: 0;
+      }
+
+      .cart-item {
+        display: flex;
+        align-items: center;
+        border-bottom: 1px solid #ddd;
+        padding: 8px 0; // Adjusted padding
+
+        img {
+          width: 12%; // Adjusted width
+          height: auto; // Adjusted height
+          object-fit: cover;
+          margin-right: 15px; // Adjusted margin
+        }
+
+        .content {
+          display: flex;
+          width: 88%;
+          gap: 8px; // Adjusted gap
+
+          .name-content {
+            width: 100%;
+
+            h2 {
+              font-size: 0.9rem; // Adjusted font size
+              overflow: hidden; // Hide overflow text
+              display: -webkit-box;
+              text-overflow: ellipsis; // Show ellipsis when text is too long
+              white-space: nowrap;
+              -webkit-box-orient: vertical; // Prevent text from wrapping
+              //     max-width: calc(
+              //       100% - 200px
+              //     ); // Adjust max-width based on image width and margin
+            }
+          }
+
+          .quantity-controls {
+            display: flex;
+            width: 15%;
+            align-items: center;
+            gap: 8px; // Adjusted gap
+
+            button {
+              width: 20%; // Adjusted button size
+              height: auto; // Adjusted button size
+              border: none;
+              background-color: #f0f0f0;
+              cursor: pointer;
+              font-size: 14px; // Adjusted font size
+            }
+          }
+        }
+
+        .btn-danger {
+          height: 80px;
+          margin-left: 5px;
+          background-color: #dc3545;
+          border-color: #dc3545;
+          color: #fff;
+          border-radius: 5px;
+          font-size: 12px; // Adjusted font size
+          padding: 4px 8px; // Adjusted padding
+          cursor: pointer;
+
+          &:hover {
+            background-color: #c82333;
+            border-color: #bd2130;
+          }
+        }
+      }
+    }
+
+    .payment-info {
+      border: 1px solid #ddd;
+      padding: 15px; // Adjusted padding
+
+      .total {
+        display: flex;
+        justify-content: space-between;
+        font-size: 14px; // Adjusted font size
+      }
+
+      .checkout-btn {
+        margin-top: 15px; // Adjusted margin-top
+
+        button {
+          width: 100%;
+          background-color: #007bff;
+          border: none;
+          color: #fff;
+          padding: 8px; // Adjusted padding
+          font-size: 14px; // Adjusted font size
+          cursor: pointer;
+
+          &:hover {
+            background-color: #0056b3;
+          }
+        }
+      }
+    }
+  }
+}

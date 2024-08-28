@@ -62,6 +62,38 @@
             -webkit-line-clamp: 4; /* Chỉnh số dòng cần hiển thị */
             -webkit-box-orient: vertical;
           }
+
+          .quantity-controls {
+            margin-top: 5px;
+            display: flex;
+            align-items: center;
+            background-color: #f0f0f0; /* Background color for the whole block */
+            border-radius: 5px;
+            overflow: hidden;
+
+            button {
+              background-color: #e0e0e0; /* Background color for the buttons */
+              border: none;
+              padding: 5px 10px;
+              font-size: 1.2rem;
+              color: #333;
+              cursor: pointer;
+              border-radius: 0;
+              &:disabled {
+                background-color: #ccc;
+                cursor: not-allowed;
+              }
+            }
+
+            p {
+              background-color: #fff; /* Background color for the quantity */
+              padding: 5px 10px;
+              margin: 0;
+              color: #333;
+              border-left: 1px solid #ccc;
+              border-right: 1px solid #ccc;
+            }
+          }
         }
       }
     }

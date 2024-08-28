@@ -127,15 +127,6 @@ const ModalForm = (props) => {
       toast.error("Full name field is empty");
       return;
     }
-    if (!email) {
-      toast.error("Email field is empty");
-      return;
-    }
-    const isValidEmail = validateEmail(email);
-    if (!isValidEmail) {
-      toast.error("Invalid email");
-      return;
-    }
     if (!phone) {
       toast.error("Phone field is empty");
       return;

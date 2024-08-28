@@ -8,10 +8,11 @@ import ManageProduct from "../components/Admin/Content/Product/ManageProduct";
 import Login from "../components/Auth/Login";
 import ForgotPassword from "../components/Auth/ForgotPassword";
 import App from "../views/App";
-import { ToastContainer, toast } from "react-toastify";
+import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Register from "../components/Auth/Register";
 import OAuth2RedirectHandler from "../components/Auth/OAuth2RedirectHandler";
+import ViewCart from "../components/ViewCart/ViewCart";
 
 const Layout = () => {
   return (
@@ -21,6 +22,7 @@ const Layout = () => {
         <Route path="/" element={<App />}>
           <Route index element={<Home />} />
           <Route path="/user" element={<User />} />
+          <Route path="/view-cart" element={<ViewCart />} />
         </Route>
 
         <Route path="/admin" element={<Admin />}>

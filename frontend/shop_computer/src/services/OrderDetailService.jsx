@@ -1,7 +1,7 @@
 import axios from "../utils/axiosCustomze";
 import { ACCESS_TOKEN } from "../constants/index";
 
-const postCreateNewProduct = async (formDT) => {
+const postCreateNewOrderDetail = async (formDT) => {
   let data = {
     name: formDT.name,
     price: formDT.price,
@@ -19,17 +19,17 @@ const postCreateNewProduct = async (formDT) => {
   return await axios.post("api/v1/product/", data, config);
 };
 
-const getAllProducts = async () => {
+const getAllOrderDetails = async () => {
   const { config } = await markToken();
   return await axios.get("api/v1/product/list?sortBy=name:asc", config);
 };
 
-const getProductId = async (productId) => {
+const getOrderDetailId = async (productId) => {
   const { config } = await markToken();
   return await axios.get(`api/v1/product/${productId}`, config);
 };
 
-const putUpdateProducts = async (id, formDT) => {
+const putUpdateOrderDetails = async (id, formDT) => {
   let data = {
     name: formDT.name,
     price: formDT.price,
@@ -48,27 +48,17 @@ const putUpdateProducts = async (id, formDT) => {
   return axios.put(`api/v1/product/${id}`, data, config);
 };
 
-const deleteProduct = async (productId) => {
+const deleteOrderDetail = async (productId) => {
   const { config } = await markToken();
   return axios.delete(`api/v1/product/${productId}`, config);
 };
 
-const getAllProductsWithPaginate = async (pageNo, pageSize) => {
+const getAllOrderDetailsWithPaginate = async (pageNo, pageSize) => {
   const { config } = await markToken();
   return axios.get(
     `api/v1/product/list?pageNo=${pageNo}&pageSize=${pageSize}&sortBy=name:asc`,
     config
   );
-};
-
-const getCategories = async () => {
-  const { config } = await markToken();
-  return await axios.get("api/v1/category/list", config);
-};
-
-const getSuppliers = async () => {
-  const { config } = await markToken();
-  return await axios.get("api/v1/supplier/list", config);
 };
 
 const markToken = () => {
@@ -84,12 +74,10 @@ const markToken = () => {
 };
 
 export {
-  postCreateNewProduct,
-  getAllProducts,
-  putUpdateProducts,
-  getProductId,
-  deleteProduct,
-  getAllProductsWithPaginate,
-  getCategories,
-  getSuppliers,
+  postCreateNewOrderDetail,
+  getAllOrderDetails,
+  putUpdateOrderDetails,
+  getOrderDetailId,
+  deleteOrderDetail,
+  getAllOrderDetailsWithPaginate,
 };

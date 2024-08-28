@@ -1,56 +1,53 @@
-// .navbar-custom {
-//   background-color: rgb(96, 93, 93);
-//   color: white;
+.header-navbar {
+  background-color: rgb(96, 93, 93);
+  opacity: 1;
+  color: white;
+}
 
-//   .navbar-brand {
-//     display: flex;
-//     align-items: center;
+.navbar-brand {
+  display: flex;
+  align-items: center;
+}
 
-//     img {
-//       width: 30px;
-//       height: 30px;
-//       margin-right: 5px;
-//     }
+.navbar-brand-title {
+  margin-left: 5px;
+  color: black;
+}
 
-//     div {
-//       color: black;
-//     }
-//   }
+.search-container {
+  display: flex;
+  width: 450px;
+  margin: 0 auto;
+  align-items: center;
 
-//   .input-group {
-//     width: 450px;
+  .form-control {
+    flex: 1;
+  }
 
-//     input {
-//       width: 100%;
-//     }
+  .btn {
+    background-color: #f9bb01;
+  }
+}
 
-//     button {
-//       background-color: #f9bb01;
-//     }
-//   }
+.cart-container {
+  position: relative;
+  margin-right: 30px;
+  margin-top: 5px;
+  cursor: pointer;
 
-//   .cart-icon {
-//     position: relative;
-//     margin-right: 30px;
-//     margin-top: 5px;
+  svg.icon-shopping-cart {
+    height: 1.9em;
+    width: 1.9em;
+  }
 
-//     .badge {
-//       position: absolute;
-//       top: 0;
-//       start: 100%;
-//       transform: translate(-50%, -50%);
-//       background-color: #dc3545; // Use your badge color
-//     }
-//   }
+  .badge {
+    position: absolute;
+    top: 0;
+    start: 100%;
+    transform: translate(-50%, -50%);
+  }
+}
 
-//   .dropdown-toggle {
-//     color: white;
-//     text-decoration: none;
-//     display: flex;
-//     align-items: center;
-
-//     svg {
-//       margin-right: 5px;
-//     }
-//   }
-// }
+.btn-light {
+  margin-right: 10px;
+}

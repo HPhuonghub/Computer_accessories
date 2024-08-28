@@ -13,7 +13,7 @@ import { toast } from "react-toastify";
 import TableProductPaginate from "./TableProductPaginate";
 
 const ManageProduct = () => {
-  const LIMIT_USER = 5;
+  const LIMIT_PRODUCT = 5;
   const [pageCount, setPageCount] = useState(0);
   const [currentPage, setcurrentPage] = useState(1);
 
@@ -37,7 +37,7 @@ const ManageProduct = () => {
   };
 
   const fetchListProductPaginate = async (page) => {
-    let res = await getAllProductsWithPaginate(page, LIMIT_USER);
+    let res = await getAllProductsWithPaginate(page, LIMIT_PRODUCT);
     if (res.data.status === 200) {
       setListProducts(res.data.data.items);
       setPageCount(res.data.data.totalPage);

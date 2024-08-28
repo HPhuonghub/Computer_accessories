@@ -1,50 +1,61 @@
-// HomePage.js
 import React, { useState, useEffect } from "react";
 import CategoryList from "./CategoryList";
 import ProductList from "./ProductList";
 import { Container, Row, Col } from "react-bootstrap";
-import { listProduct, getAllProduct } from "../../redux/slices/ProductSlice";
+import {
+  listProductSearch,
+  wordSearch,
+  getAllProductSearch,
+} from "../../redux/slices/ProductSlice";
 import { listCategory, getAllCategory } from "../../redux/slices/CategorySlice";
 import { useDispatch, useSelector } from "react-redux";
 
 const HomePage = () => {
+  const LIMIT_PRODUCT = 8;
   const dispatch = useDispatch();
+  const [filteredProducts, setFilteredProducts] = useState([]);
+  const [selectedCategoryName, setSelectedCategoryName] = useState(0);
+  const [currentPage, setCurrentPage] = useState(1);
+  const productSearch = useSelector(listProductSearch);
+  const keySearch = useSelector(wordSearch);
+  const [search, setSearch] = useState();
+  const categories = useSelector(listCategory);
+  const [pageCount, setPageCount] = useState(0);
 
-  // Dùng useSelector để lấy danh sách sản phẩm từ Redux store
-  let products = useSelector(listProduct);
-  let categories = useSelector(listCategory);
-
-  console.log(products);
-  console.log(categories);
-
-  // Khởi tạo selectedCategoryId ban đầu là id của danh mục đầu tiên
-  const [selectedCategoryId, setSelectedCategoryId] = useState(1);
-
-  // Hàm lấy danh sách sản phẩm từ Redux
-  const fetchProducts = () => {
-    dispatch(getAllProduct());
-  };
-
-  const fetchCategory = () => {
-    dispatch(getAllCategory());
-  };
-
-  // Effect để gọi fetchProducts khi component được render lần đầu
   useEffect(() => {
-    fetchProducts();
-    fetchCategory();
-  }, []);
+    // Chỉ gọi khi keySearch thay đổi
+    if (keySearch !== search) {
+      setSearch(keySearch);
+      setCurrentPage(1);
+    }
+  }, [keySearch]);
 
-  // Lọc sản phẩm theo danh mục được chọn
-  const filteredProducts = products
-    ? products.data.items.filter(
-        (product) => product.category.id === selectedCategoryId
-      )
-    : [];
+  useEffect(() => {
+    dispatch(getAllCategory());
+    dispatch(getAllProductSearch(currentPage, LIMIT_PRODUCT, search));
+  }, [dispatch]);
 
-  // Hàm xử lý khi chọn danh mục mới
-  const handleSelectCategory = (categoryId) => {
-    setSelectedCategoryId(categoryId);
+  useEffect(() => {
+    // Chỉ khi selectedCategoryName thay đổi hoặc currentPage thay đổi
+    dispatch(getAllProductSearch(currentPage, LIMIT_PRODUCT, search));
+  }, [selectedCategoryName, currentPage, search, dispatch]);
+
+  useEffect(() => {
+    if (productSearch?.data?.items) {
+      const filtered = productSearch.data.items;
+      setPageCount(productSearch.data.totalPage);
+      setFilteredProducts(filtered);
+    }
+  }, [productSearch]);
+
+  const handleSelectCategory = (categoryName) => {
+    setSelectedCategoryName(categoryName);
+    setCurrentPage(1);
+    setSearch(categoryName); // Giả định categoryName là giá trị tìm kiếm
+  };
+
+  const handlePageChange = (selectedPage) => {
+    setCurrentPage(selectedPage + 1);
   };
 
   return (
@@ -58,7 +69,12 @@ const HomePage = () => {
             />
           </Col>
           <Col xs={10} md={8}>
-            <ProductList products={filteredProducts} />
+            <ProductList
+              products={filteredProducts}
+              pageCount={pageCount}
+              currentPage={currentPage}
+              onPageChange={handlePageChange}
+            />
           </Col>
         </Row>
       </Container>

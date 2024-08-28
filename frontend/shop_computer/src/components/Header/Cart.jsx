@@ -1,12 +1,39 @@
-import React, { useEffect, useRef } from "react";
-import { useSelector } from "react-redux";
-import { selectCartItems } from "../../redux/slices/cartSlice";
-import "./Cart.scss";
+import React, { useEffect, useRef, useState } from "react";
 import { FaShoppingCart } from "react-icons/fa";
+import { useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  removeFromCart,
+  increaseQuantity,
+  decreaseQuantity,
+  selectCartItems,
+} from "../../redux/slices/cartSlice";
+import "./Cart.scss";
 
 const Cart = ({ setShowCartPopup }) => {
-  const cartItems = useSelector(selectCartItems);
   const cartRef = useRef(null);
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const cartItems = useSelector(selectCartItems);
+  // const [cartItems, setCartItems] = useState();
+
+  const handleClickOutside = (event) => {
+    if (cartRef.current && !cartRef.current.contains(event.target)) {
+      setShowCartPopup(false);
+    }
+  };
+
+  // Attach and clean up event listener
+  React.useEffect(() => {
+    console.log("check cart", cartItems);
+    document.addEventListener("mousedown", handleClickOutside);
+    //setCartItems(cartItem);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
+
+  // useEffect(() => {}, [cartItems]);
 
   const calculateDiscountedPrice = (price, discount) => {
     if (discount) {
@@ -17,12 +44,10 @@ const Cart = ({ setShowCartPopup }) => {
   };
 
   const calculateTotalPrice = () => {
-    let totalPrice = 0;
-    cartItems.forEach((item) => {
+    return cartItems.reduce((totalPrice, item) => {
       const itemPrice = calculateDiscountedPrice(item.price, item.discount);
-      totalPrice += item.quantity * parseFloat(itemPrice); // Sử dụng item.quantity thay vì cartItems.quantity
-    });
-    return totalPrice;
+      return totalPrice + item.quantity * parseFloat(itemPrice);
+    }, 0);
   };
 
   const formatPrice = (price) => {
@@ -32,19 +57,22 @@ const Cart = ({ setShowCartPopup }) => {
     }).format(price);
   };
 
-  useEffect(() => {
-    const handleClickOutside = (event) => {
-      if (cartRef.current && !cartRef.current.contains(event.target)) {
-        setShowCartPopup(false);
-      }
-    };
+  const handleQuantityChange = (id, change) => {
+    if (change > 0) {
+      dispatch(increaseQuantity({ id }));
+    } else {
+      dispatch(decreaseQuantity({ id }));
+    }
+  };
 
-    document.addEventListener("mousedown", handleClickOutside);
+  const handleRemoveItem = (id) => {
+    dispatch(removeFromCart({ id }));
+  };
 
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-  }, [setShowCartPopup]);
+  const handleViewCart = () => {
+    setShowCartPopup(false);
+    navigate("/view-cart");
+  };
 
   return (
     <div ref={cartRef} className="cart-popup">
@@ -59,9 +87,33 @@ const Cart = ({ setShowCartPopup }) => {
                   <div>
                     <p>{item.name}</p>
                     <p>
-                      ${calculateDiscountedPrice(item.price, item.discount)}
+                      {formatPrice(
+                        calculateDiscountedPrice(item.price, item.discount)
+                      )}
                     </p>
-                    <p>Quantity: {item.quantity}</p>
+                    <div className="quantity-controls d-flex align-items-center">
+                      <p>Quantity: </p>
+                      <div className="d-flex justify-content-center align-items-center">
+                        <button
+                          disabled={item.quantity <= 1}
+                          onClick={() => handleQuantityChange(item.id, -1)}
+                        >
+                          -
+                        </button>
+                        <p>{item.quantity}</p>
+                        <button
+                          onClick={() => handleQuantityChange(item.id, 1)}
+                        >
+                          +
+                        </button>
+                        <button
+                          className="remove-btn"
+                          onClick={() => handleRemoveItem(item.id)}
+                        >
+                          Remove
+                        </button>
+                      </div>
+                    </div>
                   </div>
                 </li>
               ))}
@@ -83,7 +135,9 @@ const Cart = ({ setShowCartPopup }) => {
           <h3>Total:</h3>
           <p>{formatPrice(calculateTotalPrice())}</p>
         </div>
-        <button className="close-btn btn btn-warning">View cart</button>
+        <button className="close-btn btn btn-warning" onClick={handleViewCart}>
+          View cart
+        </button>
       </div>
     </div>
   );

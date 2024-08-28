@@ -1,6 +1,5 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Container from "react-bootstrap/Container";
-import "./Header.scss";
 import Nav from "react-bootstrap/Nav";
 import Navbar from "react-bootstrap/Navbar";
 import logo from "../../assets/images/logo.png";
@@ -13,22 +12,31 @@ import {
   FaUserCog,
   FaSearch,
   FaShoppingCart,
-} from "react-icons/fa"; // Import các icon từ Font Awesome
+} from "react-icons/fa";
 import {
   logout,
   selectUser,
   selectIsLoggedIn,
 } from "../../redux/slices/authSlice";
-import { selectCartItems } from "../../redux/slices/cartSlice";
+import {
+  getSearch,
+  getAllProductSearch,
+} from "../../redux/slices/ProductSlice";
+import { selectCartTotalItems } from "../../redux/slices/cartSlice";
+import { ACCESS_TOKEN } from "../../constants/index";
+import { jwtDecode } from "jwt-decode";
 import Cart from "./Cart";
+import "./Header.scss";
 
 const Header = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const isLoggedIn = useSelector(selectIsLoggedIn);
   const user = useSelector(selectUser);
-  const cartItemCount = useSelector(selectCartItems);
+  const totalQuantity = useSelector(selectCartTotalItems);
   const [showCartPopup, setShowCartPopup] = useState(false);
+  const [search, setSearch] = useState("");
+  const [userHeader, setUserHeader] = useState();
 
   const toggleCartPopup = () => {
     setShowCartPopup(!showCartPopup);
@@ -47,83 +55,71 @@ const Header = () => {
     navigate("/admin");
   };
 
-  const calculateTotalQuantity = () => {
-    let totalQuantity = 0;
-    cartItemCount.forEach((item) => {
-      const itemQuantity = item.quantity;
-      totalQuantity += itemQuantity;
-    });
-    return totalQuantity;
+  const handleSearch = () => {
+    dispatch(getSearch(search));
+    setTimeout(() => {
+      navigate("/");
+    }, 500);
   };
 
-  console.log("check user", user);
+  const handleHome = () => {
+    dispatch(getAllProductSearch(1, 8, ""));
+  };
+
+  useEffect(() => {
+    if (!user) {
+      const accessToken = localStorage.getItem(ACCESS_TOKEN);
+      if (accessToken) {
+        const decodedToken = jwtDecode(accessToken);
+
+        const valid = {
+          fullname: decodedToken.sub,
+          role: decodedToken.role[0],
+        };
+        setUserHeader(valid);
+      }
+    } else {
+      setUserHeader(user);
+    }
+  }, [user]);
 
   return (
-    <Navbar
-      expand="lg"
-      variant="dark"
-      style={{ backgroundColor: "rgb(96 93 93)", opacity: 1, color: "white" }}
-    >
+    <Navbar expand="lg" variant="dark" className="header-navbar">
       <Container>
-        <NavLink
-          to="/"
-          className="navbar-brand"
-          style={{ display: "flex", alignItems: "center" }}
-        >
-          <img
-            src={logo}
-            width="30"
-            height="30"
-            className="d-inline-block align-top"
-            alt="Shop Computer Logo"
-          />
-          <div style={{ marginLeft: "5px", color: "black" }}>Shop Computer</div>
+        {/* <NavLink to="/" className="navbar-brand"> */}
+        <NavLink to="/" className="navbar-brand" onClick={handleHome}>
+          <img src={logo} width="30" height="30" alt="Shop Computer Logo" />
+          <div className="navbar-brand-title">Shop Computer</div>
         </NavLink>
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav className="mx-auto">
-            <div className="row align-items-center" style={{ width: "450px" }}>
-              <div className="col">
-                <div className="input-group">
-                  <input
-                    type="text"
-                    className="form-control"
-                    placeholder="Search..."
-                  />
-                  <button
-                    className="btn btn-outline-secondary"
-                    type="button"
-                    style={{ backgroundColor: "#f9bb01" }}
-                  >
-                    <FaSearch color="white" />
-                  </button>
-                </div>
-              </div>
+            <div className="search-container">
+              <input
+                type="text"
+                className="form-control"
+                placeholder="Search..."
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+              />
+              <button
+                className="btn btn-outline-secondary"
+                type="button"
+                onClick={() => handleSearch()}
+              >
+                <FaSearch color="white" />
+              </button>
             </div>
           </Nav>
           <Nav>
-            <div className="d-flex align-items-center ms-auto">
-              <div
-                className="position-relative"
-                style={{
-                  marginRight: "30px",
-                  marginTop: "5px",
-                  cursor: "pointer",
-                }}
-              >
-                <FaShoppingCart
-                  style={{
-                    fontSize: "1.5rem",
-                    marginRight: "15px",
-                  }}
-                  onClick={() => toggleCartPopup()}
-                />
-                <span className="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
-                  <span className="visually-hidden">Cart items</span>
-
-                  <span>{cartItemCount ? calculateTotalQuantity() : 0}</span>
-                </span>
-              </div>
+            <div className="cart-container">
+              <FaShoppingCart
+                className="icon-shopping-cart"
+                onClick={() => toggleCartPopup()}
+              />
+              <span className="badge rounded-pill bg-danger">
+                {totalQuantity || 0}
+              </span>
             </div>
             {!isLoggedIn ? (
               <>
@@ -139,7 +135,8 @@ const Header = () => {
               <NavDropdown
                 title={
                   <>
-                    <FaUserCircle /> Welcome, {user.fullname}
+                    <FaUserCircle /> Welcome,{" "}
+                    {userHeader ? userHeader.fullname : ""}
                   </>
                 }
                 id="basic-nav-dropdown"
@@ -147,7 +144,7 @@ const Header = () => {
                 <NavDropdown.Item>
                   <FaUserCircle /> Profile
                 </NavDropdown.Item>
-                {user.role.name === "ADMIN" && (
+                {userHeader && userHeader.role === "ADMIN" && (
                   <NavDropdown.Item onClick={handleAdmin}>
                     <FaUserCog /> Admin
                   </NavDropdown.Item>
@@ -161,7 +158,6 @@ const Header = () => {
           </Nav>
         </Navbar.Collapse>
       </Container>
-
       {showCartPopup && <Cart setShowCartPopup={setShowCartPopup} />}
     </Navbar>
   );

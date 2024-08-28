@@ -381,10 +381,12 @@ const ModalFormProduct = (props) => {
           <Button variant="primary" onClick={handleCreateProduct}>
             Save
           </Button>
-        ) : (
+        ) : !viewId ? (
           <Button variant="primary" onClick={handleUpdateProduct}>
             Update
           </Button>
+        ) : (
+          <></>
         )}
       </Modal.Footer>
     </Modal>

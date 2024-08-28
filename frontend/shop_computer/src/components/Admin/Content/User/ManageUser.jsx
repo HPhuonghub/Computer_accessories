@@ -43,6 +43,9 @@ const ManageUser = () => {
       setPageCount(res.data.data.totalPage);
       console.log(res);
     }
+    if (res.data.status === 1007) {
+      toast.error(res.data.message);
+    }
   };
 
   const handleUpdateUser = (userId) => {
@@ -58,15 +61,18 @@ const ManageUser = () => {
 
   const handleModalDeleteUser = async () => {
     let res = await deleteUser(userID);
-    if (res) {
+    console.log("check res:", res);
+    if (res.data.status === 200) {
       toast.success(res.data.message);
       setcurrentPage(1);
+    } else if (res.data && res.data.status !== 200) {
+      toast.success(res.data.message);
     }
     setReloadUsers(!reloadUsers);
   };
 
   const handleViewUser = (userId) => {
-    console.log("check handleViewUser");
+    console.log("check handleViewUser: ", userId);
     setShowModal(true);
     setId(userId);
     setViewId(true);

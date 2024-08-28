@@ -1,48 +1,53 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
-  items: [], // Mảng các sản phẩm trong giỏ hàng
+  items: JSON.parse(localStorage.getItem("cart")) || [], // Initialize from local storage
 };
 
-export const cartSlice = createSlice({
+const cartSlice = createSlice({
   name: "cart",
   initialState,
   reducers: {
     addToCart: (state, action) => {
-      // Kiểm tra xem sản phẩm đã có trong giỏ hàng chưa
       const existingItem = state.items.find(
         (item) => item.id === action.payload.id
       );
 
       if (existingItem) {
-        // Nếu sản phẩm đã có trong giỏ hàng, tăng số lượng lên 1
         existingItem.quantity++;
       } else {
-        // Nếu sản phẩm chưa có trong giỏ hàng, thêm mới vào giỏ hàng
         state.items.push({ ...action.payload, quantity: 1 });
       }
+
+      // Save to local storage
+      localStorage.setItem("cart", JSON.stringify(state.items));
     },
     removeFromCart: (state, action) => {
-      // Xoá sản phẩm khỏi giỏ hàng
       state.items = state.items.filter((item) => item.id !== action.payload.id);
+
+      // Save to local storage
+      localStorage.setItem("cart", JSON.stringify(state.items));
     },
     increaseQuantity: (state, action) => {
-      // Tăng số lượng sản phẩm trong giỏ hàng
       const item = state.items.find((item) => item.id === action.payload.id);
       if (item) {
         item.quantity++;
+        // Save to local storage
+        localStorage.setItem("cart", JSON.stringify(state.items));
       }
     },
     decreaseQuantity: (state, action) => {
-      // Giảm số lượng sản phẩm trong giỏ hàng
       const item = state.items.find((item) => item.id === action.payload.id);
       if (item && item.quantity > 1) {
         item.quantity--;
+        // Save to local storage
+        localStorage.setItem("cart", JSON.stringify(state.items));
       }
     },
     clearCart: (state) => {
-      // Xoá toàn bộ sản phẩm trong giỏ hàng
       state.items = [];
+      // Save to local storage
+      localStorage.removeItem("cart");
     },
   },
 });

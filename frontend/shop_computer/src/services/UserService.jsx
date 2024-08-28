@@ -1,4 +1,5 @@
 import axios from "../utils/axiosCustomze";
+import { ACCESS_TOKEN } from "../constants/index";
 
 const postCreateNewUser = async (
   email,
@@ -20,16 +21,18 @@ const postCreateNewUser = async (
     },
     state: state.toLowerCase(),
   };
-
-  return await axios.post("api/v1/user/", data);
+  const { config } = await markToken();
+  return await axios.post("api/v1/user/", data, config);
 };
 
 const getAllUsers = async () => {
-  return await axios.get("api/v1/user/list");
+  const { config } = await markToken();
+  return await axios.get("api/v1/user/list", config);
 };
 
 const getUserId = async (userId) => {
-  return await axios.get(`api/v1/user/${userId}`);
+  const { config } = await markToken();
+  return await axios.get(`api/v1/user/${userId}`, config);
 };
 
 const putUpdateUsers = async (
@@ -51,15 +54,22 @@ const putUpdateUsers = async (
     },
     state: state.toLowerCase(),
   };
-  return axios.put(`api/v1/user/${id}`, data);
+  const { config } = await markToken();
+  return axios.put(`api/v1/user/${id}`, data, config);
 };
 
 const deleteUser = async (userId) => {
-  return axios.delete(`api/v1/user/${userId}`);
+  const { config } = await markToken();
+  return axios.delete(`api/v1/user/${userId}`, config);
 };
 
 const getAllUsersWithPaginate = async (pageNo, pageSize) => {
-  return axios.get(`api/v1/user/list?pageNo=${pageNo}&pageSize=${pageSize}`);
+  const { config } = await markToken();
+
+  return axios.get(
+    `api/v1/user/list?pageNo=${pageNo}&pageSize=${pageSize}&sortBy=fullName:asc`,
+    config
+  );
 };
 
 const postLogin = async (username, password) => {
@@ -85,6 +95,18 @@ const postChangePassword = async (email, oldPassword, newPassword) => {
     oldPassword,
     newPassword,
   });
+};
+
+const markToken = () => {
+  const token = localStorage.getItem(ACCESS_TOKEN); // Retrieve token from localStorage
+
+  const config = {
+    headers: {
+      Authorization: `Bearer ${token}`, // Add the token to the Authorization header
+    },
+  };
+
+  return { config }; // Return the config object
 };
 
 export {

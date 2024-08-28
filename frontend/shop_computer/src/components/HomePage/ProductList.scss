@@ -16,8 +16,9 @@
     gap: 20px; /* Khoảng cách giữa các sản phẩm */
   }
 
-  li {
+  .li-product {
     width: calc(25% - 20px); /* Mỗi sản phẩm chiếm 25% chiều rộng của row */
+    height: 15%;
     margin-bottom: 20px;
     position: relative;
     border: 1px solid #ccc;
@@ -40,6 +41,7 @@
     img {
       max-width: 100%;
       height: auto;
+      aspect-ratio: 1 / 1;
       margin-bottom: 10px;
     }
 
@@ -101,6 +103,7 @@
           display: flex;
           align-items: center;
           justify-content: center;
+          margin-right: 7px;
           width: 30px;
           height: 30px;
           border-radius: 50%;

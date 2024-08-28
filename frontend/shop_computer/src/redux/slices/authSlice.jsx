@@ -1,4 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
+import { jwtDecode } from "jwt-decode";
+import { ACCESS_TOKEN, REFRESH_TOKEN } from "../../constants/index";
 import axios from "axios";
 
 const initialState = {
@@ -49,7 +51,30 @@ export const loginUser = (username, password) => async (dispatch) => {
       "http://localhost:8888/api/v1/auth/login",
       { username, password }
     );
-    dispatch(loginSuccess(response.data));
+    console.log("check response.data", response.data);
+    const accessToken = response.data.accessToken;
+    const refreshToken = response.data.refreshToken;
+
+    if (accessToken && refreshToken) {
+      localStorage.setItem(ACCESS_TOKEN, accessToken);
+      localStorage.setItem(REFRESH_TOKEN, refreshToken);
+
+      try {
+        // Decode the access token to extract user information
+        const decodedToken = jwtDecode(accessToken);
+        console.log("Decoded token:", decodedToken);
+
+        // Extract user information from the decoded token
+        const user = {
+          fullname: decodedToken.sub,
+          role: decodedToken.role[0],
+          // Add other fields as needed
+        };
+        dispatch(loginSuccess({ user }));
+      } catch (error) {
+        console.error("Error decoding AccessToken:", error);
+      }
+    }
   } catch (error) {
     dispatch(loginFailure(error.message));
   }

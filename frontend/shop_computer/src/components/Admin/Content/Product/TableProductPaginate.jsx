@@ -86,7 +86,7 @@ const TableProductPaginate = (props) => {
         <ReactPaginate
           nextLabel="next >"
           onPageChange={handlePageClick}
-          pageRangeDisplayed={3}
+          pageRangeDisplayed={1}
           marginPagesDisplayed={2}
           pageCount={pageCount}
           previousLabel="< previous"
