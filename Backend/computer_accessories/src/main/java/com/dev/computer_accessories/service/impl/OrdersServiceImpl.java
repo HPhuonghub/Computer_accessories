@@ -6,8 +6,10 @@ import com.dev.computer_accessories.dto.response.PageResponse;
 import com.dev.computer_accessories.exception.AppException;
 import com.dev.computer_accessories.exception.ErrorCode;
 import com.dev.computer_accessories.exception.ResourceNotFoundException;
+import com.dev.computer_accessories.model.OrderDetails;
 import com.dev.computer_accessories.model.Orders;
 import com.dev.computer_accessories.model.User;
+import com.dev.computer_accessories.repository.OrderDetailsRepository;
 import com.dev.computer_accessories.repository.OrdersRepository;
 import com.dev.computer_accessories.service.OrdersService;
 import lombok.RequiredArgsConstructor;
@@ -27,9 +29,10 @@ import java.util.regex.Pattern;
 @Service
 @RequiredArgsConstructor
 public class OrdersServiceImpl implements OrdersService {
-    
+
     private final UserServiceImpl userService;
     private final OrdersRepository ordersRepository;
+    private final OrderDetailsRepository orderDetailsRepository;
 
 
     @Override
@@ -39,7 +42,6 @@ public class OrdersServiceImpl implements OrdersService {
         Orders orders = Orders.builder()
                 .fullname(ordersDTO.getFullname())
                 .phone(ordersDTO.getPhone())
-                .status(ordersDTO.getStatus())
                 .email(ordersDTO.getEmail())
                 .note(ordersDTO.getNote())
                 .address(ordersDTO.getAddress())
@@ -58,7 +60,6 @@ public class OrdersServiceImpl implements OrdersService {
         orders.setPhone(ordersDTO.getPhone());
         orders.setAddress(ordersDTO.getAddress());
         orders.setNote(ordersDTO.getNote());
-        orders.setStatus(ordersDTO.getStatus());
 
         ordersRepository.save(orders);
 
@@ -70,25 +71,39 @@ public class OrdersServiceImpl implements OrdersService {
     }
 
     @Override
-    public OrdersResponse getOrdersDetail(String email) {
-        Orders orders = getOrdersByEmail(email);
-        return OrdersResponse.builder()
-                .fullname(orders.getFullname())
-                .email(orders.getEmail())
-                .address(orders.getAddress())
-                .phone(orders.getPhone())
-                .build();
+    public List<OrdersResponse> getOrdersDetail(String email) {
+        List<Orders> orders = getOrdersByEmail(email);
+
+
+        List<OrdersResponse> ordersResponses = new ArrayList<>();
+
+        orders.stream().forEach(order -> {
+
+                    List<OrderDetails> orderDetails = orderDetailsRepository.findAllByOrderId(order.getId()).get();
+
+                    ordersResponses.add(OrdersResponse.builder()
+                                    .id(order.getId())
+                            .fullname(order.getFullname())
+                            .email(order.getEmail())
+                            .address(order.getAddress())
+                            .phone(order.getPhone())
+                            .status(order.getOrderStatus())
+                            .orderDetails(orderDetails)
+                            .build());
+                }
+        );
+        return ordersResponses;
     }
 
     @Override
     public PageResponse<?> getAllOrdersWithSortBy(int pageNo, int pageSize, String sortBy) {
         int p = 0;
-        if(pageNo > 0) {
+        if (pageNo > 0) {
             p = pageNo - 1;
         }
 
         List<Sort.Order> sorts = new ArrayList<>();
-        if(StringUtils.hasLength(sortBy)) {
+        if (StringUtils.hasLength(sortBy)) {
             Pattern pattern = Pattern.compile("(\\w+?)(:)(.*)");
             Matcher matcher = pattern.matcher(sortBy);
             if (matcher.find()) {
@@ -105,15 +120,14 @@ public class OrdersServiceImpl implements OrdersService {
         Page<Orders> orders = ordersRepository.findAll(pageable);
 
         List<OrdersResponse> res = orders.stream().map(order -> OrdersResponse.builder()
-                .email(order.getEmail())
-                .fullname(order.getFullname())
-                .phone(order.getPhone())
-                .address(order.getAddress())
-                .status(order.getStatus())
-                .note(order.getNote())
-                .user(order.getUser())
-                .id(order.getId())
-                .build())
+                        .email(order.getEmail())
+                        .fullname(order.getFullname())
+                        .phone(order.getPhone())
+                        .address(order.getAddress())
+                        .note(order.getNote())
+                        .user(order.getUser())
+                        .id(order.getId())
+                        .build())
                 .toList();
 
         return PageResponse.builder()
@@ -128,7 +142,7 @@ public class OrdersServiceImpl implements OrdersService {
         return ordersRepository.findById(id).orElseThrow(() -> new AppException(ErrorCode.ORDERS_NOT_FOUND));
     }
 
-    public Orders getOrdersByEmail(String email) {
+    public List<Orders> getOrdersByEmail(String email) {
         return ordersRepository.findByEmail(email).orElseThrow(() -> new AppException(ErrorCode.ORDERS_NOT_FOUND));
     }
 

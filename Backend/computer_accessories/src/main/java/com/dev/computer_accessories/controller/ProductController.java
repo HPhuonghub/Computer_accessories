@@ -74,4 +74,18 @@ public class ProductController {
 
     }
 
+    @Operation(summary = "Get list of most promoted products by page", description = "Send a request via this API to get a list of top selling products by pageNo and pageSize")
+    @GetMapping("/list-promotion")
+    public ResponseData<?> getAllProductPromotion(@RequestParam(defaultValue = "0", required = false) int pageNo,
+                                         @Min(1) @RequestParam(defaultValue = "20", required = false) int pageSize,
+                                         @RequestParam(required = false) String sortBy
+    ) {
+        return new ResponseData<>(HttpStatus.OK.value(), "Get all product successful", productService.getAllProductsWithSortBy(pageNo, pageSize, sortBy));
+    }
+
+    @GetMapping("/test")
+    public String testRedis () {
+        productService.testRedis();
+        return "Complete!";
+    }
 }

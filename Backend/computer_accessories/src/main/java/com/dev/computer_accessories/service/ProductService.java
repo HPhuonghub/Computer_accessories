@@ -6,6 +6,8 @@ import com.dev.computer_accessories.dto.response.ProductDetailResponse;
 
 public interface ProductService {
 
+    void testRedis();
+
     void saveProduct(ProductDTO productDTO);
 
     void updateProduct(long id, ProductDTO productDTO);
@@ -17,4 +19,6 @@ public interface ProductService {
     PageResponse<?> getAllProductsWithSortBy(int PageNo, int PageSize, String sortBy);
 
     PageResponse<?> searchProduct(int pageNo, int pageSize, String sortBy, String keyword);
+
+    PageResponse<?> promotionalProduct(int pageNo, int pageSize, String sortBy, String keyword);
 }

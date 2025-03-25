@@ -108,4 +108,16 @@ public class GlobalExceptionHandler {
                         .message(errorCode.getMessage())
                         .build());
     }
+
+    @ExceptionHandler(ResourceNotFoundException.class)
+    public ResponseEntity<?> handleResourceNotFoundException(ResourceNotFoundException exception) {
+        ErrorCode errorCode = ErrorCode.BAD_REQUEST;
+
+        return ResponseEntity.status(errorCode.getStatusCode())
+                .body(ErrorResponse.builder()
+                        .status(errorCode.getCode())
+                        .error(errorCode.getStatusCode().toString())
+                        .message(exception.getMessage())
+                        .build());
+    }
 }

@@ -144,27 +144,11 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public PageResponse<?> getAllUsersWithSortBy(int pageNo, int pageSize, String sortBy) {
-        int p = 0;
-        if(pageNo > 0) {
-            p = pageNo - 1 ;
-        }
+        int p = pageNo > 0 ? pageNo - 1 : 0;
 
         log.info("check pageSize: {}", pageSize);
 
-        List<Sort.Order> sorts = new ArrayList<>();
-        if(StringUtils.hasLength(sortBy)) {
-            //fullName:asc|desc
-            Pattern pattern = Pattern.compile("(\\w+?)(:)(.*)");
-            Matcher matcher = pattern.matcher(sortBy);
-            if(matcher.find()) {
-                if(matcher.group(3).equalsIgnoreCase("asc")) {
-                    sorts.add(new Sort.Order(Sort.Direction.ASC, matcher.group(1)));
-                } else {
-                    sorts.add(new Sort.Order(Sort.Direction.DESC, matcher.group(1)));
-                }
-
-            }
-        }
+        List<Sort.Order> sorts = parseSortParameter(sortBy);
 
         Pageable pageable = PageRequest.of(p, pageSize, Sort.by(sorts));
 
@@ -255,5 +239,22 @@ public class UserServiceImpl implements UserService {
 
     public User getUserByEmail(String email) {
         return userRepository.findByEmail(email).orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTED));
+    }
+
+    private List<Sort.Order> parseSortParameter(String sortBy) {
+        List<Sort.Order> sorts = new ArrayList<>();
+        if (StringUtils.hasLength(sortBy)) {
+            log.info("sortBy: {}", sortBy);
+            // fullName:asc|desc
+            Pattern pattern = Pattern.compile("(\\w+?)(:)(.*)");
+            Matcher matcher = pattern.matcher(sortBy);
+            if (matcher.find()) {
+                Sort.Direction direction = matcher.group(3).equalsIgnoreCase("asc")
+                        ? Sort.Direction.ASC
+                        : Sort.Direction.DESC;
+                sorts.add(new Sort.Order(direction, matcher.group(1)));
+            }
+        }
+        return sorts;
     }
 }

@@ -1,12 +1,13 @@
 server:
   port: 8888
+
 spring:
   application:
     name: computer_accessories
   datasource:
-    url: jdbc:mysql://172.18.0.2:3306/computer_accessories
-    username: root
-    password: root
+    url: jdbc:mysql://localhost:3306/computer_accessories
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
     driver-class-name: com.mysql.cj.jdbc.Driver
   jpa:
     database-platform: org.hibernate.dialect.MySQLDialect
@@ -35,7 +36,6 @@ spring:
             scope:
               - email
               - public_profile
-
   mail:
     host: smtp.gmail.com
     port: 587
@@ -48,6 +48,10 @@ spring:
           starttls:
             enable: true
 
+  data:
+    redis:
+      host: localhost
+      port: 6379
 
 
 springdoc:
@@ -82,3 +86,8 @@ app:
     authorizedRedirectUris:
       - http://localhost:8888
       - http://localhost:3000
+
+payos:
+  client-id: ${PAYOS_CLIENT_ID}
+  api-key: ${PAYOS_API_KEY}
+  checksum-key: ${PAYOS_CHECKSUM_KEY}

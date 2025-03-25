@@ -61,10 +61,8 @@ public class OrdersController {
     }
 
     @Operation(summary = "Get orders by email", description = "Api get a orders by email")
-    @PreAuthorize("hasAnyAuthority('ADMIN','USER')")
-    @PostAuthorize("returnObject.data.email == authentication.name")
-    @GetMapping("/{email}")
-    public ResponseData<OrdersResponse> getOrdersByEmail(@PathVariable String email) {
+    @GetMapping("/lists")
+    public ResponseData<?> getOrdersByEmail(@RequestParam String email) {
             return new ResponseData<>(HttpStatus.OK.value(), "Get orders by email successfully", ordersService.getOrdersDetail(email));
     }
 }

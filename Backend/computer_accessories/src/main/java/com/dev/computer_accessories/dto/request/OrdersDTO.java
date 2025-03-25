@@ -1,7 +1,12 @@
 package com.dev.computer_accessories.dto.request;
 
+import com.dev.computer_accessories.model.OrderDetails;
+import com.dev.computer_accessories.model.PaymentMethod;
 import com.dev.computer_accessories.model.User;
+import com.dev.computer_accessories.util.OrderStatus;
 import lombok.Getter;
+
+import java.util.List;
 
 @Getter
 public class OrdersDTO {
@@ -11,6 +16,8 @@ public class OrdersDTO {
     private String phone;
     private String address;
     private String note;
-    private int status;
+    private List<OrderDetails> orderDetailsList;
+    private OrderStatus status;
+    private PaymentMethod paymentMethod;
     private User user;
 }

@@ -34,15 +34,22 @@ public class SecurityConfig {
     private final CustomOAuth2UserService customOAuth2UserService;
     private final OAuth2AuthenticationSuccessHandler oAuth2AuthenticationSuccessHandler;
     private final OAuth2AuthenticationFailureHandler oAuth2AuthenticationFailureHandler;
-    private final String[] WHITE_LIST = {"api/v1/auth/**",
+    private final String[] WHITE_LIST = {
+            "/api/v1/auth/**",
             "/api/v1/oauth2/**",
+            "/api/v1/user/list/**",
+            "/api/v1/user/list-with-sort-by-multiple-columns/**",
+            "/api/v1/user/list-with-sort-by-multiple-columns-search/**",
             "/api/v1/product/list/**",
             "/api/v1/product/list-search/**",
+            "/api/v1/product/list-promotion/**",
             "/api/v1/category/list/**",
             "/api/v1/category/lists/**",
             "/api/v1/supplier/list/**",
             "/api/v1/supplier/lists/**",
-            "/login/oauth2/**"
+            "/api/v1/orders/lists/**",
+            "/login/oauth2/**",
+            "/api/v1/payment/**"
 
     };
 
@@ -52,6 +59,7 @@ public class SecurityConfig {
         http.csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(request -> request
                         .requestMatchers(WHITE_LIST).permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/v1/product/**").permitAll()
                         .anyRequest().authenticated()
                 )
                 .sessionManagement(manager -> manager.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
@@ -67,11 +75,11 @@ public class SecurityConfig {
                         .successHandler(oAuth2AuthenticationSuccessHandler)
                         .failureHandler(oAuth2AuthenticationFailureHandler)
                 )
-                .logout(logout ->
-                        logout.logoutUrl("/api/v1/auth/logout")
-                                .addLogoutHandler(logoutHandler)
-                                .logoutSuccessHandler((request, response, authentication) -> SecurityContextHolder.clearContext())
-                )
+//                .logout(logout ->
+//                        logout.logoutUrl("/api/v1/auth/logout")
+//                                .addLogoutHandler(logoutHandler)
+//                                .logoutSuccessHandler((request, response, authentication) -> SecurityContextHolder.clearContext())
+//                )
         ;
 
         return http.build();

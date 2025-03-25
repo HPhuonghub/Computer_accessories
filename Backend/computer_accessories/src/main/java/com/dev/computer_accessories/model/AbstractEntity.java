@@ -9,12 +9,13 @@ import org.hibernate.annotations.UpdateTimestamp;
 import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.LastModifiedBy;
 
+import java.io.Serializable;
 import java.util.Date;
 
 @Getter
 @Setter
 @MappedSuperclass
-public abstract class AbstractEntity<T> {
+public abstract class AbstractEntity<T> implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

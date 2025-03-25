@@ -1,5 +1,7 @@
 package com.dev.computer_accessories.service.impl;
 
+import com.dev.computer_accessories.model.User;
+import com.dev.computer_accessories.repository.UserRepository;
 import com.dev.computer_accessories.service.JwtService;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -13,16 +15,14 @@ import org.springframework.stereotype.Service;
 
 
 import java.security.Key;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
 @Service
 public class JwtServiceImpl implements JwtService {
 
+    private final UserRepository userRepository;
     @Value("${jwt.expiryTime}")
     private long expiryTime;
 
@@ -31,6 +31,10 @@ public class JwtServiceImpl implements JwtService {
 
     @Value("${jwt.secretKey}")
     private String secretKey;
+
+    public JwtServiceImpl(UserRepository userRepository) {
+        this.userRepository = userRepository;
+    }
 
     @Override
     public String generateToken(UserDetails user) {
@@ -52,11 +56,14 @@ public class JwtServiceImpl implements JwtService {
                 .map(GrantedAuthority::getAuthority)
                 .collect(Collectors.toList());
 
+        Optional<User> user = userRepository.findByEmail(userDetails.getUsername());
+
         return Jwts.builder()
                 .setClaims(extraClaims)
                 .setSubject(userDetails.getUsername())
                 .setIssuedAt(new Date(System.currentTimeMillis()))
                 .setExpiration(new Date(System.currentTimeMillis() + expiration))
+                .claim("id",user.get().getId())
                 .claim("role",roles)
                 .signWith(getSigningKey(), SignatureAlgorithm.HS256).compact();
     }

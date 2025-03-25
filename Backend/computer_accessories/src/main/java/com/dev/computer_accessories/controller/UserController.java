@@ -33,7 +33,6 @@ public class UserController {
 
 
     @Operation(summary = "Get list of users per page", description = "Send a request via this API to get user list by pageNo and pageSize")
-    @PreAuthorize("hasAuthority('ADMIN')")
     @GetMapping("/list")
     public ResponseData<?> getAllUser(@RequestParam(defaultValue = "0", required = false) int pageNo,
                                       @Min(1) @RequestParam(defaultValue = "20", required = false) int pageSize,
@@ -43,7 +42,6 @@ public class UserController {
     }
 
     @Operation(summary = "Get list of users with sort by multiple columns", description = "Send a request via this API to get user list by pageNo, pageSize and sort by multiple columns")
-    @PostAuthorize("hasAuthority('ADMIN')")
     @GetMapping("/list-with-sort-by-multiple-columns")
     public ResponseData<?> getAllUsersWithSortByMultipleColumns(@RequestParam(defaultValue = "0", required = false) int pageNo,
                                                              @Min(10) @RequestParam(defaultValue = "20", required = false) int pageSize,
@@ -53,7 +51,6 @@ public class UserController {
     }
 
     @Operation(summary = "Get list of users with sort by columns and search", description = "Send a request via this API to get user list by pageNo, pageSize, search and sort by search")
-    @PostAuthorize("hasAuthority('ADMIN')")
     @GetMapping("/list-with-sort-by-multiple-columns-search")
     public ResponseData<?> getAllUsersWithSortByColumnAndSearch(@RequestParam(defaultValue = "0", required = false) int pageNo,
                                                                 @RequestParam(defaultValue = "20", required = false) int pageSize,

@@ -1,5 +1,6 @@
 package com.dev.computer_accessories.model;
 
+import com.dev.computer_accessories.util.OrderStatus;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
@@ -31,14 +32,17 @@ public class Orders extends AbstractEntity<Long>{
     @Column(name = "note")
     private String note;
 
-    @Column(name = "status")
-    private int status;
-
     @ManyToOne(cascade = CascadeType.MERGE)
     @JoinColumn(name = "user_id")
+    @JsonIgnore
     private User user;
 
     @OneToMany(mappedBy = "orders", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonIgnore
     private List<OrderDetails> orderDetails = new ArrayList<>();
+
+    @Enumerated(EnumType.STRING) //đảm bảo rằng giá trị của enum OrderStatus được lưu dưới dạng chuỗi trong cơ sở dữ liệu.
+    private OrderStatus orderStatus;
+
+    private double totalPrice;
 }

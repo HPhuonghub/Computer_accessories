@@ -30,7 +30,6 @@ public class CategoryController {
     }
 
     @Operation(summary = "Add category", description = "API create new category")
-    @PreAuthorize("hasAuthority('ADMIN')")
     @PostMapping("/")
     public ResponseData<?> addCategory(@RequestBody @Valid CategoryDTO categoryDTO) {
         log.info("Request add category = {}", categoryDTO);
@@ -40,7 +39,6 @@ public class CategoryController {
 
 
     @Operation(summary = "Update a category", description = "API update a category")
-    @PreAuthorize("hasAuthority('ADMIN')")
     @PutMapping("/{categoryId}")
     public ResponseData<?> updateCategory(@Min(value = 1, message = "CategoryId must be greater than 0") @PathVariable int categoryId, @RequestBody CategoryDTO categoryDTO) {
         categoryService.updateCategory(categoryId, categoryDTO);
@@ -48,7 +46,6 @@ public class CategoryController {
     }
 
     @Operation(summary = "Delete a category", description = "API delete a category")
-    @PreAuthorize("hasAuthority('ADMIN')")
     @DeleteMapping("/{categoryId}")
     public ResponseData<?> deleteCategory(@Min(1) @PathVariable int categoryId) {
         categoryService.deleteCategory(categoryId);

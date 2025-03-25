@@ -4,6 +4,8 @@ import com.dev.computer_accessories.dto.request.OrdersDTO;
 import com.dev.computer_accessories.dto.response.OrdersResponse;
 import com.dev.computer_accessories.dto.response.PageResponse;
 
+import java.util.List;
+
 public interface OrdersService {
 
     void saveOrders(OrdersDTO ordersDTO);
@@ -12,7 +14,7 @@ public interface OrdersService {
 
     void deleteOrders(long id);
 
-    OrdersResponse getOrdersDetail(String email);
+    List<OrdersResponse> getOrdersDetail(String email);
 
     PageResponse<?> getAllOrdersWithSortBy(int pageNo, int pageSize, String sortBy);
 }

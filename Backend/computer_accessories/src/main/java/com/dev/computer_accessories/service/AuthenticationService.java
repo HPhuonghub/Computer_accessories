@@ -13,18 +13,20 @@ import com.dev.computer_accessories.token.Token;
 import com.dev.computer_accessories.token.TokenType;
 import com.dev.computer_accessories.util.UserStatus;
 import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 
 import java.util.Optional;
+import java.util.concurrent.TimeUnit;
 
 @Service
 @Slf4j
@@ -37,6 +39,17 @@ public class AuthenticationService {
     private final TokenRepository tokenRepository;
     private final PasswordEncoder passwordEncoder;
     private final RoleServiceImpl roleService;
+    private final RedisTemplate<String, Object> redisTemplate;
+
+    private static final String BLACKLIST_KEY_PREFIX = "blacklist:";
+
+    private static final String REFRESH_TOKEN_KEY = "refresh_token:";
+
+    @Value("${jwt.expiryTime}")
+    private long expireTime;
+
+    @Value("${jwt.refresh-token.expiryTime}")
+    private long expireTimeRefreshToken;
 
     public TokenResponse authenticate(SignInRequest signInRequest) {
 
@@ -54,9 +67,11 @@ public class AuthenticationService {
 
         var refreshToken = jwtService.generateReFreshToken(user);
 
-        revokedAllUserTokens(user);
+        // revokedAllUserTokens(user);
 
-        savedToken(user, accessToken);
+        // savedToken(user, accessToken);
+
+        redisTemplate.opsForValue().set(REFRESH_TOKEN_KEY, refreshToken, expireTimeRefreshToken, TimeUnit.SECONDS);
 
         return TokenResponse.builder()
                 .accessToken(accessToken)
@@ -131,6 +146,10 @@ public class AuthenticationService {
             throw new AppException(ErrorCode.TOKEN_NOT_BLANK);
         }
 
+        if (token.equals(redisTemplate.hasKey(REFRESH_TOKEN_KEY))) {
+            throw new AppException(ErrorCode.TOKEN_INVALID);
+        }
+
         final String userName = jwtService.extractUsername(token);
 
         Optional<User> user = userRepository.findByEmail(userName);
@@ -141,7 +160,7 @@ public class AuthenticationService {
 
         String accessToken = jwtService.generateToken(user.get());
 
-        savedToken(user.get(), accessToken);
+//        savedToken(user.get(), accessToken);
 
         return TokenResponse.builder()
                 .accessToken(accessToken)
@@ -151,21 +170,32 @@ public class AuthenticationService {
     }
 
     public TokenResponse logout(HttpServletRequest request) {
-        final String authHeader = request.getHeader("Authorization");
-        final String jwt;
-        if (StringUtils.isAllBlank(authHeader) || !authHeader.startsWith("Bearer ")) {
-            throw new AppException(ErrorCode.TOKEN_INVALID);
+        final String jwt = request.getHeader(AUTHORIZATION);
+        System.out.println("check token: " + jwt);
+
+        if (StringUtils.isBlank(jwt)) {
+            throw new AppException(ErrorCode.TOKEN_NOT_BLANK);
         }
-        jwt = authHeader.substring(7);
+
+        final String token = jwt.substring("Bearer ".length());
+
+        redisTemplate.opsForValue().set(BLACKLIST_KEY_PREFIX + token, "blacklisted", expireTime, TimeUnit.SECONDS);
+
         var storedToken = tokenRepository.findByToken(jwt)
                 .orElse(null);
         if (storedToken != null) {
-            storedToken.setExpired(true);
-            storedToken.setRevoked(true);
-            tokenRepository.save(storedToken);
+            tokenRepository.delete(storedToken);
             SecurityContextHolder.clearContext();
         }
+//        if (storedToken != null) {
+//            storedToken.setExpired(true);
+//            storedToken.setRevoked(true);
+//            tokenRepository.save(storedToken);
+//            SecurityContextHolder.clearContext();
+//        }
         return TokenResponse.builder()
+                .status(200)
+                .message("Logout successful")
                 .build();
     }
 

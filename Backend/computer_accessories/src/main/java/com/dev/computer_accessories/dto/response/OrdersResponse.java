@@ -1,9 +1,13 @@
 package com.dev.computer_accessories.dto.response;
 
+import com.dev.computer_accessories.model.OrderDetails;
 import com.dev.computer_accessories.model.User;
+import com.dev.computer_accessories.util.OrderStatus;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
+
+import java.util.List;
 
 @Getter
 @Builder
@@ -15,6 +19,7 @@ public class OrdersResponse {
     private String phone;
     private String address;
     private String note;
-    private int status;
+    private OrderStatus status;
     private User user;
+    private List<OrderDetails> orderDetails;
 }

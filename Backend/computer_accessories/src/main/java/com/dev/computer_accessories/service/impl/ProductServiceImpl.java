@@ -3,6 +3,8 @@ package com.dev.computer_accessories.service.impl;
 import com.dev.computer_accessories.dto.request.ProductDTO;
 import com.dev.computer_accessories.dto.response.PageResponse;
 import com.dev.computer_accessories.dto.response.ProductDetailResponse;
+import com.dev.computer_accessories.exception.AppException;
+import com.dev.computer_accessories.exception.ErrorCode;
 import com.dev.computer_accessories.exception.ResourceNotFoundException;
 import com.dev.computer_accessories.model.Category;
 import com.dev.computer_accessories.model.Product;
@@ -17,6 +19,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
@@ -32,6 +35,15 @@ public class ProductServiceImpl implements ProductService {
     private final ProductRepository productRepository;
     private final CategoryRepository categoryRepository;
     private final SupplierRepository supplierRepository;
+    private final RedisTemplate<String, Object> redisTemplate;
+
+    private static final String PRODUCT_KEY_PREFIX = "product:";
+
+    @Override
+    public void testRedis() {
+        Product product = getProductById(12);
+        redisTemplate.opsForValue().set(PRODUCT_KEY_PREFIX + product.getId(), product);
+    }
 
     @Override
     public void saveProduct(ProductDTO productDTO) {
@@ -91,6 +103,7 @@ public class ProductServiceImpl implements ProductService {
         Product product = getProductById(id);
 
         return ProductDetailResponse.builder()
+                .id(product.getId())
                 .name(product.getName())
                 .description(product.getDescription())
                 .discount(product.getDiscount())
@@ -197,20 +210,67 @@ public class ProductServiceImpl implements ProductService {
                 .build();
     }
 
+    public PageResponse<?> promotionalProduct(int pageNo, int pageSize, String sortBy, String keyword) {
+        int p = 0;
+        if(pageNo > 0) {
+            p = pageNo - 1;
+        }
+
+
+        List<Sort.Order> sorts = new ArrayList<>();
+        if(StringUtils.hasLength(sortBy)) {
+            //name:asc||desc
+            Pattern pattern = Pattern.compile("(\\w+?)(:)(.*)");
+            Matcher matcher = pattern.matcher(sortBy);
+            if(matcher.find()) {
+                if (matcher.group(3).equalsIgnoreCase("asc")) {
+                    sorts.add((new Sort.Order(Sort.Direction.ASC, matcher.group(1))));
+                } else {
+                    sorts.add((new Sort.Order(Sort.Direction.DESC, matcher.group(1))));
+                }
+            }
+        }
+
+        Pageable pageable = PageRequest.of(p, pageSize, Sort.by(sorts));
+
+        Page<Product> products = productRepository.promotionalProduct(keyword, pageable);
+
+        List<ProductDetailResponse> res = products.stream().map(product -> ProductDetailResponse.builder()
+                        .id(product.getId())
+                        .name(product.getName())
+                        .price(product.getPrice())
+                        .description(product.getDescription())
+                        .stock(product.getStock())
+                        .thumbnail(product.getThumbnail())
+                        .discount(product.getDiscount())
+                        .category(product.getCategory())
+                        .supplier(product.getSupplier())
+                        .productSpecifications(product.getProductSpecifications())
+                        .build())
+                .toList();
+
+        return PageResponse.builder()
+                .pageNo(p)
+                .pageSize(pageSize)
+                .totalPage(products.getTotalPages())
+                .items(res)
+                .build();
+    }
+
 
     private Product getProductById(long id) {
-        return productRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Product not found"));
+        return productRepository.findById(id).orElseThrow(() -> new AppException(ErrorCode.PRODUCT_NOT_FOUND));
     }
 
     private Category getCategoryByName(String name) {
-        return categoryRepository.findByName(name).orElseThrow(() -> new ResourceNotFoundException("Category name not found"));
+        return categoryRepository.findByName(name).orElseThrow(() -> new AppException(ErrorCode.CATEGORY_NOT_FOUND));
     }
 
     private Supplier getSupplierByName(String name) {
-        return supplierRepository.findByName(name).orElseThrow(() -> new ResourceNotFoundException("Supplier name not found"));
+        return supplierRepository.findByName(name).orElseThrow(() -> new AppException(ErrorCode.SUPPLIER_NOT_FOUND));
     }
 
     public Product getProductByName(String name) {
-        return productRepository.findByName(name).orElseThrow(() -> new ResourceNotFoundException("Product not found"));
+        return productRepository.findByName(name).orElseThrow(() -> new AppException(ErrorCode.PRODUCT_NOT_FOUND));
     }
 }

@@ -1,5 +1,6 @@
 package com.dev.computer_accessories.controller;
 
+import com.dev.computer_accessories.dto.request.CheckoutRequest;
 import com.dev.computer_accessories.dto.request.OrderDetailsDTO;
 import com.dev.computer_accessories.dto.response.OrderDetailsResponse;
 import com.dev.computer_accessories.dto.response.ResponseData;
@@ -14,6 +15,8 @@ import org.springframework.security.access.prepost.PostAuthorize;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/order-details")
@@ -26,15 +29,19 @@ public class OrderDetailsController {
     @PreAuthorize("hasAnyAuthority('ADMIN','USER')")
     @PostAuthorize("returnObject.data.orders.email == authentication.name")
     @PostMapping("/")
-    public ResponseData<OrderDetailsResponse> saveOrderDetails(@RequestBody OrderDetailsDTO orderDetailsDTO) {
-        orderDetailsService.saveOrderDetails(orderDetailsDTO);
-        return new ResponseData<>(HttpStatus.OK.value(), "OrderDetails added successfully");
+    public ResponseData<OrderDetailsResponse> saveOrderDetails(@RequestBody CheckoutRequest request) {
+        try {
+            orderDetailsService.processOrder(request.getOrdersDTO(), request.getOrderDetailsDTOS());
+            return new ResponseData<>(HttpStatus.OK.value(), "OrderDetails added successfully");
+        } catch (Exception e) {
+            return new ResponseData<>(HttpStatus.INTERNAL_SERVER_ERROR.value(), "Failed to add OrderDetails");
+        }
     }
 
 
     @Operation(summary = "Delete orderDetails", description = "Api delete a orderDetails")
-    @PreAuthorize("hasAnyAuthority('ADMIN','USER')")
-    @PostAuthorize("returnObject.data.orders.email == authentication.name")
+//    @PreAuthorize("hasAnyAuthority('ADMIN','USER')")
+//    @PostAuthorize("returnObject.data.orders.email == authentication.name")
     @DeleteMapping("/{orderDetailsId}")
     public ResponseData<OrderDetailsResponse> deleteOrderDetails(@PathVariable int orderDetailsId) {
         orderDetailsService.deleteOrderDetails(orderDetailsId);
@@ -67,5 +74,13 @@ public class OrderDetailsController {
     public ResponseData<OrderDetailsResponse> getOrderDetailsById(@Min(value = 1, message = "orderDetailsId must be greater than 0") @PathVariable int orderDetailsId) {
         orderDetailsService.getOrderDetails(orderDetailsId);
         return new ResponseData<>(HttpStatus.OK.value(), "Get orderDetails by id successfully");
+    }
+
+    @Operation(summary = "Get orderDetails by id", description = "Api get a orderDetails by id")
+//    @PreAuthorize("hasAnyAuthority('ADMIN','USER')")
+//    @PostAuthorize("returnObject.data.orders.email == authentication.name")
+    @GetMapping("/list/{userId}")
+    public ResponseData<List<OrderDetailsResponse>> getOrderDetailsByUserId(@Min(value = 1, message = "orderDetailsId must be greater than 0") @PathVariable int userId) {
+        return new ResponseData<>(HttpStatus.OK.value(), "Get orderDetails by id successfully", orderDetailsService.getOrderDetailByUserId(userId));
     }
 }

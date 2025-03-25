@@ -7,6 +7,7 @@ import org.springframework.http.HttpStatusCode;
 @Getter
 public enum ErrorCode {
 
+
     // USER
     UNCATEGORIZED_EXCEPTION(9999, "Uncategorized error", HttpStatus.INTERNAL_SERVER_ERROR),
     INVALID_KEY(1001, "Uncategorized error", HttpStatus.BAD_REQUEST),
@@ -34,6 +35,9 @@ public enum ErrorCode {
     // PRODUCT
     PRODUCT_NOT_FOUND(4000, "Product not found", HttpStatus.NOT_FOUND),
     PRODUCT_EXISTED(4001, "Product already exists", HttpStatus.BAD_REQUEST),
+    PRODUCT_QUANTITY_UNAVAILABLE(4002, "Not enough product stock", HttpStatus.BAD_REQUEST),
+
+
 
     // SPECIFICATION_PRODUCT
     SPECIFICATION_PRODUCT_NOT_FOUND(5000, "Specification product not found", HttpStatus.NOT_FOUND),
@@ -56,6 +60,12 @@ public enum ErrorCode {
 
     // CART
     CART_NOT_FOUND(10000, "Cart not found", HttpStatus.NOT_FOUND),
+
+    // NOT FOUND
+    NOT_FOUND(404, "Not found", HttpStatus.NOT_FOUND),
+
+    // BAD REQUEST
+    BAD_REQUEST(400, "Bad request", HttpStatus.BAD_REQUEST),
 
     ;
 
