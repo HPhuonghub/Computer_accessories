@@ -61,6 +61,16 @@ const getAllOrderDetailsWithPaginate = async (pageNo, pageSize) => {
   );
 };
 
+const getOrderDetailByUserId = async (userId) => {
+  const { config } = await markToken();
+  return axios.get(`api/v1/order-details/list/${userId}`, config);
+};
+
+const deleteOrderDetailByUserId = async (productId) => {
+  const { config } = await markToken();
+  return axios.delete(`api/v1/order-details/${productId}`, config);
+};
+
 const markToken = () => {
   const token = localStorage.getItem(ACCESS_TOKEN); // Retrieve token from localStorage
 
@@ -80,4 +90,6 @@ export {
   getOrderDetailId,
   deleteOrderDetail,
   getAllOrderDetailsWithPaginate,
+  getOrderDetailByUserId,
+  deleteOrderDetailByUserId,
 };

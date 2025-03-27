@@ -68,8 +68,10 @@ export const loginUser = (username, password) => async (dispatch) => {
         const user = {
           fullname: decodedToken.sub,
           role: decodedToken.role[0],
+          email: decodedToken.sub,
           // Add other fields as needed
         };
+        localStorage.setItem("email", user.email);
         dispatch(loginSuccess({ user }));
       } catch (error) {
         console.error("Error decoding AccessToken:", error);

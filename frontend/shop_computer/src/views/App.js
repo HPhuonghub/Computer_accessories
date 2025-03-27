@@ -4,6 +4,7 @@ import { useEffect } from "react";
 import { Outlet } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { selectIsLoggedIn, loginUser } from "../redux/slices/authSlice";
+import Footer from "../components/Footer/Footer";
 
 function App() {
   const dispatch = useDispatch();
@@ -24,11 +25,9 @@ function App() {
         className="header-container"
         style={{
           position: "fixed",
-          height: "80px",
           top: 0,
           width: "100%",
-
-          zIndex: 2,
+          zIndex: 200,
         }}
       >
         <Header />
@@ -38,6 +37,9 @@ function App() {
         <div className="app-content">
           <Outlet />
         </div>
+      </div>
+      <div>
+        <Footer />
       </div>
     </div>
   );

@@ -74,7 +74,11 @@ const SideBar = (props) => {
                 Quản lí sản phẩm
                 <Link to={"/admin/manage-products"} />
               </MenuItem>
-              <MenuItem> Quản lí loại sản phẩm</MenuItem>
+              <MenuItem>
+                {" "}
+                Quản lí loại sản phẩm
+                <Link to={"/admin/manage-categories"} />
+              </MenuItem>
             </SubMenu>
           </Menu>
         </SidebarContent>
@@ -87,7 +91,7 @@ const SideBar = (props) => {
             }}
           >
             <a
-              href="https://github.com/azouaoui-med/react-pro-sidebar"
+              href="https://github.com/HPhuonghub/Computer_accessories"
               target="_blank"
               className="sidebar-btn"
               rel="noopener noreferrer"

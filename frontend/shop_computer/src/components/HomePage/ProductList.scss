@@ -23,6 +23,7 @@
     position: relative;
     border: 1px solid #ccc;
     border-radius: 5px;
+    cursor: pointer;
 
     @media (max-width: 1024px) {
       width: calc(
@@ -39,8 +40,7 @@
     }
 
     img {
-      max-width: 100%;
-      height: auto;
+      width: 100%;
       aspect-ratio: 1 / 1;
       margin-bottom: 10px;
     }
@@ -175,6 +175,46 @@
           -webkit-box-orient: vertical;
         }
       }
+    }
+  }
+
+  .pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    list-style: none;
+    padding: 0;
+    margin: 20px 0;
+
+    .page-item {
+      margin: 0 5px;
+
+      &.active .page-link {
+        background-color: #007bff; // Màu nền cho trang đang hoạt động
+        color: white; // Màu chữ cho trang đang hoạt động
+        border-radius: 5px; // Bo góc
+      }
+
+      .page-link {
+        display: block;
+        padding: 10px 15px;
+        color: #007bff; // Màu chữ mặc định
+        text-decoration: none;
+        border: 1px solid #dee2e6; // Đường viền
+        border-radius: 5px; // Bo góc
+        transition: background-color 0.3s, color 0.3s;
+
+        &:hover {
+          background-color: #e9ecef; // Màu nền khi hover
+          color: #0056b3; // Màu chữ khi hover
+        }
+      }
+    }
+
+    .break-item {
+      margin: 0 5px;
+      font-size: 18px;
+      line-height: 1.5;
     }
   }
 }

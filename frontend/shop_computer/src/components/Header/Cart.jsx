@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useRef } from "react";
 import { FaShoppingCart } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
@@ -33,8 +33,6 @@ const Cart = ({ setShowCartPopup }) => {
     };
   }, []);
 
-  // useEffect(() => {}, [cartItems]);
-
   const calculateDiscountedPrice = (price, discount) => {
     if (discount) {
       const discountedPrice = price * (1 - discount / 100);
@@ -59,9 +57,9 @@ const Cart = ({ setShowCartPopup }) => {
 
   const handleQuantityChange = (id, change) => {
     if (change > 0) {
-      dispatch(increaseQuantity({ id }));
+      dispatch(increaseQuantity({ id, quantity: 1 }));
     } else {
-      dispatch(decreaseQuantity({ id }));
+      dispatch(decreaseQuantity({ id, quantity: 1 }));
     }
   };
 

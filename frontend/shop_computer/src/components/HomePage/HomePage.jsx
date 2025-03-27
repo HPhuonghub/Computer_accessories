@@ -1,11 +1,14 @@
 import React, { useState, useEffect } from "react";
 import CategoryList from "./CategoryList";
 import ProductList from "./ProductList";
+import Promotion from "./Promotion";
 import { Container, Row, Col } from "react-bootstrap";
 import {
   listProductSearch,
   wordSearch,
   getAllProductSearch,
+  getAllPromotionalProduct,
+  promotionalProduct,
 } from "../../redux/slices/ProductSlice";
 import { listCategory, getAllCategory } from "../../redux/slices/CategorySlice";
 import { useDispatch, useSelector } from "react-redux";
@@ -17,6 +20,7 @@ const HomePage = () => {
   const [selectedCategoryName, setSelectedCategoryName] = useState(0);
   const [currentPage, setCurrentPage] = useState(1);
   const productSearch = useSelector(listProductSearch);
+  const products = useSelector(promotionalProduct);
   const keySearch = useSelector(wordSearch);
   const [search, setSearch] = useState();
   const categories = useSelector(listCategory);
@@ -33,6 +37,7 @@ const HomePage = () => {
   useEffect(() => {
     dispatch(getAllCategory());
     dispatch(getAllProductSearch(currentPage, LIMIT_PRODUCT, search));
+    dispatch(getAllPromotionalProduct(1, 10));
   }, [dispatch]);
 
   useEffect(() => {
@@ -59,7 +64,10 @@ const HomePage = () => {
   };
 
   return (
-    <div className="home">
+    <div
+      className="home"
+      style={{ marginTop: "50px", fontFamily: `"Quicksand", sans-serif` }}
+    >
       <Container>
         <Row>
           <Col xs={9} md={3}>
@@ -76,6 +84,9 @@ const HomePage = () => {
               onPageChange={handlePageChange}
             />
           </Col>
+        </Row>
+        <Row>
+          <Promotion products={products ? products : []} />
         </Row>
       </Container>
     </div>

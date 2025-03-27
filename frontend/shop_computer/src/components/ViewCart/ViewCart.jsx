@@ -7,9 +7,11 @@ import {
   removeFromCart,
 } from "../../redux/slices/cartSlice";
 import "./ViewCart.scss";
+import { useNavigate } from "react-router-dom";
 
 const ViewCart = () => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const cartItems = useSelector(selectCartItems);
 
   useEffect(() => {
@@ -61,9 +63,9 @@ const ViewCart = () => {
 
   const handleQuantityChange = (id, change) => {
     if (change > 0) {
-      dispatch(increaseQuantity({ id }));
+      dispatch(increaseQuantity({ id, quantity: 1 }));
     } else {
-      dispatch(decreaseQuantity({ id }));
+      dispatch(decreaseQuantity({ id, quantity: 1 }));
     }
   };
 
@@ -71,10 +73,15 @@ const ViewCart = () => {
     dispatch(removeFromCart({ id }));
   };
 
+  const handlePay = () => {
+    localStorage.setItem("products", JSON.stringify(cartItems));
+    navigate(`/checkout/-1`);
+  };
+
   return (
     <div className="view-cart">
       <div className="container">
-        <div className="cart-items">
+        <div className="cart-items col-md-8">
           <h1>Your Cart</h1>
           {cartItems.length > 0 ? (
             <ul>
@@ -120,14 +127,34 @@ const ViewCart = () => {
             <p>Your cart is empty.</p>
           )}
         </div>
-        <div className="payment-info">
-          <h2>Payment Information</h2>
-          <div className="total">
-            <h3>Total:</h3>
-            <p>{formatPrice(calculateTotalPrice())}</p>
+        <div className="payment-info col-md-4">
+          <div>
+            <h2>Payment Information</h2>
+
+            <div class="d-flex justify-content-between align-items-center">
+              <span>Tổng tiền:</span>
+              <span class="order-total">
+                <p>{formatPrice(calculateTotalPrice())}</p>
+              </span>
+            </div>
+            <div class="mt-3">
+              <ul class="list-unstyled">
+                <li>Phí vận chuyển sẽ được tính ở trang thanh toán.</li>
+                <li>Bạn cũng có thể nhập mã giảm giá ở trang thanh toán.</li>
+                <li>Bạn cũng có thể nhập mã giảm giá ở trang thanh toán.</li>
+              </ul>
+            </div>
+            <button
+              class="btn btn-checkout w-100 mt-3"
+              onClick={() => handlePay()}
+            >
+              THANH TOÁN
+            </button>
           </div>
-          <div className="checkout-btn">
-            <button>Proceed to Checkout</button>
+          <div class="policy-note mt-3">
+            <div class="fw-bold">Chính sách mua hàng:</div>
+            Hiện chúng tôi chỉ áp dụng thanh toán với đơn hàng có giá trị tối
+            thiểu 40.000₫ trở lên.
           </div>
         </div>
       </div>

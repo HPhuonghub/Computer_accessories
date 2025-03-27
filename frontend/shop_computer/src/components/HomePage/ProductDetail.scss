@@ -1,0 +1,283 @@
+$product-bg-color: #f8f9fa;
+$border-color: #ddd;
+$primary-color: #007bff;
+$success-color: #28a745;
+$warning-color: #e63946;
+$pay-color: #ff0015;
+$font-size-large: 24px;
+$font-size-medium: 20px;
+$font-size-small: 16px;
+.product {
+  .product-detail {
+    display: flex;
+    padding: 10px;
+    border: 1px solid $border-color;
+    border-radius: 8px;
+    margin: 0 auto; // Căn giữa
+    margin-top: 50px;
+    background-color: $product-bg-color;
+
+    .product-image {
+      img {
+        max-width: 100%;
+        border-radius: 8px;
+      }
+    }
+
+    .product-info {
+      margin-left: 20px;
+      margin-top: 20px;
+      flex: 1; // Cho phép nội dung chiếm hết chiều rộng còn lại
+
+      .product-name {
+        font-size: $font-size-large;
+        font-weight: bold;
+      }
+
+      .product-price {
+        font-size: $font-size-medium;
+        color: $warning-color; // Màu cho giá khuyến mãi
+
+        .original-price {
+          text-decoration: line-through;
+          margin-right: 10px;
+          color: #aaa; // Màu cho giá gốc
+        }
+
+        .discounted-price {
+          font-size: 22px;
+        }
+      }
+
+      .product-stock,
+      .product-category,
+      .product-supplier,
+      .supplier-info,
+      .supplier-contact {
+        margin: 10px 0;
+      }
+
+      .quantity-controls {
+        display: flex;
+        width: 40%;
+        height: 24%;
+        align-items: center;
+        margin-top: -15px;
+        gap: 8px; // Adjusted gap
+
+        .quantity-text {
+          width: 100%;
+        }
+
+        button {
+          width: 40%;
+          height: 40%;
+          border: none;
+          background-color: #f0f0f0;
+          font-size: 20px; // Adjusted font size
+        }
+        .black-text {
+          color: black;
+        }
+
+        .red-text {
+          color: red;
+        }
+      }
+
+      .action-buttons {
+        display: flex;
+        gap: 10px; // Khoảng cách giữa các nút
+        //margin-top: 20px; // Khoảng cách trên
+
+        .add-to-cart,
+        .buy-now {
+          padding: 10px 20px;
+          font-size: $font-size-small;
+          border: 2px solid $warning-color;
+          border-radius: 5px;
+          cursor: pointer;
+        }
+
+        .add-to-cart {
+          background: white;
+          color: $warning-color; // Default text color
+          position: relative;
+          overflow: hidden;
+          transition: color 0.3s ease; // Only the text color transition
+
+          &:before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: $pay-color;
+            z-index: 0;
+            transition: transform 0.5s ease; // Smooth transition of background
+            transform: translateX(-100%); // Start off-screen from the left
+          }
+
+          &:hover {
+            color: white; // Change text color to white on hover
+
+            &:before {
+              transform: translateX(
+                0
+              ); // Bring the background in from left to right
+            }
+
+            span {
+              color: white; // Ensure the text color is white when hovering
+            }
+          }
+
+          span {
+            color: red; // Default text color is red
+            position: relative;
+            z-index: 1; // Ensure text is on top of background
+            transition: color 0.3s ease; // Smooth text color transition on hover
+          }
+        }
+
+        .buy-now {
+          background: $warning-color;
+          color: $product-bg-color; // Default text color
+          position: relative;
+          overflow: hidden;
+          transition: color 0.3s ease; // Only the text color transition
+
+          &:before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: $pay-color;
+            z-index: 0;
+            transition: transform 0.5s ease; // Smooth transition of background
+            transform: translateX(-100%); // Start off-screen from the left
+          }
+
+          &:hover {
+            color: white; // Change text color to white on hover
+
+            &:before {
+              transform: translateX(
+                0
+              ); // Bring the background in from left to right
+            }
+
+            span {
+              color: white; // Ensure the text color is white when hovering
+            }
+          }
+
+          span {
+            color: $product-bg-color; // Default text color is red
+            position: relative;
+            z-index: 1; // Ensure text is on top of background
+            transition: color 0.3s ease; // Smooth text color transition on hover
+          }
+        }
+      }
+
+      .sales-policy {
+        padding: 20px;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        background-color: #f9f9f9;
+
+        h2 {
+          font-size: 24px;
+          margin-bottom: 10px;
+        }
+
+        h3 {
+          font-size: 20px;
+          margin-top: 20px;
+          margin-bottom: 10px;
+        }
+
+        ul {
+          list-style-type: none;
+          padding: 0;
+
+          li {
+            font-size: 16px;
+            margin: 5px 0;
+            display: flex;
+            align-items: center; // Align icons and text vertically
+
+            strong {
+              color: #333;
+              margin-left: 10px; // Space between icon and text
+            }
+
+            svg {
+              font-size: 18px; // Adjust icon size
+              color: #007bff; // Icon color
+            }
+          }
+        }
+      }
+    }
+  }
+
+  .cart-popup {
+    position: fixed;
+    width: 300px; /* Width of the popup */
+    max-height: 100px; /* Maximum height of the popup */
+    overflow: hidden; /* Hide overflow content */
+    top: 50px; /* Distance from the top of the screen */
+    right: 20px; /* Distance from the right of the screen */
+    background-color: #ffffff;
+    border: 1px solid #cccccc;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+    padding: 10px;
+    z-index: 999;
+    animation: fadeInOut 0.5s ease-in-out;
+
+    @keyframes fadeInOut {
+      0% {
+        opacity: 0;
+        transform: translateY(-20px);
+      }
+      50% {
+        opacity: 1;
+        transform: translateY(0);
+      }
+      100% {
+        opacity: 0;
+        transform: translateY(-20px);
+      }
+    }
+
+    .cart-popup-content {
+      display: flex;
+      align-items: center;
+
+      img {
+        width: 50px;
+        height: 50px;
+        margin-right: 10px;
+      }
+
+      div {
+        flex-grow: 1; /* Ensure content takes up remaining space */
+        p {
+          margin: 0;
+          font-size: 0.8rem;
+          white-space: normal; /* Allow text to wrap */
+          overflow: hidden;
+          text-overflow: ellipsis;
+          display: -webkit-box;
+          -webkit-line-clamp: 3; /* Number of lines to display */
+          -webkit-box-orient: vertical;
+        }
+      }
+    }
+  }
+}

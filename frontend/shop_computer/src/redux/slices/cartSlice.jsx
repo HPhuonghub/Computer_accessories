@@ -14,9 +14,17 @@ const cartSlice = createSlice({
       );
 
       if (existingItem) {
-        existingItem.quantity++;
+        existingItem.quantity += action.payload.quantity; // Increment by the quantity added
+      } else if (action.payload.quantity) {
+        state.items.push({
+          ...action.payload,
+          quantity: action.payload.quantity,
+        });
       } else {
-        state.items.push({ ...action.payload, quantity: 1 });
+        state.items.push({
+          ...action.payload,
+          quantity: 1,
+        });
       }
 
       // Save to local storage
@@ -31,7 +39,7 @@ const cartSlice = createSlice({
     increaseQuantity: (state, action) => {
       const item = state.items.find((item) => item.id === action.payload.id);
       if (item) {
-        item.quantity++;
+        item.quantity += action.payload.quantity; // Increment by specified quantity
         // Save to local storage
         localStorage.setItem("cart", JSON.stringify(state.items));
       }

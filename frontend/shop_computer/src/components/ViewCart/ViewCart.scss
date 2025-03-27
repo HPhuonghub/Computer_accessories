@@ -2,7 +2,7 @@
   display: grid;
   grid-template-columns: 1fr 7fr 3fr 1fr; // Defines 1/12, 7/12, 3/12, 1/12
   gap: 20px; // Optional: Add some spacing between columns
-
+  margin-top: 50px;
   // Optional: Add a container to constrain the width of the entire view-cart
   .container {
     grid-column: 2 / 4; // Constrains the content to 7/12 + 3/12 of the container width
@@ -69,6 +69,10 @@
               cursor: pointer;
               font-size: 14px; // Adjusted font size
             }
+
+            .quantity {
+              color: #bd2130;
+            }
           }
         }
 
@@ -101,23 +105,24 @@
         font-size: 14px; // Adjusted font size
       }
 
-      .checkout-btn {
-        margin-top: 15px; // Adjusted margin-top
-
-        button {
-          width: 100%;
-          background-color: #007bff;
-          border: none;
-          color: #fff;
-          padding: 8px; // Adjusted padding
-          font-size: 14px; // Adjusted font size
-          cursor: pointer;
-
-          &:hover {
-            background-color: #0056b3;
-          }
-        }
+      .order-total {
+        font-size: 24px;
+        color: #ff0000;
+        font-weight: bold;
       }
     }
+    .btn-checkout {
+      background-color: #ff0000;
+      color: #fff;
+      font-size: 18px;
+      font-weight: bold;
+    }
+  }
+
+  .policy-note {
+    background-color: #e0f7fa;
+    padding: 10px;
+    border-radius: 5px;
+    font-size: 14px;
   }
 }

@@ -1,0 +1,86 @@
+.newsletter-section {
+  background-color: #0099e5;
+  color: white;
+  padding: 20px 0;
+  margin-top: 100px;
+
+  .input-group {
+    display: flex; // Use flexbox for alignment
+    width: 100%; // Make it full width
+    max-width: 600px; // Optional: Set a max width for the group
+    margin-top: 10px; // Space between text and input
+    margin-left: 20px;
+    height: 50px;
+
+    h2,
+    h5,
+    p,
+    li {
+      font-family: "Quicksand", sans-serif;
+    }
+
+    input[type="email"] {
+      border: none;
+      padding: 10px;
+      flex: 1; // Allow the input to grow
+      border-radius: 5px 0 0 5px; // Rounded corners on the left
+      margin-right: -1px; // Overlap border with button
+    }
+
+    button {
+      position: absolute;
+      right: 5px;
+      top: 5px;
+      bottom: 5px;
+      background-color: #ffcc00;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 5px; // Rounded corners on the right
+      color: white;
+      font-weight: bold;
+    }
+  }
+}
+
+.footer-section {
+  padding: 40px 0;
+
+  h5 {
+    font-weight: bold;
+  }
+
+  ul {
+    list-style: none;
+    padding: 0;
+
+    li {
+      margin-bottom: 10px;
+      margin-left: 20px;
+    }
+  }
+
+  .social-icons {
+    a {
+      margin-right: 15px; // Adjusted margin for better spacing
+      color: black;
+      font-size: 24px; // Slightly larger icons
+
+      &:hover {
+        color: #0099e5; // Change color on hover
+        transition: color 0.3s ease; // Smooth transition effect
+      }
+    }
+
+    .icon {
+      // Additional styles for the icon if needed
+      vertical-align: middle; // Align icons nicely
+    }
+  }
+}
+
+.footer-bottom {
+  background-color: #f8f9fa;
+  padding: 10px 0;
+  text-align: center;
+  font-size: 14px;
+}

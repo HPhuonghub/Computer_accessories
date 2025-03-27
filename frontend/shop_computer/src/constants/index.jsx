@@ -1,5 +1,7 @@
 const keys = require("../config/keys");
 
+export const BASE_URL = "http://localhost:8888/";
+
 export const API_BASE_URL = keys.apiBaseUrl;
 
 export const ACCESS_TOKEN = "accessToken";

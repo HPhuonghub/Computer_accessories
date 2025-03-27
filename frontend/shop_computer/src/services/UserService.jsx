@@ -109,6 +109,20 @@ const markToken = () => {
   return { config }; // Return the config object
 };
 
+const logOut = async () => {
+  const { config } = markToken(); // Gọi hàm markToken không cần await
+  try {
+    const response = await axios.post(
+      "/api/v1/auth/logout",
+      {},
+      { ...config, withCredentials: true } // Kết hợp config với withCredentials
+    );
+    return response; // Trả về phản hồi để sử dụng nếu cần
+  } catch (error) {
+    console.error("Có lỗi xảy ra khi đăng xuất:", error);
+  }
+};
+
 export {
   postCreateNewUser,
   getAllUsers,
@@ -120,4 +134,5 @@ export {
   postRegister,
   postForgotPassword,
   postChangePassword,
+  logOut,
 };

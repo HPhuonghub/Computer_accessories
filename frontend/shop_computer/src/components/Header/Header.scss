@@ -2,11 +2,15 @@
   background-color: rgb(96, 93, 93);
   opacity: 1;
   color: white;
+  min-height: 100px;
+  // margin: 0px 10px;
+  font-family: "Quicksand", sans-serif;
 }
 
 .navbar-brand {
   display: flex;
   align-items: center;
+  z-index: 100;
 }
 
 .navbar-brand-title {
@@ -15,17 +19,36 @@
 }
 
 .search-container {
-  display: flex;
-  width: 450px;
-  margin: 0 auto;
-  align-items: center;
+  display: flex; // Use flexbox for alignment
+  width: 100%; // Make it full width
+  min-width: 500px;
+  height: 50px;
+  position: relative;
 
-  .form-control {
-    flex: 1;
+  input {
+    border: none;
+    padding: 10px;
+    flex: 1; // Allow the input to grow
+    border-radius: 5px 0 0 5px; // Rounded corners on the left
+    margin-right: -1px; // Overlap border with button
   }
 
-  .btn {
+  button {
+    position: absolute;
+    right: 5px;
+    top: 5px;
+    bottom: 5px;
+    width: 60px;
     background-color: #f9bb01;
+    border: none; /* Bỏ viền nút */
+    color: #000; /* Màu chữ */
+    cursor: pointer; /* Hiển thị con trỏ chuột khi di chuột qua nút */
+    transition: background-color 0.3s ease, color 0.3s ease; /* Thêm hiệu ứng chuyển đổi */
+  }
+
+  button:hover {
+    background-color: #f39c12; /* Màu nền khi hover */
+    color: #fff; /* Màu chữ khi hover */
   }
 }
 

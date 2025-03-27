@@ -1,5 +1,3 @@
-// CategoryList.scss
-
 .category-list {
   background-color: #f8f9fa;
   padding: 20px;
@@ -28,6 +26,8 @@
     list-style-type: none;
     padding: 0;
     margin: 0;
+    transition: max-height 0.3s ease, opacity 0.3s ease; /* Hiệu ứng chuyển động cho max-height và opacity */
+    max-height: 1000px; /* Giới hạn chiều cao tối đa */
 
     li {
       margin-bottom: 10px;
@@ -44,8 +44,31 @@
 
         &:hover {
           background-color: #333;
+          color: #fff; // Change text color on hover
+        }
+
+        &.active {
+          background-color: #007bff; // Màu nền cho mục active
+          color: #fff; // Màu chữ cho mục active
         }
       }
+    }
+  }
+
+  .toggle-button {
+    display: block;
+    width: 100%;
+    padding: 10px;
+    margin-top: 10px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+
+    &:hover {
+      background-color: #0056b3;
     }
   }
 }

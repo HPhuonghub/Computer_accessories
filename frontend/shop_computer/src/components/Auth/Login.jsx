@@ -4,12 +4,10 @@ import { useNavigate, Link } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
 import { faGoogle, faFacebook } from "@fortawesome/free-brands-svg-icons";
-import axios from "axios";
 import { useDispatch } from "react-redux";
 import { loginUser } from "../../redux/slices/authSlice";
 import { toast } from "react-toastify";
 import { GOOGLE_AUTH_URL, FACEBOOK_AUTH_URL } from "../../constants";
-import googleLogo from "../../assets/images/google-logo.png";
 
 const Login = () => {
   const navigate = useNavigate();

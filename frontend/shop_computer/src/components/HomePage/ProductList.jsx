@@ -1,34 +1,22 @@
 import React, { useState } from "react";
 import "./ProductList.scss";
+import { useNavigate } from "react-router-dom";
 import { FaShoppingCart } from "react-icons/fa";
 import { useDispatch } from "react-redux";
 import { addToCart } from "../../redux/slices/cartSlice";
+import { getProductId } from "../../redux/slices/ProductSlice";
 import ReactPaginate from "react-paginate";
 
 const ProductList = ({ products, pageCount, currentPage, onPageChange }) => {
+  const navigate = useNavigate();
   const dispatch = useDispatch();
   const [showPopup, setShowPopup] = useState(false);
   const [addedProduct, setAddedProduct] = useState(null);
 
   const addToCartAndShowPopup = (product) => {
     // Add product to cart in Redux
-    dispatch(addToCart(product));
-
-    // // Update localStorage
-    // const cart = JSON.parse(localStorage.getItem("cart")) || [];
-    // const existingProductIndex = cart.findIndex(
-    //   (item) => item.id === product.id
-    // );
-
-    // if (existingProductIndex > -1) {
-    //   // Update quantity if the product already exists
-    //   cart[existingProductIndex].quantity += 1;
-    // } else {
-    //   // Add new product to cart
-    //   cart.push({ ...product, quantity: 1 });
-    // }
-
-    // localStorage.setItem("cart", JSON.stringify(cart));
+    const newProduct = { ...product, quantity: 1 };
+    dispatch(addToCart(newProduct));
 
     // Show popup
     setAddedProduct(product);
@@ -44,15 +32,29 @@ const ProductList = ({ products, pageCount, currentPage, onPageChange }) => {
     onPageChange(event.selected); // Call function from parent component
   };
 
+  const handleProductDetail = (productId) => {
+    navigate(`/product/${productId}`);
+    dispatch(getProductId(productId));
+  };
+
   return (
     <div className="product-list">
       <h2>Products</h2>
       <ul className="product-grid">
         {products.map((product) => (
           <li className="li-product" key={product.id}>
-            <img src={product.thumbnail} alt={product.name} />
+            <img
+              src={product.thumbnail}
+              alt={product.name}
+              onClick={() => handleProductDetail(product.id)}
+            />
             <div className="product-info">
-              <h3 className="product-name">{product.name.toLowerCase()}</h3>
+              <h3
+                className="product-name"
+                onClick={() => handleProductDetail(product.id)}
+              >
+                {product.name.toLowerCase()}
+              </h3>
               <div
                 className="price-container"
                 style={product.discount === 0 ? { marginTop: "27px" } : {}}
@@ -111,7 +113,7 @@ const ProductList = ({ products, pageCount, currentPage, onPageChange }) => {
       )}
 
       {/* Pagination */}
-      <div className="d-flex justify-content-center">
+      <div className="d-flex justify-content-center" style={{ zIndex: "1000" }}>
         <ReactPaginate
           nextLabel="next >"
           onPageChange={handlePageClick}

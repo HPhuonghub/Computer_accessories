@@ -1,0 +1,243 @@
+.promotion-container {
+  background-color: #d0021b; // Màu nền
+  padding: 16px;
+  border-radius: 8px;
+
+  .header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
+    padding: 15px;
+    color: white;
+
+    .prev {
+      left: 10px;
+    }
+
+    .next {
+      right: 10px;
+    }
+
+    h1 {
+      font-size: 1.5rem;
+      display: flex;
+      align-items: center;
+      flex-grow: 1;
+      text-align: center;
+
+      .icon {
+        color: black; // Màu đen cho icon
+        margin: 0 4px;
+      }
+    }
+
+    .navigation-buttons {
+      display: flex;
+      gap: 10px;
+
+      .nav-button {
+        background: white;
+        border: none;
+        border-radius: 50%;
+        color: #f44336;
+        width: 36px;
+        height: 36px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        transition: background 0.3s;
+
+        &:hover {
+          background: rgba(255, 255, 255, 0.7);
+        }
+
+        .icon {
+          color: black; // Màu đen cho icon
+        }
+      }
+    }
+  }
+
+  .product-grid {
+    gap: 16px;
+    overflow: hidden;
+
+    .product-card {
+      background: #ffffff;
+      border-radius: 8px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      max-width: 320px;
+      margin: auto 20px;
+      cursor: pointer;
+
+      &:hover {
+        transform: scale(1.005);
+      }
+
+      img {
+        width: 100%;
+        height: 16em;
+        object-fit: cover;
+        border-radius: 8px;
+      }
+
+      .product-info {
+        padding: 16px;
+
+        h2 {
+          font-size: 1rem;
+          color: #333;
+          margin: 8px 0;
+          display: -webkit-box; /* Sử dụng flexbox */
+          -webkit-box-orient: vertical; /* Định hướng thành cột */
+          -webkit-line-clamp: 2; /* Giới hạn số dòng là 2 */
+          overflow: hidden; /* Ẩn phần văn bản tràn */
+          text-overflow: ellipsis;
+        }
+
+        p {
+          color: #666;
+        }
+
+        .price-info {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          margin-top: 8px;
+
+          .price {
+            color: red;
+            font-weight: bold;
+            font-size: 1.2rem;
+            .original-price {
+              text-decoration: line-through;
+              margin-right: 10px;
+              opacity: 0.6;
+            }
+          }
+
+          .old-price {
+            text-decoration: line-through;
+            color: #999;
+            font-size: 0.9rem;
+          }
+
+          .discount {
+            background: red;
+            color: white;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 0.9rem;
+          }
+        }
+
+        .add-to-cart {
+          margin-top: 16px;
+          background: blue;
+          color: white;
+          padding: 8px;
+          border: none;
+          border-radius: 4px;
+          cursor: pointer;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          transition: background 0.3s;
+
+          .icon {
+            margin-right: 4px;
+            color: black; // Màu đen cho icon
+          }
+
+          &:hover {
+            background: darkblue;
+          }
+        }
+      }
+    }
+  }
+
+  .view-all {
+    text-align: center;
+    margin-top: 35px;
+    padding: 5px;
+
+    button {
+      background: white;
+      color: red;
+      padding: 8px 16px;
+      border: none;
+      border-radius: 20px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      margin: 0 auto;
+
+      .icon {
+        margin: 0 4px;
+        color: black; // Màu đen cho icon
+      }
+
+      &:hover {
+        background: rgba(255, 255, 255, 0.8);
+      }
+    }
+  }
+
+  .cart-popup {
+    position: fixed;
+    width: 300px; /* Chiều rộng của popup */
+    max-height: 100px; /* Chiều cao tối đa của popup */
+    overflow: hidden; /* Ẩn nội dung vượt quá chiều cao */
+    top: 60px; /* Khoảng cách từ bottom của màn hình là 200px */
+    right: 20px;
+    background-color: #ffffff;
+    border: 1px solid #cccccc;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+    padding: 10px;
+    z-index: 999;
+    animation: fadeInOut 0.5s ease-in-out;
+
+    @keyframes fadeInOut {
+      0% {
+        opacity: 0;
+        transform: translateY(-20px);
+      }
+      50% {
+        opacity: 1;
+        transform: translateY(0);
+      }
+      100% {
+        opacity: 0;
+        transform: translateY(-20px);
+      }
+    }
+
+    .cart-popup-content {
+      display: flex;
+      align-items: center;
+
+      img {
+        width: 50px;
+        height: 50px;
+        margin-right: 10px;
+      }
+
+      div {
+        flex-grow: 1; /* Đảm bảo phần nội dung có thể mở rộng để chiếm hết không gian còn lại */
+        p {
+          margin: 0;
+          font-size: 0.8rem;
+          white-space: normal; /* Cho phép văn bản xuống dòng */
+          overflow: hidden;
+          text-overflow: ellipsis;
+          display: -webkit-box;
+          -webkit-line-clamp: 3; /* Chỉnh số dòng cần hiển thị */
+          -webkit-box-orient: vertical;
+        }
+      }
+    }
+  }
+}
