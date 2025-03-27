@@ -18,12 +18,12 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
-    @ExceptionHandler(Exception.class)
+    @ExceptionHandler(RuntimeException.class)
     public ErrorResponse handleException(RuntimeException exception) {
         return ErrorResponse.builder()
                 .status(ErrorCode.UNCATEGORIZED_EXCEPTION.getCode())
                 .error(ErrorCode.UNCATEGORIZED_EXCEPTION.toString())
-                .message(ErrorCode.UNCATEGORIZED_EXCEPTION.getMessage())
+                .message(exception.getMessage())
                 .build();
     }
 

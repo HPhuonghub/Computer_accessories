@@ -3,7 +3,9 @@ package com.dev.computer_accessories.service;
 import com.dev.computer_accessories.dto.request.FeedbackDTO;
 import com.dev.computer_accessories.dto.response.PageResponse;
 import com.dev.computer_accessories.dto.response.FeedBackDetailResponse;
+import org.springframework.stereotype.Service;
 
+@Service
 public interface FeedbackService {
     void saveFeedback(FeedbackDTO feedBackDTO);
 

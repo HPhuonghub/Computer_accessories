@@ -1,5 +1,6 @@
 package com.dev.computer_accessories.service.impl;
 
+import com.dev.computer_accessories.exception.ResourceNotFoundException;
 import com.dev.computer_accessories.model.User;
 import com.dev.computer_accessories.repository.UserRepository;
 import com.dev.computer_accessories.service.JwtService;
@@ -50,22 +51,27 @@ public class JwtServiceImpl implements JwtService {
         return generateToken(new HashMap<>(), user, refreshExpiration);
     }
 
-    private String generateToken(Map<String, Object> extraClaims, UserDetails userDetails, long expiration) {
+
+    public String generateToken(Map<String, Object> extraClaims, UserDetails userDetails, long expiration) {
         // Chuyển đổi danh sách GrantedAuthority thành danh sách chuỗi
         List<String> roles = userDetails.getAuthorities().stream()
                 .map(GrantedAuthority::getAuthority)
                 .collect(Collectors.toList());
 
         Optional<User> user = userRepository.findByEmail(userDetails.getUsername());
+        if (!user.isPresent()) {
+            throw new ResourceNotFoundException("User not found with email: " + userDetails.getUsername());
+        }
 
         return Jwts.builder()
                 .setClaims(extraClaims)
                 .setSubject(userDetails.getUsername())
                 .setIssuedAt(new Date(System.currentTimeMillis()))
                 .setExpiration(new Date(System.currentTimeMillis() + expiration))
-                .claim("id",user.get().getId())
-                .claim("role",roles)
-                .signWith(getSigningKey(), SignatureAlgorithm.HS256).compact();
+                .claim("id", user.get().getId())
+                .claim("role", roles)
+                .signWith(getSigningKey(), SignatureAlgorithm.HS256)
+                .compact();
     }
 
     @Override

@@ -12,6 +12,7 @@ import com.dev.computer_accessories.model.User;
 import com.dev.computer_accessories.repository.OrderDetailsRepository;
 import com.dev.computer_accessories.repository.OrdersRepository;
 import com.dev.computer_accessories.service.OrdersService;
+import com.dev.computer_accessories.util.OrderStatus;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -22,6 +23,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -66,8 +68,36 @@ public class OrdersServiceImpl implements OrdersService {
     }
 
     @Override
+    public void updateStatusOrder(long id, String status) {
+        Orders orders = getOrdersById(id);
+
+        if (Arrays.stream(OrderStatus.values())
+                .anyMatch(e -> e.name().equalsIgnoreCase(status))) {
+            OrderStatus newStatus = OrderStatus.valueOf(status.toUpperCase());
+            orders.setOrderStatus(newStatus);
+        } else {
+            throw new RuntimeException("Trạng thái đơn hàng không hợp lệ: " + status);
+        }
+
+        ordersRepository.save(orders);
+    }
+
+    @Override
     public void deleteOrders(long id) {
         ordersRepository.deleteById(id);
+    }
+
+    @Override
+    public OrdersResponse getOrderId(long id) {
+        Orders order = getOrdersById(id);
+        return OrdersResponse.builder()
+                .id(order.getId())
+                .fullname(order.getFullname())
+                .email(order.getEmail())
+                .address(order.getAddress())
+                .phone(order.getPhone())
+                .status(order.getOrderStatus())
+                .build();
     }
 
     @Override
@@ -127,6 +157,7 @@ public class OrdersServiceImpl implements OrdersService {
                         .note(order.getNote())
                         .user(order.getUser())
                         .id(order.getId())
+                        .status(order.getOrderStatus())
                         .build())
                 .toList();
 

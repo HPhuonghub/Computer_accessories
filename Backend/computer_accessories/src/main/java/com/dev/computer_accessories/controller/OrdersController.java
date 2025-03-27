@@ -10,8 +10,6 @@ import jakarta.validation.constraints.Min;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
-import org.springframework.security.access.prepost.PostAuthorize;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -23,8 +21,6 @@ public class OrdersController {
     private final OrdersService ordersService;
 
     @Operation(summary = "Add orders", description = "Api create new orders")
-    @PreAuthorize("hasAnyAuthority('ADMIN','USER')")
-    @PostAuthorize("returnObject.data.email == authentication.name")
     @PostMapping("/")
     public ResponseData<OrdersResponse> saveOrders(@RequestBody OrdersDTO ordersDTO) {
             ordersService.saveOrders(ordersDTO);
@@ -33,8 +29,6 @@ public class OrdersController {
 
 
     @Operation(summary = "Delete orders", description = "Api delete a orders")
-    @PreAuthorize("hasAnyAuthority('ADMIN','USER')")
-    @PostAuthorize("returnObject.data.email == authentication.name")
     @DeleteMapping("/{ordersId}")
     public ResponseData<OrdersResponse> deleteOrders(@PathVariable int ordersId) {
             ordersService.deleteOrders(ordersId);
@@ -42,16 +36,26 @@ public class OrdersController {
     }
 
     @Operation(summary = "Update orders", description = "Api update a orders")
-    @PreAuthorize("hasAnyAuthority('ADMIN','USER')")
-    @PostAuthorize("returnObject.data.email == authentication.name")
     @PutMapping("/{ordersId}")
     public ResponseData<OrdersResponse> updateOrders(@Min(value = 1, message = "ordersId must be greater than 0") @PathVariable int ordersId, @RequestBody OrdersDTO ordersDTO) {
             ordersService.updateOrders(ordersId, ordersDTO);
             return new ResponseData<>(HttpStatus.OK.value(), "Orders updated successfully");
     }
 
+    @Operation(summary = "Update orders", description = "Api update a orders")
+    @PatchMapping("/{ordersId}")
+    public ResponseData<OrdersResponse> updateStatusOrder(@Min(value = 1, message = "ordersId must be greater than 0") @PathVariable int ordersId, String status) {
+        ordersService.updateStatusOrder(ordersId, status);
+        return new ResponseData<>(HttpStatus.OK.value(), "Orders updated successfully");
+    }
+
+    @Operation(summary = "Get order_id", description = "Api get a orders")
+    @GetMapping("/{ordersId}")
+    public ResponseData<OrdersResponse> getOrderId(@PathVariable int ordersId) {
+        return new ResponseData<>(HttpStatus.OK.value(), "Orders get successfully", ordersService.getOrderId(ordersId));
+    }
+
     @Operation(summary = "Get list of orders per page", description = "Send a request via this API to get orders list by pageNo and pageSize")
-    @PreAuthorize("hasAnyAuthority('ADMIN')")
     @GetMapping("/list")
     public ResponseData<?> getAllOrders(@RequestParam(defaultValue = "0", required = false) int pageNo,
                                                                          @Min(1) @RequestParam(defaultValue = "20", required = false) int pageSize,

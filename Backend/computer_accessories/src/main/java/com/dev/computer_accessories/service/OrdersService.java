@@ -12,7 +12,11 @@ public interface OrdersService {
 
     void updateOrders(long id, OrdersDTO ordersDTO);
 
+    void updateStatusOrder(long id, String status);
+
     void deleteOrders(long id);
+
+    OrdersResponse getOrderId(long id);
 
     List<OrdersResponse> getOrdersDetail(String email);
 
