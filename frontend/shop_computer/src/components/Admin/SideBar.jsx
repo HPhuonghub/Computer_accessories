@@ -1,116 +1,186 @@
-import "react-pro-sidebar/dist/css/styles.css";
-import {
-  ProSidebar,
-  Menu,
-  MenuItem,
-  SubMenu,
-  SidebarHeader,
-  SidebarFooter,
-  SidebarContent,
-} from "react-pro-sidebar";
+// import "react-pro-sidebar/dist/css/styles.css";
+// import {
+//   ProSidebar,
+//   Menu,
+//   MenuItem,
+//   SubMenu,
+//   SidebarHeader,
+//   SidebarFooter,
+//   SidebarContent,
+// } from "react-pro-sidebar";
 
-import {
-  FaTachometerAlt,
-  FaGem,
-  FaList,
-  FaGithub,
-  FaRegLaughWink,
-  FaHeart,
-} from "react-icons/fa";
-import sidebarBg from "../../assets/images/bg2.jpg";
-import { RiComputerFill } from "react-icons/ri";
-import { MdDashboard } from "react-icons/md";
-import { Link } from "react-router-dom";
+// import {
+//   FaTachometerAlt,
+//   FaGem,
+//   FaList,
+//   FaGithub,
+//   FaRegLaughWink,
+//   FaHeart,
+// } from "react-icons/fa";
+// import sidebarBg from "../../assets/images/bg2.jpg";
+// import { RiComputerFill } from "react-icons/ri";
+// import { MdDashboard } from "react-icons/md";
+// import { Link } from "react-router-dom";
+import { useEffect, useState } from "react";
+import logo from "../../assets/images/icon-logo.png";
+import "./SideBar.scss";
+import "../../styles/global.scss";
 
-const SideBar = (props) => {
-  const { image, collapsed, toggled, handleToggleSidebar } = props;
+// const SideBar = (props) => {
+//   const { image, collapsed, toggled, handleToggleSidebar } = props;
+//   return (
+//     <>
+//       <ProSidebar
+//         image={sidebarBg}
+//         collapsed={collapsed}
+//         toggled={toggled}
+//         breakPoint="md"
+//         onToggle={handleToggleSidebar}
+//       >
+//         <SidebarHeader>
+//           <div
+//             style={{
+//               padding: "24px",
+//               textTransform: "uppercase",
+//               fontWeight: "bold",
+//               fontSize: 14,
+//               letterSpacing: "1px",
+//               overflow: "hidden",
+//               textOverflow: "ellipsis",
+//               whiteSpace: "nowrap",
+//             }}
+//           >
+//             <RiComputerFill
+//               size={"2.5em"}
+//               color="00bfff"
+//               style={{ marginRight: "25px" }}
+//             />
+//             Dashboard
+//           </div>
+//         </SidebarHeader>
+
+//         <SidebarContent>
+//           <Menu iconShape="circle">
+//             <MenuItem icon={<MdDashboard />}>
+//               Dashboard
+//               <Link to={"/admin"} />
+//             </MenuItem>
+//           </Menu>
+//           <Menu iconShape="circle">
+//             <SubMenu icon={<FaGem />} title="Features">
+//               <MenuItem>
+//                 {" "}
+//                 Quản lí người dùng
+//                 <Link to={"/admin/manage-users"} />
+//               </MenuItem>
+//               <MenuItem>
+//                 {" "}
+//                 Quản lí sản phẩm
+//                 <Link to={"/admin/manage-products"} />
+//               </MenuItem>
+//               <MenuItem>
+//                 {" "}
+//                 Quản lí loại sản phẩm
+//                 <Link to={"/admin/manage-categories"} />
+//               </MenuItem>
+//             </SubMenu>
+//           </Menu>
+//         </SidebarContent>
+
+//         <SidebarFooter style={{ textAlign: "center" }}>
+//           <div
+//             className="sidebar-btn-wrapper"
+//             style={{
+//               padding: "20px 24px",
+//             }}
+//           >
+//             <a
+//               href="https://github.com/HPhuonghub/Computer_accessories"
+//               target="_blank"
+//               className="sidebar-btn"
+//               rel="noopener noreferrer"
+//             >
+//               <FaGithub />
+//               <span
+//                 style={{
+//                   whiteSpace: "nowrap",
+//                   textOverflow: "ellipsis",
+//                   overflow: "hidden",
+//                 }}
+//               >
+//                 Source
+//               </span>
+//             </a>
+//           </div>
+//         </SidebarFooter>
+//       </ProSidebar>
+//     </>
+//   );
+// };
+
+const menuItems = [
+  { key: "dashboard", icon: "dashboard", label: "Dashboard" },
+  { key: "users", icon: "person_outline", label: "Quản lí người dùng" },
+  { key: "orders", icon: "shopping_cart", label: "Quản lí đơn hàng" },
+  { key: "analytics", icon: "analytics", label: "Thống kê" },
+  { key: "products", icon: "inventory_2", label: "Quản lí sản phẩm" },
+  { key: "categories", icon: "category", label: "Quản lí loại sản phẩm" },
+  { key: "settings", icon: "settings", label: "Cài đặt" },
+  { key: "logout", icon: "logout", label: "Đăng xuất" },
+];
+
+const SideBar = ({
+  showSidebar,
+  setShowSidebar,
+  activeMenu,
+  setActiveMenu,
+}) => {
+  // Hiện sidebar khi màn hình lớn
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth > 768) {
+        setShowSidebar(true); // Luôn hiện sidebar khi màn hình lớn
+      }
+    };
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
+  if (!showSidebar) return null;
+
   return (
-    <>
-      <ProSidebar
-        image={sidebarBg}
-        collapsed={collapsed}
-        toggled={toggled}
-        breakPoint="md"
-        onToggle={handleToggleSidebar}
-      >
-        <SidebarHeader>
-          <div
-            style={{
-              padding: "24px",
-              textTransform: "uppercase",
-              fontWeight: "bold",
-              fontSize: 14,
-              letterSpacing: "1px",
-              overflow: "hidden",
-              textOverflow: "ellipsis",
-              whiteSpace: "nowrap",
-            }}
-          >
-            <RiComputerFill
-              size={"2.5em"}
-              color="00bfff"
-              style={{ marginRight: "25px" }}
-            />
-            Dashboard
+    <div className="container-sidebar">
+      {showSidebar && (
+        <aside>
+          <div className="top">
+            <div className="logo">
+              <img src={logo} alt="logo" />
+              <h2 className="text-muted">
+                DAC<span className="danger">SHOP</span>
+              </h2>
+            </div>
+            <div className="close" onClick={() => setShowSidebar(false)}>
+              <span className="material-icons-sharp">close</span>
+            </div>
           </div>
-        </SidebarHeader>
 
-        <SidebarContent>
-          <Menu iconShape="circle">
-            <MenuItem icon={<MdDashboard />}>
-              Dashboard
-              <Link to={"/admin"} />
-            </MenuItem>
-          </Menu>
-          <Menu iconShape="circle">
-            <SubMenu icon={<FaGem />} title="Features">
-              <MenuItem>
-                {" "}
-                Quản lí người dùng
-                <Link to={"/admin/manage-users"} />
-              </MenuItem>
-              <MenuItem>
-                {" "}
-                Quản lí sản phẩm
-                <Link to={"/admin/manage-products"} />
-              </MenuItem>
-              <MenuItem>
-                {" "}
-                Quản lí loại sản phẩm
-                <Link to={"/admin/manage-categories"} />
-              </MenuItem>
-            </SubMenu>
-          </Menu>
-        </SidebarContent>
-
-        <SidebarFooter style={{ textAlign: "center" }}>
-          <div
-            className="sidebar-btn-wrapper"
-            style={{
-              padding: "20px 24px",
-            }}
-          >
-            <a
-              href="https://github.com/HPhuonghub/Computer_accessories"
-              target="_blank"
-              className="sidebar-btn"
-              rel="noopener noreferrer"
-            >
-              <FaGithub />
-              <span
-                style={{
-                  whiteSpace: "nowrap",
-                  textOverflow: "ellipsis",
-                  overflow: "hidden",
-                }}
+          <div className="sidebar">
+            {menuItems.map((item) => (
+              <a
+                href="#"
+                key={item.key}
+                className={activeMenu === item.key ? "active" : ""}
+                onClick={() => setActiveMenu(item.key)}
               >
-                Source
-              </span>
-            </a>
+                <span className="material-icons-sharp">{item.icon}</span>
+                <h3>{item.label}</h3>
+              </a>
+            ))}
           </div>
-        </SidebarFooter>
-      </ProSidebar>
-    </>
+        </aside>
+      )}
+      {/* <!------ end of sidebar ----------> */}
+    </div>
   );
 };
 
